@@ -61,6 +61,89 @@ const findByIdWithRefreshToken = (id) => {
   return User.findById(id).select("+refreshToken");
 };
 
+const updateById = (id, fields) => {
+  return User.findByIdAndUpdate(id, fields, {
+    new: true,
+    runValidators: true,
+  });
+};
+
+const updateAvatar = (id, avatar, avatarPublicId) => {
+  return User.findByIdAndUpdate(
+    id,
+    {
+      avatar,
+      avatarPublicId,
+    },
+    {
+      new: true,
+      runValidators: true,
+    }
+  );
+};
+
+const findAll = async ({
+  search = "",
+  role,
+  isBlocked,
+  page = 1,
+  limit = 20,
+}) => {
+  const filter = {};
+
+  if (search) {
+    filter.$or = [
+      { name: { $regex: search, $options: "i" } },
+      { email: { $regex: search, $options: "i" } },
+    ];
+  }
+
+  if (role) {
+    filter.role = role;
+  }
+
+  if (typeof isBlocked !== "undefined") {
+    filter.isBlocked = isBlocked;
+  }
+
+  limit = Math.min(Math.max(limit, 1), 100);
+
+  const users = await User.find(filter)
+    .skip((page - 1) * limit)
+    .limit(limit)
+    .sort({ createdAt: -1 });
+
+  const total = await User.countDocuments(filter);
+
+  return { users, total };
+};
+
+const deleteById = (id) => {
+  return User.findByIdAndDelete(id);
+};
+
+const setBlockedStatus = (id, isBlocked) => {
+  return User.findByIdAndUpdate(
+    id,
+    { isBlocked },
+    {
+      new: true,
+      runValidators: true,
+    }
+  );
+};
+
+const updateRole = (id, role) => {
+  return User.findByIdAndUpdate(
+    id,
+    { role },
+    {
+      new: true,
+      runValidators: true,
+    }
+  );
+};
+
 export default {
   findByEmail,
   findById,
@@ -72,4 +155,10 @@ export default {
   updatePassword,
   saveResetPasswordToken,
   findByResetToken,
+  updateById,
+  updateAvatar,
+  findAll,
+  deleteById,
+  setBlockedStatus,
+  updateRole,
 };
