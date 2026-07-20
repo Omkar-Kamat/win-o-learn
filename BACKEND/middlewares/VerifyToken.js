@@ -1,28 +1,28 @@
 import jwt from "jsonwebtoken";
 
-import User from "../models/User.model.js";
+import UserRepository from "../repository/User.repository.js";
 import ApiError from "../utils/ApiError.js";
 
-const verifyToken = async (req, res, next) => {
+const VerifyToken = async (req, res, next) => {
   try {
     const authHeader = req.headers.authorization;
 
     if (!authHeader || !authHeader.startsWith("Bearer ")) {
-      return next(new ApiError(401, "Access token is required"));
+      throw new ApiError(401, "Access token is required");
     }
 
     const token = authHeader.split(" ")[1];
 
     const decoded = jwt.verify(token, process.env.JWT_SECRET);
 
-    const user = await User.findById(decoded.id);
+    const user = await UserRepository.findById(decoded.id);
 
     if (!user) {
-      return next(new ApiError(401, "User not found"));
+      throw new ApiError(401, "User not found");
     }
 
     if (user.isBlocked) {
-      return next(new ApiError(403, "Your account has been blocked"));
+      throw new ApiError(403, "Your account has been blocked");
     }
 
     req.user = user;
@@ -41,4 +41,4 @@ const verifyToken = async (req, res, next) => {
   }
 };
 
-export default verifyToken;
+export default VerifyToken;

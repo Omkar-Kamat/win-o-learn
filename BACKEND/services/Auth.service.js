@@ -127,11 +127,16 @@ class AuthService {
 
     const resetToken = crypto.randomBytes(32).toString("hex");
 
+    const hashedToken = crypto
+      .createHash("sha256")
+      .update(resetToken)
+      .digest("hex");
+      
     const expires = Date.now() + 1000 * 60 * 15;
 
     await UserRepository.saveResetPasswordToken(
       user._id,
-      resetToken,
+      hashedToken,
       expires
     );
 
@@ -139,7 +144,12 @@ class AuthService {
   }
 
   async resetPassword(token, newPassword) {
-    const user = await UserRepository.findByResetToken(token);
+    const hashedToken = crypto
+      .createHash("sha256")
+      .update(token)
+      .digest("hex");
+
+    const user = await UserRepository.findByResetToken(hashedToken);
 
     if (!user) {
       throw new ApiError(400, "Invalid or expired reset token");

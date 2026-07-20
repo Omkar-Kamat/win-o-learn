@@ -2,6 +2,7 @@ import "dotenv/config";
 import express from "express";
 import cookieParser from "cookie-parser";
 import helmet from "helmet";
+import cors from "cors";
 
 import AuthRoutes from "./routes/Auth.routes.js";
 
