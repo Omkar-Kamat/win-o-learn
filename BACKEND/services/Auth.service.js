@@ -1,0 +1,156 @@
+import jwt from "jsonwebtoken";
+import crypto from "crypto";
+
+import UserRepository from "../repository/User.repository.js";
+import ApiError from "../utils/ApiError.js";
+import {
+  generateAccessToken,
+  generateRefreshToken,
+} from "../utils/GenerateToken.js";
+
+class AuthService {
+  async signup(data) {
+    const { name, email, password, role } = data;
+
+    const existingUser = await UserRepository.findByEmail(email);
+
+    if (existingUser) {
+      throw new ApiError(409, "Email already exists");
+    }
+
+    const user = await UserRepository.create({
+      name,
+      email,
+      password,
+      role,
+    });
+
+    const accessToken = generateAccessToken(user);
+    const refreshToken = generateRefreshToken(user);
+
+    await UserRepository.updateRefreshToken(user._id, refreshToken);
+
+    return {
+      user: user.toJSON(),
+      accessToken,
+      refreshToken,
+    };
+  }
+
+  async login(email, password) {
+    const user = await UserRepository.findByEmail(email);
+
+    if (!user) {
+      throw new ApiError(401, "Invalid email or password");
+    }
+
+    if (user.isBlocked) {
+      throw new ApiError(403, "Your account has been blocked");
+    }
+
+    const isMatch = await user.comparePassword(password);
+
+    if (!isMatch) {
+      throw new ApiError(401, "Invalid email or password");
+    }
+
+    const accessToken = generateAccessToken(user);
+    const refreshToken = generateRefreshToken(user);
+
+    await UserRepository.updateRefreshToken(user._id, refreshToken);
+
+    return {
+      user: user.toJSON(),
+      accessToken,
+      refreshToken,
+    };
+  }
+
+  async logout(userId) {
+    await UserRepository.clearRefreshToken(userId);
+  }
+
+  async getMe(user) {
+    return user.toJSON();
+  }
+
+  async refreshToken(token) {
+    if (!token) {
+      throw new ApiError(401, "Refresh token is required");
+    }
+
+    let decoded;
+
+    try {
+      decoded = jwt.verify(token, process.env.JWT_REFRESH_SECRET);
+    } catch {
+      throw new ApiError(401, "Invalid refresh token");
+    }
+
+    const user = await UserRepository.findByIdWithRefreshToken(decoded.id);
+
+    if (!user) {
+    throw new ApiError(401, "User not found");
+    }
+
+    if (user.refreshToken !== token) {
+    throw new ApiError(401, "Refresh token mismatch");
+    }
+
+    const accessToken = generateAccessToken(user);
+
+    return { accessToken };
+  }
+
+  async changePassword(userId, oldPassword, newPassword) {
+    const user = await UserRepository.findByIdWithPassword(userId);
+
+    if (!user) {
+        throw new ApiError(404, "User not found");
+    }
+
+    const isMatch = await user.comparePassword(oldPassword);
+
+    if (!isMatch) {
+      throw new ApiError(400, "Old password is incorrect");
+    }
+
+    await UserRepository.updatePassword(userId, newPassword);
+  }
+
+  async forgotPassword(email) {
+    const user = await UserRepository.findByEmail(email);
+
+    if (!user) {
+      return;
+    }
+
+    const resetToken = crypto.randomBytes(32).toString("hex");
+
+    const expires = Date.now() + 1000 * 60 * 15;
+
+    await UserRepository.saveResetPasswordToken(
+      user._id,
+      resetToken,
+      expires
+    );
+
+    return resetToken;
+  }
+
+  async resetPassword(token, newPassword) {
+    const user = await UserRepository.findByResetToken(token);
+
+    if (!user) {
+      throw new ApiError(400, "Invalid or expired reset token");
+    }
+
+    user.password = newPassword;
+    user.resetPasswordToken = undefined;
+    user.resetPasswordExpires = undefined;
+
+    await user.save();
+  }
+}
+
+export default new AuthService();
