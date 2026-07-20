@@ -122,5 +122,10 @@ export const validateAdminUpdate = [
     .exists()
     .withMessage("Use dedicated endpoints for role and block status"),
 
+  body(["password", "role", "isBlocked"])
+    .not()
+    .exists()
+    .withMessage("Use dedicated endpoints for password, role, and block status"),
+
   handleValidationErrors,
 ];
