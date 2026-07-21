@@ -92,11 +92,15 @@ const modeValidation = (optional = false) => {
 
 const venueValidation = (optional = false) => {
   let validator = body("venue").custom((value, { req }) => {
-    const mode = req.body.mode;
+    const mode =
+      req.body.mode ??
+      req.hackathon?.mode;
 
     if (mode === "offline") {
       if (!value || value.trim() === "") {
-        throw new Error("Venue is required for offline hackathons");
+        throw new Error(
+          "Venue is required for offline hackathons"
+        );
       }
     }
 
