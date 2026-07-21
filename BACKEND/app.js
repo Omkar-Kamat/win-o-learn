@@ -6,6 +6,7 @@ import cors from "cors";
 
 import AuthRoutes from "./routes/Auth.routes.js";
 import UserRoutes from "./routes/User.routes.js";
+import HackathonRoutes from "./routes/Hackathon.routes.js";
 
 import ErrorHandler from "./middlewares/ErrorHandler.js";
 
@@ -32,6 +33,7 @@ app.get("/health", (req, res) => {
 
 app.use("/api/auth", AuthRoutes);
 app.use("/api/users", UserRoutes);
+app.use("/api/hackathons", HackathonRoutes);
 
 app.use(ErrorHandler);
 
