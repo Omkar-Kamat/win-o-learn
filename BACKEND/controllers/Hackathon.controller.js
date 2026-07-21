@@ -49,8 +49,7 @@ const getMyHackathons = AsyncHandler(async (req, res) => {
   const hackathons =
     await HackathonService.getMyHackathons(
       req.user._id,
-      req.query.page,
-      req.query.limit
+      req.query
     );
 
   return SendResponse(
@@ -140,8 +139,7 @@ const updateBanner = AsyncHandler(async (req, res) => {
   const hackathon =
     await HackathonService.updateBanner(
       req.hackathon,
-      req.file.path,
-      req.file.filename
+      req.file
     );
 
   return SendResponse(

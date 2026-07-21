@@ -23,7 +23,7 @@ const ErrorHandler = (err, req, res, next) => {
   // Invalid Mongo ObjectId
   else if (err.name === "CastError") {
     statusCode = 400;
-    message = "Invalid resource ID";
+    message = `Invalid value for field: ${err.path}`;
   }
 
   // JWT Errors

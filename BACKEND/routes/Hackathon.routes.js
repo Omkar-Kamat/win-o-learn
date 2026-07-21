@@ -1,4 +1,4 @@
-import express from "express";
+import {Router} from "express";
 
 import HackathonController from "../controllers/Hackathon.controller.js";
 
@@ -17,18 +17,12 @@ import {
 import UploadBanner from "../middlewares/UploadBanner.js";
 import { ROLES } from "../utils/Constants.js";
 
-const router = express.Router();
+const router = Router();
 
 router.get(
   "/",
   validateListHackathons,
   HackathonController.getHackathons
-);
-
-router.get(
-  "/:id",
-  validateHackathonId,
-  HackathonController.getHackathonById
 );
 
 router.post(
@@ -43,7 +37,14 @@ router.get(
   "/my",
   VerifyToken,
   AuthorizeRoles(ROLES.ORGANIZER),
+  validateListHackathons,  
   HackathonController.getMyHackathons
+);
+
+router.get(
+  "/:id",
+  validateHackathonId,
+  HackathonController.getHackathonById
 );
 
 router.put(

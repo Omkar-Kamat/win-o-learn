@@ -10,7 +10,25 @@ const createHackathon = async (data, organizerId) => {
 };
 
 const getHackathons = async (filters) => {
-  return await HackathonRepository.findAll(filters);
+  const page = filters.page ? Number(filters.page) : 1;
+  const limit = filters.limit ? Number(filters.limit) : 20;
+
+  const { hackathons, total } =
+    await HackathonRepository.findAll({
+      ...filters,
+      page,
+      limit,
+    });
+
+  return {
+    hackathons,
+    pagination: {
+      totalHackathons: total,
+      totalPages: Math.ceil(total / limit),
+      currentPage: page,
+      limit,
+    },
+  };
 };
 
 const getHackathonById = async (id) => {
@@ -25,13 +43,29 @@ const getHackathonById = async (id) => {
 
 const getMyHackathons = async (
   organizerId,
-  page,
-  limit
+  filters = {}
 ) => {
-  return await HackathonRepository.findByOrganizer(
-    organizerId,
-    { page, limit }
-  );
+  const page = Number(filters.page) || 1;
+  const limit = Number(filters.limit) || 20;
+
+  const { hackathons, total } =
+    await HackathonRepository.findByOrganizer(
+      organizerId,
+      {
+        page,
+        limit,
+      }
+    );
+
+  return {
+    hackathons,
+    pagination: {
+      totalHackathons: total,
+      totalPages: Math.ceil(total / limit),
+      currentPage: page,
+      limit,
+    },
+  };
 };
 
 const updateHackathon = async (hackathon, data) => {
@@ -105,22 +139,16 @@ const publishResults = async (hackathon) => {
   );
 };
 
-const updateBanner = async (
-  hackathon,
-  banner,
-  bannerPublicId
-) => {
-  if (hackathon.bannerPublicId) {
-    await DeleteImageFromCloudinary(
-      hackathon.bannerPublicId
-    );
+const updateBanner = async (hackathon, file) => {
+  if (!file) {
+    throw new ApiError(400, "Banner image is required");
   }
 
-  return await HackathonRepository.updateBanner(
-    hackathon._id,
-    banner,
-    bannerPublicId
-  );
+  if (hackathon.bannerPublicId) {
+    await DeleteImageFromCloudinary(hackathon.bannerPublicId);
+  }
+
+  return await HackathonRepository.updateBanner(hackathon._id, file.path, file.filename);
 };
 
 export default {

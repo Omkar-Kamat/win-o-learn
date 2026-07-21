@@ -206,6 +206,86 @@ const dateValidation = body().custom((_, { req }) => {
   return true;
 });
 
+const registrationStartDateValidation = (optional = false) => {
+  let validator = body("registrationStartDate");
+
+  if (optional) {
+    return validator
+      .optional()
+      .isISO8601({ strict: true, strictSeparator: true })
+      .withMessage("Invalid registration start date")
+      .toDate();
+  }
+
+  return validator
+    .exists({ checkFalsy: true })
+    .withMessage("Registration start date is required")
+    .bail()
+    .isISO8601({ strict: true, strictSeparator: true })
+    .withMessage("Invalid registration start date")
+    .toDate();
+};
+
+const registrationDeadlineValidation = (optional = false) => {
+  let validator = body("registrationDeadline");
+
+  if (optional) {
+    return validator
+      .optional()
+      .isISO8601({ strict: true, strictSeparator: true })
+      .withMessage("Invalid registration deadline")
+      .toDate();
+  }
+
+  return validator
+    .exists({ checkFalsy: true })
+    .withMessage("Registration deadline is required")
+    .bail()
+    .isISO8601({ strict: true, strictSeparator: true })
+    .withMessage("Invalid registration deadline")
+    .toDate();
+};
+
+const startDateValidation = (optional = false) => {
+  let validator = body("startDate");
+
+  if (optional) {
+    return validator
+      .optional()
+      .isISO8601({ strict: true, strictSeparator: true })
+      .withMessage("Invalid hackathon start date")
+      .toDate();
+  }
+
+  return validator
+    .exists({ checkFalsy: true })
+    .withMessage("Hackathon start date is required")
+    .bail()
+    .isISO8601({ strict: true, strictSeparator: true })
+    .withMessage("Invalid hackathon start date")
+    .toDate();
+};
+
+const endDateValidation = (optional = false) => {
+  let validator = body("endDate");
+
+  if (optional) {
+    return validator
+      .optional()
+      .isISO8601({ strict: true, strictSeparator: true })
+      .withMessage("Invalid hackathon end date")
+      .toDate();
+  }
+
+  return validator
+    .exists({ checkFalsy: true })
+    .withMessage("Hackathon end date is required")
+    .bail()
+    .isISO8601({ strict: true, strictSeparator: true })
+    .withMessage("Invalid hackathon end date")
+    .toDate();
+};
+
 const protectedFieldsValidation = body([
   "organizer",
   "registrationOpen",
@@ -264,6 +344,12 @@ export const validateCreateHackathon = [
   descriptionValidation(),
   themeValidation(),
   modeValidation(),
+
+  registrationStartDateValidation(),
+  registrationDeadlineValidation(),
+  startDateValidation(),
+  endDateValidation(),
+
   venueValidation(),
   prizePoolValidation(),
   maxTeamSizeValidation(),
@@ -272,7 +358,9 @@ export const validateCreateHackathon = [
   judgingCriteriaValidation(),
   criterionValidation(),
   marksValidation(),
+
   dateValidation,
+
   protectedFieldsValidation,
   handleValidationErrors,
 ];
@@ -282,6 +370,12 @@ export const validateUpdateHackathon = [
   descriptionValidation(true),
   themeValidation(true),
   modeValidation(true),
+
+  registrationStartDateValidation(true),
+  registrationDeadlineValidation(true),
+  startDateValidation(true),
+  endDateValidation(true),
+
   venueValidation(true),
   prizePoolValidation(true),
   maxTeamSizeValidation(true),
@@ -290,7 +384,9 @@ export const validateUpdateHackathon = [
   judgingCriteriaValidation(true),
   criterionValidation(true),
   marksValidation(true),
+
   updateDateValidation,
+
   protectedFieldsValidation,
   handleValidationErrors,
 ];
