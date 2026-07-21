@@ -1,4 +1,4 @@
-import { body, param, validationResult } from "express-validator";
+import { body, param, query, validationResult } from "express-validator";
 
 const hackathonIdValidation = () =>
   param("hackathonId")
@@ -75,6 +75,9 @@ export const validateRegistrationStatus = [
 
 export const validateHackathonRegistrations = [
   hackathonIdValidation(),
+  query("status").optional().isIn(["pending", "approved", "rejected"]).withMessage("Invalid status"),
+  query("page").optional().isInt({ min: 1 }).withMessage("Page must be at least 1"),
+  query("limit").optional().isInt({ min: 1, max: 100 }).withMessage("Limit must be between 1 and 100"),
   validate,
 ];
 

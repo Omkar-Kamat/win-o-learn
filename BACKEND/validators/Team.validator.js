@@ -1,4 +1,4 @@
-import { body } from "express-validator";
+import { body, validationResult } from "express-validator";
 
 const nameValidation = () =>
   body("name")
@@ -91,5 +91,5 @@ export const validateCreateTeam = [
   membersCannotContainLeaderValidation(),
   leaderValidation(),
   ...protectedFieldsValidation(),
-  validate(),
+  validate,
 ];

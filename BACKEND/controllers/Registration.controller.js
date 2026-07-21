@@ -15,6 +15,7 @@ const registerTeam = asyncHandler(async (req, res) => {
   return SendResponse(
     res,
     201,
+    true,
     "Team registered successfully.",
     registration
   );
@@ -30,6 +31,7 @@ const cancelRegistration = asyncHandler(async (req, res) => {
   return SendResponse(
     res,
     200,
+    true,
     "Registration cancelled successfully."
   );
 });
@@ -44,6 +46,7 @@ const getRegistrationStatus = asyncHandler(async (req, res) => {
   return SendResponse(
     res,
     200,
+    true,
     "Registration status fetched successfully.",
     status
   );
@@ -59,6 +62,7 @@ const getHackathonRegistrations = asyncHandler(async (req, res) => {
   return SendResponse(
     res,
     200,
+    true,
     "Registrations fetched successfully.",
     registrations
   );
@@ -74,6 +78,7 @@ const approveRegistration = asyncHandler(async (req, res) => {
   return SendResponse(
     res,
     200,
+    true,
     "Registration approved successfully.",
     registration
   );
@@ -89,6 +94,7 @@ const rejectRegistration = asyncHandler(async (req, res) => {
   return SendResponse(
     res,
     200,
+    true,
     "Registration rejected successfully.",
     registration
   );

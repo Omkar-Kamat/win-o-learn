@@ -5,10 +5,12 @@ const ErrorHandler = (err, req, res, next) => {
   // MongoDB Duplicate Key Error
   if (err.code === 11000) {
     statusCode = 409;
-
-    const field = Object.keys(err.keyValue)[0];
-
-    message = `${field.charAt(0).toUpperCase() + field.slice(1)} already exists`;
+    if (err.keyValue?.hackathon && err.keyValue?.team) {
+      message = "This team is already registered for this hackathon";
+    } else {
+      const field = Object.keys(err.keyValue)[0];
+      message = `${field.charAt(0).toUpperCase() + field.slice(1)} already exists`;
+    }
   }
 
   // Mongoose Validation Error

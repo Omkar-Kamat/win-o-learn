@@ -33,4 +33,6 @@ const teamSchema = new Schema(
 
 teamSchema.index({ leader: 1 });
 
+teamSchema.set("toJSON", { transform(doc, ret) { delete ret.__v; return ret; } });
+
 export default model("Team", teamSchema);

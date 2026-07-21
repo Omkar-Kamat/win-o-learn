@@ -52,6 +52,8 @@ registrationSchema.index(
   }
 );
 
+registrationSchema.set("toJSON", { transform(doc, ret) { delete ret.__v; return ret; } });
+
 export default model(
   "Registration",
   registrationSchema

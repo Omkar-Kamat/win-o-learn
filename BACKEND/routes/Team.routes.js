@@ -7,12 +7,14 @@ import AuthorizeRoles from "../middlewares/AuthorizeRoles.js";
 
 import { validateCreateTeam } from "../validators/Team.validator.js";
 
+import { ROLES } from "../utils/Constants.js";
+
 const router = Router();
 
 router.post(
   "/",
   VerifyToken,
-  AuthorizeRoles("participant"),
+  AuthorizeRoles(ROLES.PARTICIPANT),
   validateCreateTeam,
   TeamController.createTeam
 );

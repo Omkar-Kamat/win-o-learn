@@ -11,6 +11,7 @@ const createTeam = asyncHandler(async (req, res) => {
   return SendResponse(
     res,
     201,
+    true,
     "Team created successfully.",
     team
   );

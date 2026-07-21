@@ -9,6 +9,8 @@ import LoadTeam from "../middlewares/LoadTeam.js";
 import LoadRegistration from "../middlewares/LoadRegistration.js";
 import CheckHackathonOwnership from "../middlewares/CheckHackathonOwnership.js";
 
+import { ROLES } from "../utils/Constants.js";
+
 import {
   validateRegister,
   validateCancelRegistration,
@@ -17,66 +19,68 @@ import {
   validateRegistrationId,
 } from "../validators/Registration.validator.js";
 
-const router = Router();
+const hackathonScopedRouter = Router();
 
-router.post(
-  "/hackathons/:hackathonId/register",
+hackathonScopedRouter.post(
+  "/:hackathonId/register",
   VerifyToken,
-  AuthorizeRoles("participant"),
+  AuthorizeRoles(ROLES.PARTICIPANT),
   validateRegister,
   LoadHackathon,
   LoadTeam({ requireLeader: true }),
   RegistrationController.registerTeam
 );
 
-router.delete(
-  "/hackathons/:hackathonId/register/:teamId",
+hackathonScopedRouter.delete(
+  "/:hackathonId/register/:teamId",
   VerifyToken,
-  AuthorizeRoles("participant"),
+  AuthorizeRoles(ROLES.PARTICIPANT),
   validateCancelRegistration,
   LoadHackathon,
   LoadTeam({ requireLeader: true }),
   RegistrationController.cancelRegistration
 );
 
-router.get(
-  "/hackathons/:hackathonId/register/status/:teamId",
+hackathonScopedRouter.get(
+  "/:hackathonId/register/status/:teamId",
   VerifyToken,
-  AuthorizeRoles("participant"),
+  AuthorizeRoles(ROLES.PARTICIPANT),
   validateRegistrationStatus,
   LoadHackathon,
   LoadTeam({ requireMember: true }),
   RegistrationController.getRegistrationStatus
 );
 
-router.get(
-  "/hackathons/:hackathonId/registrations",
+hackathonScopedRouter.get(
+  "/:hackathonId/registrations",
   VerifyToken,
-  AuthorizeRoles("organizer"),
+  AuthorizeRoles(ROLES.ORGANIZER),
   validateHackathonRegistrations,
   LoadHackathon,
   CheckHackathonOwnership(),
   RegistrationController.getHackathonRegistrations
 );
 
-router.patch(
-  "/registrations/:registrationId/approve",
+const registrationScopedRouter = Router();
+
+registrationScopedRouter.patch(
+  "/:registrationId/approve",
   VerifyToken,
-  AuthorizeRoles("organizer"),
+  AuthorizeRoles(ROLES.ORGANIZER),
   validateRegistrationId,
   LoadRegistration,
   CheckHackathonOwnership(),
   RegistrationController.approveRegistration
 );
 
-router.patch(
-  "/registrations/:registrationId/reject",
+registrationScopedRouter.patch(
+  "/:registrationId/reject",
   VerifyToken,
-  AuthorizeRoles("organizer"),
+  AuthorizeRoles(ROLES.ORGANIZER),
   validateRegistrationId,
   LoadRegistration,
   CheckHackathonOwnership(),
   RegistrationController.rejectRegistration
 );
 
-export default router;
+export { registrationScopedRouter, hackathonScopedRouter};
