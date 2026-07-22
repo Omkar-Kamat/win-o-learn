@@ -1,4 +1,4 @@
-import { body, validationResult } from "express-validator";
+import { body,param, validationResult } from "express-validator";
 
 const nameValidation = () =>
   body("name")
@@ -81,6 +81,11 @@ const memberIdValidation = () =>
     .isMongoId()
     .withMessage("Invalid member id.");
 
+const userIdValidation = () =>
+  param("userId")
+    .isMongoId()
+    .withMessage("Invalid user ID.");
+
 const uniqueMembersValidation = () =>
   body("members").custom((members = []) => {
     const unique = new Set(members);
@@ -127,7 +132,13 @@ const inviteEmailValidation = () =>
     .withMessage("Invalid email.")
     .normalizeEmail();
 
-
+const newLeaderValidation = () =>
+  body("userId")
+    .exists({ values: "falsy" })
+    .withMessage("User ID is required.")
+    .bail()
+    .isMongoId()
+    .withMessage("Invalid user ID.");
 
 export const validateCreateTeam = [
   nameValidation(),
@@ -164,5 +175,15 @@ export const validateUpdateTeam = [
 
 export const validateInviteMember = [
   inviteEmailValidation(),
+  validate,
+];
+
+export const validateTransferLeadership = [
+  newLeaderValidation(),
+  validate,
+];
+
+export const validateRemoveMember = [
+  userIdValidation(),
   validate,
 ];

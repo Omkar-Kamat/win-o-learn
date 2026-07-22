@@ -11,6 +11,8 @@ import {
   validateCreateTeam,
   validateUpdateTeam,
   validateInviteMember,
+  validateTransferLeadership,
+  validateRemoveMember
 } from "../validators/Team.validator.js";
 
 const router = Router();
@@ -70,6 +72,32 @@ router.post(
   AuthorizeRoles(ROLES.PARTICIPANT),
   LoadTeam(),
   TeamController.rejectInvite
+);
+
+router.patch(
+  "/:id/leader",
+  VerifyToken,
+  AuthorizeRoles(ROLES.PARTICIPANT),
+  LoadTeam({ requireLeader: true }),
+  validateTransferLeadership,
+  TeamController.transferLeadership
+);
+
+router.post(
+  "/:id/leave",
+  VerifyToken,
+  AuthorizeRoles(ROLES.PARTICIPANT),
+  LoadTeam({ requireMember: true }),
+  TeamController.leaveTeam
+);
+
+router.delete(
+  "/:id/members/:userId",
+  VerifyToken,
+  AuthorizeRoles(ROLES.PARTICIPANT),
+  LoadTeam({ requireLeader: true }),
+  validateRemoveMember,
+  TeamController.removeMember
 );
 
 export default router;

@@ -99,6 +99,39 @@ const acceptInvite = async (teamId, userId) => {
     .populate("pendingInvites.invitedBy", "name avatar");
 };
 
+const transferLeadership = (teamId, newLeaderId) =>
+  Team.findByIdAndUpdate(
+    teamId,
+    {
+      leader: newLeaderId,
+    },
+    {
+      new: true,
+      runValidators: true,
+    }
+  )
+    .populate("leader", "name avatar")
+    .populate("members", "name avatar")
+    .populate("pendingInvites.user", "name email avatar")
+    .populate("pendingInvites.invitedBy", "name avatar");
+
+const removeMember = (teamId, userId) =>
+  Team.findByIdAndUpdate(
+    teamId,
+    {
+      $pull: {
+        members: userId,
+      },
+    },
+    {
+      new: true,
+      runValidators: true,
+    }
+  )
+    .populate("leader", "name avatar")
+    .populate("members", "name avatar")
+    .populate("pendingInvites.user", "name email avatar")
+    .populate("pendingInvites.invitedBy", "name avatar");
 
 export default {
   create,
@@ -111,4 +144,6 @@ export default {
   addInvite,
   removeInvite,
   acceptInvite,
+  transferLeadership,
+  removeMember,
 };

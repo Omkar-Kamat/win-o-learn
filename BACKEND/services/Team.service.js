@@ -102,6 +102,100 @@ const rejectInvite = async (team, userId) => {
   return TeamRepository.removeInvite(team._id, userId);
 };
 
+const transferLeadership = async (team, newLeaderId) => {
+  const leaderId = team.leader._id ?? team.leader;
+
+  if (leaderId.equals(newLeaderId)) {
+    throw new ApiError(
+      400,
+      "User is already the team leader."
+    );
+  }
+
+  const user = await UserRepository.findById(newLeaderId);
+
+  if (!user) {
+    throw new ApiError(404, "User not found.");
+  }
+
+  const isMember = team.members.some(
+    (member) =>
+      String(member._id ?? member) === String(newLeaderId)
+  );
+
+  if (!isMember) {
+    throw new ApiError(
+      400,
+      "New leader must be a team member."
+    );
+  }
+
+  return TeamRepository.transferLeadership(
+    team._id,
+    newLeaderId
+  );
+};
+
+const leaveTeam = async (team, userId) => {
+  const leaderId = team.leader._id ?? team.leader;
+
+  if (leaderId.equals(userId)) {
+    throw new ApiError(
+      400,
+      "Leader must transfer leadership before leaving the team."
+    );
+  }
+
+  const isMember = team.members.some(
+    (member) =>
+      (member._id ?? member).equals(userId)
+  );
+
+  if (!isMember) {
+    throw new ApiError(
+      400,
+      "User is not a team member."
+    );
+  }
+
+  return TeamRepository.removeMember(
+    team._id,
+    userId
+  );
+};
+
+const removeMember = async (team, userId, leaderId) => {
+  const member = await UserRepository.findById(userId);
+
+  if (!member) {
+    throw new ApiError(404, "User not found.");
+  }
+
+  if (String(team.leader._id ?? team.leader) === String(userId)) {
+    throw new ApiError(
+      400,
+      "Team leader cannot be removed."
+    );
+  }
+
+  const isMember = team.members.some(
+    (member) =>
+      String(member._id ?? member) === String(userId)
+  );
+
+  if (!isMember) {
+    throw new ApiError(
+      400,
+      "User is not a team member."
+    );
+  }
+
+  return TeamRepository.removeMember(
+    team._id,
+    userId
+  );
+};
+
 export default {
   createTeam,
   getTeamById,
@@ -110,4 +204,7 @@ export default {
   inviteMember,
   acceptInvite,
   rejectInvite,
+  transferLeadership,
+  leaveTeam,
+  removeMember,
 };

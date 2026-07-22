@@ -97,6 +97,45 @@ const rejectInvite = asyncHandler(async (req, res) => {
   });
 });
 
+const transferLeadership = asyncHandler(async (req, res) => {
+  const team = await TeamService.transferLeadership(
+    req.team,
+    req.body.userId
+  );
+
+  res.status(200).json({
+    success: true,
+    message: "Leadership transferred successfully.",
+    team,
+  });
+});
+
+const leaveTeam = asyncHandler(async (req, res) => {
+  const team = await TeamService.leaveTeam(
+    req.team,
+    req.user._id
+  );
+
+  res.status(200).json({
+    success: true,
+    message: "Left team successfully.",
+    team,
+  });
+});
+
+const removeMember = asyncHandler(async (req, res) => {
+  const team = await TeamService.removeMember(
+    req.team,
+    req.params.userId
+  );
+
+  res.status(200).json({
+    success: true,
+    message: "Member removed successfully.",
+    team,
+  });
+});
+
 export default {
   createTeam,
   getTeam,
@@ -105,4 +144,7 @@ export default {
   inviteMember,
   acceptInvite,
   rejectInvite,
+  transferLeadership,
+  leaveTeam,
+  removeMember,
 };
