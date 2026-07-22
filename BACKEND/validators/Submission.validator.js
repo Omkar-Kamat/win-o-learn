@@ -1,5 +1,18 @@
-import { body, query } from "express-validator";
-import validate from "../middlewares/validate.js";
+import { body, query, param, validationResult } from "express-validator";
+
+const validate = (req, res, next) => {
+  const errors = validationResult(req);
+
+  if (!errors.isEmpty()) {
+    return res.status(400).json({
+      success: false,
+      message: "Validation failed.",
+      errors: errors.array(),
+    });
+  }
+
+  next();
+};
 
 export const validateCreateSubmission = [
   body("projectName")
@@ -88,5 +101,15 @@ export const validateGetMySubmission = [
     .isMongoId()
     .withMessage("Valid teamId query param is required."),
 
+  validate,
+];
+
+export const validateHackathonIdParam = [
+  param("hackathonId").isMongoId().withMessage("Invalid hackathon ID."),
+  validate,
+];
+
+export const validateSubmissionIdParam = [
+  param("id").isMongoId().withMessage("Invalid submission ID."),
   validate,
 ];
