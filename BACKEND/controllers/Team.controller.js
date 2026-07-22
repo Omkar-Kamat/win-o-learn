@@ -17,6 +17,49 @@ const createTeam = asyncHandler(async (req, res) => {
   );
 });
 
+const getTeam = asyncHandler(async (req, res) => {
+  const team = await TeamService.getTeamById(
+    req.team
+  );
+
+  return SendResponse(
+    res,
+    200,
+    true,
+    "Team fetched successfully.",
+    team
+  );
+});
+
+const updateTeam = asyncHandler(async (req, res) => {
+  const team = await TeamService.updateTeam(
+    req.team,
+    req.body
+  );
+
+  return SendResponse(
+    res,
+    200,
+    true,
+    "Team updated successfully.",
+    team
+  );
+});
+
+const deleteTeam = asyncHandler(async (req, res) => {
+  await TeamService.deleteTeam(req.team);
+
+  return SendResponse(
+    res,
+    200,
+    true,
+    "Team deleted successfully."
+  );
+});
+
 export default {
   createTeam,
+  getTeam,
+  updateTeam,
+  deleteTeam,
 };

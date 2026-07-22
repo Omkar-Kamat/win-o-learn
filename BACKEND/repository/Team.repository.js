@@ -28,10 +28,27 @@ const findByMember = (userId) =>
     members: userId,
   });
 
+const updateById = (teamId, updates) =>
+  Team.findByIdAndUpdate(
+    teamId,
+    updates,
+    {
+      new: true,
+      runValidators: true,
+    }
+  )
+    .populate("leader", "name avatar")
+    .populate("members", "name avatar");
+
+const deleteById = (teamId) =>
+  Team.findByIdAndDelete(teamId);
+
 export default {
   create,
   findById,
   findByLeader,
   findByMember,
   isMember,
+  updateById,
+  deleteById,
 };

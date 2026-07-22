@@ -4,14 +4,20 @@ import ApiError from "../utils/ApiError.js";
 
 import TeamRepository from "../repository/Team.repository.js";
 
+
+
 const LoadTeam = (options = {}) =>
   asyncHandler(async (req, res, next) => {
     const {
       requireLeader = false,
       requireMember = false,
+      requireInvitee = false,
     } = options;
 
-    const teamId = req.body?.teamId ?? req.params.teamId;
+    const teamId =
+      req.params.id ??
+      req.params.teamId ??
+      req.body?.teamId;
 
     const team =
       await TeamRepository.findById(teamId);
@@ -38,7 +44,7 @@ const LoadTeam = (options = {}) =>
     if (
       requireMember &&
       !team.members.some((member) =>
-        member._id.equals(req.user._id)
+          (member._id ?? member).equals(req.user._id)
       )
     ) {
       throw new ApiError(

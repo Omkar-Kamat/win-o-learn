@@ -118,6 +118,11 @@ const findByHackathon = (hackathonId) =>
     select: "members",
   });
 
+const existsByTeam = (teamId) =>
+  Registration.exists({
+    team: teamId,
+  });
+
 export default {
   create,
   findById,
@@ -126,4 +131,5 @@ export default {
   findAllByHackathon,
   deleteByHackathonAndTeam,
   setStatus,
+  existsByTeam,
 };

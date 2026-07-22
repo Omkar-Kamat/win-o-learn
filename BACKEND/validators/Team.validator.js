@@ -32,15 +32,48 @@ const membersCannotContainLeaderValidation = () =>
     return true;
   });
 
-const protectedFieldsValidation = () => [
+const protectedCreateFieldsValidation = () => [
   body("createdAt")
     .not()
     .exists()
     .withMessage("createdAt cannot be provided."),
+
   body("updatedAt")
     .not()
     .exists()
     .withMessage("updatedAt cannot be provided."),
+
+  body("leader")
+    .not()
+    .exists()
+    .withMessage("Leader cannot be provided."),
+];
+
+const protectedUpdateFieldsValidation = () => [
+  body("createdAt")
+    .not()
+    .exists()
+    .withMessage("createdAt cannot be updated."),
+
+  body("updatedAt")
+    .not()
+    .exists()
+    .withMessage("updatedAt cannot be updated."),
+
+  body("leader")
+    .not()
+    .exists()
+    .withMessage("Leader cannot be updated."),
+
+  body("members")
+    .not()
+    .exists()
+    .withMessage("Members cannot be updated."),
+
+  body("pendingInvites")
+    .not()
+    .exists()
+    .withMessage("Pending invites cannot be updated."),
 ];
 
 const memberIdValidation = () =>
@@ -61,14 +94,6 @@ const uniqueMembersValidation = () =>
     return true;
   });
 
-const leaderValidation = () =>
-  body("leader")
-    .not()
-    .exists()
-    .withMessage(
-      "Leader cannot be provided."
-    );
-
 const validate = (req, res, next) => {
   const errors = validationResult(req);
 
@@ -83,13 +108,46 @@ const validate = (req, res, next) => {
   next();
 };
 
+const descriptionValidation = () =>
+  body("description")
+    .optional()
+    .trim()
+    .isLength({ max: 500 })
+    .withMessage(
+      "Description cannot exceed 500 characters."
+    );
+
+  
+
 export const validateCreateTeam = [
   nameValidation(),
   membersValidation(),
   memberIdValidation(),
   uniqueMembersValidation(),
   membersCannotContainLeaderValidation(),
-  leaderValidation(),
-  ...protectedFieldsValidation(),
+  ...protectedCreateFieldsValidation(),
+  validate,
+];
+
+export const validateUpdateTeam = [
+  body().custom((value) => {
+  if (!value || Object.keys(value).length === 0) {
+    throw new Error("At least one field must be provided.");
+  }
+
+  return true;
+  }),
+  body("name")
+    .optional()
+    .trim()
+    .isLength({ min: 3, max: 50 })
+    .withMessage(
+      "Team name must be between 3 and 50 characters."
+    ),
+
+  descriptionValidation(),
+
+  ...protectedUpdateFieldsValidation(),
+
   validate,
 ];
