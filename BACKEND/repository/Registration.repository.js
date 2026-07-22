@@ -35,6 +35,44 @@ const findByHackathonAndTeam = (
     team: teamId,
   });
 
+const findByHackathonAndUser = (
+  hackathonId,
+  userId
+) =>
+  Registration.find({
+    hackathon: hackathonId,
+  }).populate({
+    path: "team",
+    populate: [
+      {
+        path: "leader",
+        select: "name avatar",
+      },
+      {
+        path: "members",
+        select: "name avatar",
+      },
+    ],
+  }).then((registrations) =>
+    registrations.find((registration) => {
+      const team = registration.team;
+
+      if (!team) {
+        return false;
+      }
+
+      const leaderId = team.leader._id ?? team.leader;
+
+      if (leaderId.equals(userId)) {
+        return true;
+      }
+
+      return team.members.some((member) =>
+        (member._id ?? member).equals(userId)
+      );
+    }) || null
+  );
+
 const findAllByHackathon = async (
   hackathonId,
   {
@@ -127,6 +165,7 @@ export default {
   create,
   findById,
   findByHackathonAndTeam,
+  findByHackathonAndUser,
   findByHackathon,
   findAllByHackathon,
   deleteByHackathonAndTeam,

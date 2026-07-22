@@ -1,26 +1,11 @@
 import ApiError from "../utils/ApiError.js";
 
 import SubmissionRepository from "../repository/Submission.repository.js";
-import RegistrationRepository from "../repository/Registration.repository.js";
 
 const createSubmission = async (
-  hackathonId,
-  team,
+  registration,
   body
 ) => {
-  const registration =
-    await RegistrationRepository.findByHackathonAndTeam(
-      hackathonId,
-      team._id
-    );
-
-  if (!registration) {
-    throw new ApiError(
-      404,
-      "Registration not found."
-    );
-  }
-
   if (registration.status !== "approved") {
      throw new ApiError(400, "Only approved teams can submit a project.");
    }
@@ -44,22 +29,8 @@ const createSubmission = async (
 };
 
 const getMySubmission = async (
-  hackathonId,
-  team
+  registration
 ) => {
-  const registration =
-    await RegistrationRepository.findByHackathonAndTeam(
-      hackathonId,
-      team._id
-    );
-
-  if (!registration) {
-    throw new ApiError(
-      404,
-      "Registration not found."
-    );
-  }
-
   const submission =
     await SubmissionRepository.findByRegistration(
       registration._id

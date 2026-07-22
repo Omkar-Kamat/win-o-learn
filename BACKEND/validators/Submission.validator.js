@@ -1,4 +1,4 @@
-import { body, query, param, validationResult } from "express-validator";
+import { body, param, validationResult } from "express-validator";
 
 const validate = (req, res, next) => {
   const errors = validationResult(req);
@@ -66,6 +66,8 @@ export const validateCreateSubmission = [
 ];
 
 export const validateUpdateSubmission = [
+  ...protectedFieldsValidation(),
+
   body("projectName").optional().trim().notEmpty(),
 
   body("problemStatement").optional().trim().notEmpty(),
@@ -99,14 +101,6 @@ export const validateSubmissionStatus = [
   body("status")
     .isIn(["pending", "under_review", "approved", "rejected"])
     .withMessage("Invalid submission status."),
-
-  validate,
-];
-
-export const validateGetMySubmission = [
-  query("teamId")
-    .isMongoId()
-    .withMessage("Valid teamId query param is required."),
 
   validate,
 ];

@@ -63,22 +63,10 @@ const updateById = (id, data) =>
     ],
   });
 
-const findByHackathonAndTeam = (
-  hackathonId,
-  teamId
-) =>
-  Registration.findOne({
-    hackathon: hackathonId,
-    team: teamId,
-  })
-    .populate("hackathon")
-    .populate("team");
-
 export default {
   create,
   findById,
   findByRegistration,
   findAllByHackathon,
-  findByHackathonAndTeam,
   updateById,
 };

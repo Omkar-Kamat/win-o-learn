@@ -6,8 +6,7 @@ const createSubmission = asyncHandler(
   async (req, res) => {
     const submission =
       await SubmissionService.createSubmission(
-        req.params.hackathonId,
-        req.team,
+        req.registration,
         req.body
       );
 
@@ -25,8 +24,7 @@ const getMySubmission = asyncHandler(
   async (req, res) => {
     const submission =
       await SubmissionService.getMySubmission(
-        req.params.hackathonId,
-        req.team
+        req.registration
       );
 
     SendResponse(

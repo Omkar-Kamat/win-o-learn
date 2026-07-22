@@ -6,7 +6,7 @@ import VerifyToken from "../middlewares/VerifyToken.js";
 import AuthorizeRoles from "../middlewares/AuthorizeRoles.js";
 
 import LoadHackathon from "../middlewares/LoadHackathon.js";
-import LoadTeam from "../middlewares/LoadTeam.js";
+import LoadRegistrationForSubmission from "../middlewares/LoadRegistrationForSubmission.js";
 import LoadSubmission from "../middlewares/LoadSubmission.js";
 
 import CheckHackathonOwnership from "../middlewares/CheckHackathonOwnership.js";
@@ -19,7 +19,6 @@ import {
   validateSubmissionStatus,
   validateHackathonIdParam,
   validateSubmissionIdParam,
-  validateGetMySubmission,
   validateUpdateSubmissionFiles
 } from "../validators/Submission.validator.js";
 
@@ -31,7 +30,7 @@ hackathonScopedSubmissionRoutes.post(
   AuthorizeRoles(ROLES.PARTICIPANT),
   validateHackathonIdParam,
   LoadHackathon,
-  LoadTeam({ requireLeader: true }),
+  LoadRegistrationForSubmission({ requireLeader: true }),
   validateCreateSubmission,
   SubmissionController.createSubmission
 );
@@ -41,9 +40,8 @@ hackathonScopedSubmissionRoutes.get(
   VerifyToken,
   AuthorizeRoles(ROLES.PARTICIPANT),
   validateHackathonIdParam,
-  validateGetMySubmission,
   LoadHackathon,
-  LoadTeam({ requireMember: true }),
+  LoadRegistrationForSubmission({ requireMember: true }),
   SubmissionController.getMySubmission
 );
 
