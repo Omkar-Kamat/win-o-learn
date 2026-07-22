@@ -1,4 +1,4 @@
-import { body } from "express-validator";
+import { body, query } from "express-validator";
 import validate from "../middlewares/validate.js";
 
 export const validateCreateSubmission = [
@@ -77,13 +77,16 @@ export const validateUpdateSubmission = [
 
 export const validateSubmissionStatus = [
   body("status")
-    .isIn([
-      "Pending",
-      "Under Review",
-      "Approved",
-      "Rejected",
-    ])
+    .isIn(["pending", "under_review", "approved", "rejected"])
     .withMessage("Invalid submission status."),
+
+  validate,
+];
+
+export const validateGetMySubmission = [
+  query("teamId")
+    .isMongoId()
+    .withMessage("Valid teamId query param is required."),
 
   validate,
 ];

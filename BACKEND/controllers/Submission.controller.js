@@ -1,6 +1,6 @@
 import asyncHandler from "../middlewares/AsyncHandler.js";
 import SubmissionService from "../services/Submission.service.js";
-import successResponse from "../utils/successResponse.js";
+import SendResponse from "../utils/SendResponse.js";
 
 const createSubmission = asyncHandler(
   async (req, res) => {
@@ -11,9 +11,10 @@ const createSubmission = asyncHandler(
         req.body
       );
 
-    successResponse(
+    SendResponse(
       res,
       201,
+      true,
       "Submission created successfully.",
       submission
     );
@@ -28,9 +29,10 @@ const getMySubmission = asyncHandler(
         req.team
       );
 
-    successResponse(
+    SendResponse(
       res,
       200,
+      true,
       "Submission retrieved successfully.",
       submission
     );
@@ -39,9 +41,10 @@ const getMySubmission = asyncHandler(
 
 const getSubmission = asyncHandler(
   async (req, res) => {
-    successResponse(
+    SendResponse(
       res,
       200,
+      true,
       "Submission retrieved successfully.",
       req.submission
     );
@@ -56,9 +59,10 @@ const updateSubmission = asyncHandler(
         req.body
       );
 
-    successResponse(
+    SendResponse(
       res,
       200,
+      true,      
       "Submission updated successfully.",
       submission
     );
@@ -73,9 +77,10 @@ const updateSubmissionFiles = asyncHandler(
         req.body
       );
 
-    successResponse(
+    SendResponse(
       res,
       200,
+      true,
       "Submission files updated successfully.",
       submission
     );
@@ -89,9 +94,10 @@ const getHackathonSubmissions =
         req.params.hackathonId
       );
 
-    successResponse(
+    SendResponse(
       res,
       200,
+      true,
       "Submissions retrieved successfully.",
       submissions
     );
@@ -105,9 +111,10 @@ const updateSubmissionStatus =
         req.body.status
       );
 
-    successResponse(
+    SendResponse(
       res,
       200,
+      true,
       "Submission status updated successfully.",
       submission
     );

@@ -187,3 +187,8 @@ export const validateRemoveMember = [
   userIdValidation(),
   validate,
 ];
+
+export const validateTeamId = [
+  param("id").isMongoId().withMessage("Invalid team ID."),
+  validate,
+];

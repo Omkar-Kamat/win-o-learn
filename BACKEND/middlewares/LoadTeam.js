@@ -17,7 +17,8 @@ const LoadTeam = (options = {}) =>
     const teamId =
       req.params.id ??
       req.params.teamId ??
-      req.body?.teamId;
+      req.body?.teamId ??
+      req.query?.teamId;
 
     const team =
       await TeamRepository.findById(teamId);

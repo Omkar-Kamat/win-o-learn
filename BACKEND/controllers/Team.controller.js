@@ -58,82 +58,33 @@ const deleteTeam = asyncHandler(async (req, res) => {
 });
 
 const inviteMember = asyncHandler(async (req, res) => {
-  const team = await TeamService.inviteMember(
-    req.team,
-    req.body.email,
-    req.user._id
-  );
-
-  res.status(200).json({
-    success: true,
-    message: "Invite sent successfully.",
-    team,
-  });
+  const team = await TeamService.inviteMember(req.team, req.body.email, req.user._id);
+  SendResponse(res, 200, true, "Invite sent successfully.", team);
 });
 
 const acceptInvite = asyncHandler(async (req, res) => {
-  const team = await TeamService.acceptInvite(
-    req.team,
-    req.user._id
-  );
-
-  res.status(200).json({
-    success: true,
-    message: "Invite accepted successfully.",
-    team,
-  });
+  const team = await TeamService.acceptInvite(req.team, req.user._id);
+  SendResponse(res, 200, true, "Invite accepted successfully.", team);
 });
 
 const rejectInvite = asyncHandler(async (req, res) => {
-  const team = await TeamService.rejectInvite(
-    req.team,
-    req.user._id
-  );
-
-  res.status(200).json({
-    success: true,
-    message: "Invite rejected successfully.",
-    team,
-  });
+  const team = await TeamService.rejectInvite(req.team, req.user._id);
+  SendResponse(res, 200, true, "Invite rejected successfully.", team);
 });
 
 const transferLeadership = asyncHandler(async (req, res) => {
-  const team = await TeamService.transferLeadership(
-    req.team,
-    req.body.userId
-  );
-
-  res.status(200).json({
-    success: true,
-    message: "Leadership transferred successfully.",
-    team,
-  });
+  const team = await TeamService.transferLeadership(req.team, req.body.userId);
+  SendResponse(res, 200, true, "Leadership transferred successfully.", team);
 });
 
 const leaveTeam = asyncHandler(async (req, res) => {
-  const team = await TeamService.leaveTeam(
-    req.team,
-    req.user._id
-  );
-
-  res.status(200).json({
-    success: true,
-    message: "Left team successfully.",
-    team,
-  });
+  const team = await TeamService.leaveTeam(req.team, req.user._id);
+  SendResponse(res, 200, true, "Left team successfully.", team);
 });
 
 const removeMember = asyncHandler(async (req, res) => {
-  const team = await TeamService.removeMember(
-    req.team,
-    req.params.userId
-  );
-
-  res.status(200).json({
-    success: true,
-    message: "Member removed successfully.",
-    team,
-  });
+  const team = await TeamService.removeMember(req.team, req.params.userId);
+  SendResponse(res, 200, true, "Member removed successfully.", team);
 });
 
 export default {

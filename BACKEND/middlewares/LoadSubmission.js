@@ -1,6 +1,6 @@
-import SubmissionRepository from "../repositories/Submission.repository.js";
+import SubmissionRepository from "../repository/Submission.repository.js";
 import ApiError from "../utils/ApiError.js";
-import ROLES from "../constants/roles.js";
+import {ROLES} from "../utils/Constants.js";
 
 const LoadSubmission = ({
   requireLeader = false,

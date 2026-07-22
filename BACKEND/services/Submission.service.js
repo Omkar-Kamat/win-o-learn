@@ -1,7 +1,7 @@
 import ApiError from "../utils/ApiError.js";
 
-import SubmissionRepository from "../repositories/Submission.repository.js";
-import RegistrationRepository from "../repositories/Registration.repository.js";
+import SubmissionRepository from "../repository/Submission.repository.js";
+import RegistrationRepository from "../repository/Registration.repository.js";
 
 const createSubmission = async (
   hackathonId,
@@ -30,19 +30,6 @@ const createSubmission = async (
     throw new ApiError(
       400,
       "Submission already exists."
-    );
-  }
-
-  const deadline =
-    registration.hackathon.submissionDeadline;
-
-  if (
-    deadline &&
-    new Date() > new Date(deadline)
-  ) {
-    throw new ApiError(
-      400,
-      "Submission deadline has passed."
     );
   }
 

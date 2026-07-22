@@ -1,5 +1,5 @@
 import Submission from "../models/Submission.model.js";
-
+import Registration from "../models/Registration.model.js";
 const create = (data) =>
   Submission.create(data);
 
@@ -32,17 +32,16 @@ const findByRegistration = (registrationId) =>
     ],
   });
 
-const findAllByHackathon = (hackathonId) =>
-  Submission.find()
+const findAllByHackathon = async (hackathonId) => {
+  const submissions = await Submission.find()
     .populate({
       path: "registration",
-      match: {
-        hackathon: hackathonId,
-      },
-      populate: {
-        path: "team",
-      },
+      match: { hackathon: hackathonId },
+      populate: { path: "team" },
     });
+
+  return submissions.filter((s) => s.registration !== null);
+};
 
 const updateById = (id, data) =>
   Submission.findByIdAndUpdate(

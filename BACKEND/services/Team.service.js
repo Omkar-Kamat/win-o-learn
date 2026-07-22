@@ -164,7 +164,7 @@ const leaveTeam = async (team, userId) => {
   );
 };
 
-const removeMember = async (team, userId, leaderId) => {
+const removeMember = async (team, userId) => {
   const member = await UserRepository.findById(userId);
 
   if (!member) {
