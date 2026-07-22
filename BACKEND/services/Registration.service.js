@@ -55,7 +55,7 @@ const registerTeam = async (
       hackathon._id
     );
 
-  const teamMembers = team.members.map(String);
+  const teamMembers = team.members.map((m) => String(m._id ?? m));
 
   for (const registration of registrations) {
     const registeredMembers =

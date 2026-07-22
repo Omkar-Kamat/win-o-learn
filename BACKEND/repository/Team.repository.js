@@ -1,6 +1,13 @@
 import Team from "../models/Team.model.js";
 
-const create = (teamData) => Team.create(teamData);
+const create = async (teamData) => {
+  const team = await Team.create(teamData);
+
+  return team.populate([
+    { path: "leader", select: "name avatar" },
+    { path: "members", select: "name avatar" },
+  ]);
+};
 
 const findById = (teamId) =>
   Team.findById(teamId)
