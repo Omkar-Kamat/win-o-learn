@@ -172,40 +172,49 @@ const dateValidation = body().custom((_, { req }) => {
     registrationStartDate,
     registrationDeadline,
     startDate,
+    submissionDeadline,
     endDate,
   } = req.body;
 
   if (
-    !registrationStartDate ||
-    !registrationDeadline ||
-    !startDate ||
-    !endDate
+  !registrationStartDate ||
+  !registrationDeadline ||
+  !startDate ||
+  !submissionDeadline ||
+  !endDate
   ) {
     return true;
   }
 
-  const registrationStart = new Date(registrationStartDate);
-  const registrationEnd = new Date(registrationDeadline);
-  const hackathonStart = new Date(startDate);
-  const hackathonEnd = new Date(endDate);
+const registrationStart = new Date(registrationStartDate);
+const registrationEnd = new Date(registrationDeadline);
+const hackathonStart = new Date(startDate);
+const submission = new Date(submissionDeadline);
+const hackathonEnd = new Date(endDate);
 
-  if (registrationStart >= registrationEnd) {
-    throw new Error(
-      "Registration start must be before registration deadline"
-    );
-  }
+if (registrationStart >= registrationEnd) {
+  throw new Error(
+    "Registration deadline must be after registration start date."
+  );
+}
 
-  if (registrationEnd >= hackathonStart) {
-    throw new Error(
-      "Registration deadline must be before hackathon start"
-    );
-  }
+if (registrationEnd >= hackathonStart) {
+  throw new Error(
+    "Hackathon start date must be after registration deadline."
+  );
+}
 
-  if (hackathonStart >= hackathonEnd) {
-    throw new Error(
-      "Hackathon start must be before hackathon end"
-    );
-  }
+if (hackathonStart > submission) {
+  throw new Error(
+    "Submission deadline cannot be before hackathon start date."
+  );
+}
+
+if (submission > hackathonEnd) {
+  throw new Error(
+    "Submission deadline cannot be after hackathon end date."
+  );
+}
 
   return true;
 });
@@ -270,6 +279,26 @@ const startDateValidation = (optional = false) => {
     .toDate();
 };
 
+const submissionDeadlineValidation = (optional = false) => {
+  let validator = body("submissionDeadline");
+
+  if (optional) {
+    return validator
+      .optional()
+      .isISO8601({ strict: true, strictSeparator: true })
+      .withMessage("Invalid submission deadline")
+      .toDate();
+  }
+
+  return validator
+    .exists({ checkFalsy: true })
+    .withMessage("Submission deadline is required")
+    .bail()
+    .isISO8601({ strict: true, strictSeparator: true })
+    .withMessage("Invalid submission deadline")
+    .toDate();
+};
+
 const endDateValidation = (optional = false) => {
   let validator = body("endDate");
 
@@ -305,39 +334,49 @@ const protectedFieldsValidation = body([
 const updateDateValidation = body().custom((_, { req }) => {
   const hackathon = req.hackathon;
 
-  const registrationStart = new Date(
-    req.body.registrationStartDate ?? hackathon.registrationStartDate
+const registrationStart = new Date(
+  req.body.registrationStartDate ?? hackathon.registrationStartDate
+);
+
+const registrationEnd = new Date(
+  req.body.registrationDeadline ?? hackathon.registrationDeadline
+);
+
+const startDate = new Date(
+  req.body.startDate ?? hackathon.startDate
+);
+
+const submissionDeadline = new Date(
+  req.body.submissionDeadline ?? hackathon.submissionDeadline
+);
+
+const endDate = new Date(
+  req.body.endDate ?? hackathon.endDate
+);
+
+if (registrationStart >= registrationEnd) {
+  throw new Error(
+    "Registration deadline must be after registration start date."
   );
+}
 
-  const registrationDeadline = new Date(
-    req.body.registrationDeadline ?? hackathon.registrationDeadline
+if (registrationEnd >= startDate) {
+  throw new Error(
+    "Hackathon start date must be after registration deadline."
   );
+}
 
-  const startDate = new Date(
-    req.body.startDate ?? hackathon.startDate
+if (startDate > submissionDeadline) {
+  throw new Error(
+    "Submission deadline cannot be before hackathon start date."
   );
+}
 
-  const endDate = new Date(
-    req.body.endDate ?? hackathon.endDate
+if (submissionDeadline > endDate) {
+  throw new Error(
+    "Submission deadline cannot be after hackathon end date."
   );
-
-  if (registrationStart >= registrationDeadline) {
-    throw new Error(
-      "Registration start must be before registration deadline"
-    );
-  }
-
-  if (registrationDeadline >= startDate) {
-    throw new Error(
-      "Registration deadline must be before hackathon start"
-    );
-  }
-
-  if (startDate >= endDate) {
-    throw new Error(
-      "Hackathon start must be before hackathon end"
-    );
-  }
+}
 
   return true;
 });
@@ -352,6 +391,7 @@ export const validateCreateHackathon = [
   registrationStartDateValidation(),
   registrationDeadlineValidation(),
   startDateValidation(),
+  submissionDeadlineValidation(),
   endDateValidation(),
 
   venueValidation(),
@@ -378,6 +418,7 @@ export const validateUpdateHackathon = [
   registrationStartDateValidation(true),
   registrationDeadlineValidation(true),
   startDateValidation(true),
+  submissionDeadlineValidation(true),
   endDateValidation(true),
 
   venueValidation(true),
