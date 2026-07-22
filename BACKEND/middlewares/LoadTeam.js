@@ -53,6 +53,20 @@ const LoadTeam = (options = {}) =>
       );
     }
 
+    if (requireInvitee) {
+      const isInvitee = team.pendingInvites.some(
+        (invite) =>
+          (invite.user._id ?? invite.user).equals(req.user._id)
+      );
+
+      if (!isInvitee) {
+        throw new ApiError(
+          403,
+          "You do not have a pending invite for this team."
+        );
+      }
+    }
+
     req.team = team;
 
     next();

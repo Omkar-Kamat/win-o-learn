@@ -43,6 +43,63 @@ const updateById = (teamId, updates) =>
 const deleteById = (teamId) =>
   Team.findByIdAndDelete(teamId);
 
+const addInvite = (teamId, invite) =>
+  Team.findByIdAndUpdate(
+    teamId,
+    {
+      $push: {
+        pendingInvites: invite,
+      },
+    },
+    {
+      new: true,
+      runValidators: true,
+    }
+  )
+    .populate("leader", "name avatar")
+    .populate("members", "name avatar")
+    .populate("pendingInvites.user", "name email avatar")
+    .populate("pendingInvites.invitedBy", "name avatar");
+
+const removeInvite = (teamId, userId) =>
+  Team.findByIdAndUpdate(
+    teamId,
+    {
+      $pull: {
+        pendingInvites: {
+          user: userId,
+        },
+      },
+    },
+    {
+      new: true,
+      runValidators: true,
+    }
+  )
+    .populate("leader", "name avatar")
+    .populate("members", "name avatar")
+    .populate("pendingInvites.user", "name email avatar")
+    .populate("pendingInvites.invitedBy", "name avatar");
+
+const acceptInvite = async (teamId, userId) => {
+  const team = await Team.findById(teamId);
+
+  team.pendingInvites = team.pendingInvites.filter(
+    (invite) => !invite.user.equals(userId)
+  );
+
+  team.members.push(userId);
+
+  await team.save();
+
+  return Team.findById(teamId)
+    .populate("leader", "name avatar")
+    .populate("members", "name avatar")
+    .populate("pendingInvites.user", "name email avatar")
+    .populate("pendingInvites.invitedBy", "name avatar");
+};
+
+
 export default {
   create,
   findById,
@@ -51,4 +108,7 @@ export default {
   isMember,
   updateById,
   deleteById,
+  addInvite,
+  removeInvite,
+  acceptInvite,
 };

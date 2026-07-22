@@ -117,7 +117,17 @@ const descriptionValidation = () =>
       "Description cannot exceed 500 characters."
     );
 
-  
+
+const inviteEmailValidation = () =>
+  body("email")
+    .exists({ values: "falsy" })
+    .withMessage("Email is required.")
+    .bail()
+    .isEmail()
+    .withMessage("Invalid email.")
+    .normalizeEmail();
+
+
 
 export const validateCreateTeam = [
   nameValidation(),
@@ -149,5 +159,10 @@ export const validateUpdateTeam = [
 
   ...protectedUpdateFieldsValidation(),
 
+  validate,
+];
+
+export const validateInviteMember = [
+  inviteEmailValidation(),
   validate,
 ];

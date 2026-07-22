@@ -57,9 +57,52 @@ const deleteTeam = asyncHandler(async (req, res) => {
   );
 });
 
+const inviteMember = asyncHandler(async (req, res) => {
+  const team = await TeamService.inviteMember(
+    req.team,
+    req.body.email,
+    req.user._id
+  );
+
+  res.status(200).json({
+    success: true,
+    message: "Invite sent successfully.",
+    team,
+  });
+});
+
+const acceptInvite = asyncHandler(async (req, res) => {
+  const team = await TeamService.acceptInvite(
+    req.team,
+    req.user._id
+  );
+
+  res.status(200).json({
+    success: true,
+    message: "Invite accepted successfully.",
+    team,
+  });
+});
+
+const rejectInvite = asyncHandler(async (req, res) => {
+  const team = await TeamService.rejectInvite(
+    req.team,
+    req.user._id
+  );
+
+  res.status(200).json({
+    success: true,
+    message: "Invite rejected successfully.",
+    team,
+  });
+});
+
 export default {
   createTeam,
   getTeam,
   updateTeam,
   deleteTeam,
+  inviteMember,
+  acceptInvite,
+  rejectInvite,
 };

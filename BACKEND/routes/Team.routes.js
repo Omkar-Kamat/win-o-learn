@@ -10,6 +10,7 @@ import TeamController from "../controllers/Team.controller.js";
 import {
   validateCreateTeam,
   validateUpdateTeam,
+  validateInviteMember,
 } from "../validators/Team.validator.js";
 
 const router = Router();
@@ -44,6 +45,31 @@ router.delete(
   AuthorizeRoles(ROLES.PARTICIPANT),
   LoadTeam({ requireLeader: true }),
   TeamController.deleteTeam
+);
+
+router.post(
+  "/:id/invite",
+  VerifyToken,
+  AuthorizeRoles(ROLES.PARTICIPANT),
+  LoadTeam({ requireLeader: true }),
+  validateInviteMember,
+  TeamController.inviteMember
+);
+
+router.post(
+  "/:id/invite/accept",
+  VerifyToken,
+  AuthorizeRoles(ROLES.PARTICIPANT),
+  LoadTeam({ requireInvitee: true }),
+  TeamController.acceptInvite
+);
+
+router.post(
+  "/:id/invite/reject",
+  VerifyToken,
+  AuthorizeRoles(ROLES.PARTICIPANT),
+  LoadTeam(),
+  TeamController.rejectInvite
 );
 
 export default router;
