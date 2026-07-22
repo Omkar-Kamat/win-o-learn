@@ -6,6 +6,7 @@ const createSubmission = asyncHandler(
   async (req, res) => {
     const submission =
       await SubmissionService.createSubmission(
+        req.hackathon,
         req.registration,
         req.body
       );
@@ -89,7 +90,7 @@ const getHackathonSubmissions =
   asyncHandler(async (req, res) => {
     const submissions =
       await SubmissionService.getHackathonSubmissions(
-        req.params.hackathonId
+        req.hackathon._id
       );
 
     SendResponse(

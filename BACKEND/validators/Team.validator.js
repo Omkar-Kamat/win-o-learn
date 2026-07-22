@@ -47,6 +47,11 @@ const protectedCreateFieldsValidation = () => [
     .not()
     .exists()
     .withMessage("Leader cannot be provided."),
+
+  body("pendingInvites")
+    .not()
+    .exists()
+    .withMessage("Pending invites cannot be provided."),
 ];
 
 const protectedUpdateFieldsValidation = () => [
@@ -125,7 +130,7 @@ const descriptionValidation = () =>
 
 const inviteEmailValidation = () =>
   body("email")
-    .exists({ values: "falsy" })
+    .exists({ checkFalsy: true })
     .withMessage("Email is required.")
     .bail()
     .isEmail()
@@ -134,7 +139,7 @@ const inviteEmailValidation = () =>
 
 const newLeaderValidation = () =>
   body("userId")
-    .exists({ values: "falsy" })
+    .exists({ checkFalsy: true })
     .withMessage("User ID is required.")
     .bail()
     .isMongoId()

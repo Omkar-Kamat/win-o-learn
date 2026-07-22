@@ -101,8 +101,8 @@ const openRegistration = async (hackathon) => {
 
   if (new Date() >= hackathon.startDate) {
     throw new ApiError(
-        400,
-        "Registration cannot be opened after the hackathon has started"
+      400,
+      "Registration cannot be opened after the hackathon has started"
     );
   }
 

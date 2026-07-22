@@ -167,6 +167,44 @@ const marksValidation = (optional = false) => {
   return optional ? validator.optional() : validator;
 };
 
+const validateDateOrder = ({
+  registrationStartDate,
+  registrationDeadline,
+  startDate,
+  submissionDeadline,
+  endDate,
+}) => {
+  const registrationStart = new Date(registrationStartDate);
+  const registrationEnd = new Date(registrationDeadline);
+  const hackathonStart = new Date(startDate);
+  const submission = new Date(submissionDeadline);
+  const hackathonEnd = new Date(endDate);
+
+  if (registrationStart >= registrationEnd) {
+    throw new Error(
+      "Registration deadline must be after registration start date."
+    );
+  }
+
+  if (registrationEnd >= hackathonStart) {
+    throw new Error(
+      "Hackathon start date must be after registration deadline."
+    );
+  }
+
+  if (hackathonStart > submission) {
+    throw new Error(
+      "Submission deadline cannot be before hackathon start date."
+    );
+  }
+
+  if (submission > hackathonEnd) {
+    throw new Error(
+      "Submission deadline cannot be after hackathon end date."
+    );
+  }
+};
+
 const dateValidation = body().custom((_, { req }) => {
   const {
     registrationStartDate,
@@ -186,35 +224,13 @@ const dateValidation = body().custom((_, { req }) => {
     return true;
   }
 
-const registrationStart = new Date(registrationStartDate);
-const registrationEnd = new Date(registrationDeadline);
-const hackathonStart = new Date(startDate);
-const submission = new Date(submissionDeadline);
-const hackathonEnd = new Date(endDate);
-
-if (registrationStart >= registrationEnd) {
-  throw new Error(
-    "Registration deadline must be after registration start date."
-  );
-}
-
-if (registrationEnd >= hackathonStart) {
-  throw new Error(
-    "Hackathon start date must be after registration deadline."
-  );
-}
-
-if (hackathonStart > submission) {
-  throw new Error(
-    "Submission deadline cannot be before hackathon start date."
-  );
-}
-
-if (submission > hackathonEnd) {
-  throw new Error(
-    "Submission deadline cannot be after hackathon end date."
-  );
-}
+  validateDateOrder({
+    registrationStartDate,
+    registrationDeadline,
+    startDate,
+    submissionDeadline,
+    endDate,
+  });
 
   return true;
 });
@@ -323,6 +339,8 @@ const protectedFieldsValidation = body([
   "organizer",
   "registrationOpen",
   "resultsPublished",
+  "banner",
+  "bannerPublicId",
 ])
   .not()
   .exists()
@@ -334,49 +352,16 @@ const protectedFieldsValidation = body([
 const updateDateValidation = body().custom((_, { req }) => {
   const hackathon = req.hackathon;
 
-const registrationStart = new Date(
-  req.body.registrationStartDate ?? hackathon.registrationStartDate
-);
-
-const registrationEnd = new Date(
-  req.body.registrationDeadline ?? hackathon.registrationDeadline
-);
-
-const startDate = new Date(
-  req.body.startDate ?? hackathon.startDate
-);
-
-const submissionDeadline = new Date(
-  req.body.submissionDeadline ?? hackathon.submissionDeadline
-);
-
-const endDate = new Date(
-  req.body.endDate ?? hackathon.endDate
-);
-
-if (registrationStart >= registrationEnd) {
-  throw new Error(
-    "Registration deadline must be after registration start date."
-  );
-}
-
-if (registrationEnd >= startDate) {
-  throw new Error(
-    "Hackathon start date must be after registration deadline."
-  );
-}
-
-if (startDate > submissionDeadline) {
-  throw new Error(
-    "Submission deadline cannot be before hackathon start date."
-  );
-}
-
-if (submissionDeadline > endDate) {
-  throw new Error(
-    "Submission deadline cannot be after hackathon end date."
-  );
-}
+  validateDateOrder({
+    registrationStartDate:
+      req.body.registrationStartDate ?? hackathon.registrationStartDate,
+    registrationDeadline:
+      req.body.registrationDeadline ?? hackathon.registrationDeadline,
+    startDate: req.body.startDate ?? hackathon.startDate,
+    submissionDeadline:
+      req.body.submissionDeadline ?? hackathon.submissionDeadline,
+    endDate: req.body.endDate ?? hackathon.endDate,
+  });
 
   return true;
 });

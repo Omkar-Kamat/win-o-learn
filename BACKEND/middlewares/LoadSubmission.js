@@ -1,13 +1,14 @@
 import SubmissionRepository from "../repository/Submission.repository.js";
 import ApiError from "../utils/ApiError.js";
 import {ROLES} from "../utils/Constants.js";
+import AsyncHandler from "./AsyncHandler.js";
 
 const LoadSubmission = ({
   requireLeader = false,
   requireOrganizer = false,
   requireAccess = false,
 } = {}) =>
-  async (req, res, next) => {
+  AsyncHandler(async (req, res, next) => {
     const submission = await SubmissionRepository.findById(
       req.params.id
     );
@@ -80,6 +81,6 @@ const LoadSubmission = ({
     req.submission = submission;
 
     next();
-  };
+  });
 
 export default LoadSubmission;

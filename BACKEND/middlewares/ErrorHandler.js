@@ -8,7 +8,7 @@ const ErrorHandler = (err, req, res, next) => {
     if (err.keyValue?.hackathon && err.keyValue?.team) {
       message = "This team is already registered for this hackathon";
     } else {
-      const field = Object.keys(err.keyValue)[0];
+      const field = Object.keys(err.keyValue ?? {})[0] ?? "Field";
       message = `${field.charAt(0).toUpperCase() + field.slice(1)} already exists`;
     }
   }

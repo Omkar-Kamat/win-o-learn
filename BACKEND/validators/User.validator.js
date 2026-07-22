@@ -53,7 +53,7 @@ export const validateUpdateProfile = [
     .isURL()
     .withMessage("Invalid Portfolio URL"),
 
-  body(["email", "password", "role", "isBlocked"])
+  body(["email", "password", "role", "isBlocked", "avatar", "avatarPublicId"])
     .not()
     .exists()
     .withMessage("These fields cannot be updated"),
@@ -117,7 +117,7 @@ export const validateAdminUpdate = [
     .isURL()
     .withMessage("Invalid Portfolio URL"),
 
-  body(["password", "role", "isBlocked"])
+  body(["password", "role", "isBlocked", "avatar", "avatarPublicId"])
     .not()
     .exists()
     .withMessage("Use dedicated endpoints for password, role, and block status"),

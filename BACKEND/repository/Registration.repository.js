@@ -1,4 +1,5 @@
 import Registration from "../models/Registration.model.js";
+import TeamRepository from "./Team.repository.js";
 
 const create = (registrationData) =>
   Registration.create(registrationData);
@@ -35,12 +36,20 @@ const findByHackathonAndTeam = (
     team: teamId,
   });
 
-const findByHackathonAndUser = (
+const findByHackathonAndUser = async (
   hackathonId,
   userId
-) =>
-  Registration.find({
+) => {
+  const teams = await TeamRepository.findByMember(userId);
+  const teamIds = teams.map((team) => team._id);
+
+  if (teamIds.length === 0) {
+    return null;
+  }
+
+  return Registration.findOne({
     hackathon: hackathonId,
+    team: { $in: teamIds },
   }).populate({
     path: "team",
     populate: [
@@ -53,25 +62,8 @@ const findByHackathonAndUser = (
         select: "name avatar",
       },
     ],
-  }).then((registrations) =>
-    registrations.find((registration) => {
-      const team = registration.team;
-
-      if (!team) {
-        return false;
-      }
-
-      const leaderId = team.leader._id ?? team.leader;
-
-      if (leaderId.equals(userId)) {
-        return true;
-      }
-
-      return team.members.some((member) =>
-        (member._id ?? member).equals(userId)
-      );
-    }) || null
-  );
+  });
+};
 
 const findAllByHackathon = async (
   hackathonId,
@@ -151,6 +143,7 @@ const setStatus = (
 const findByHackathon = (hackathonId) =>
   Registration.find({
     hackathon: hackathonId,
+    status: { $ne: "rejected" },
   }).populate({
     path: "team",
     select: "members",
@@ -159,6 +152,7 @@ const findByHackathon = (hackathonId) =>
 const existsByTeam = (teamId) =>
   Registration.exists({
     team: teamId,
+    status: { $ne: "rejected" },
   });
 
 export default {

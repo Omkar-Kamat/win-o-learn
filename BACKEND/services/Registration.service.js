@@ -58,6 +58,10 @@ const registerTeam = async (
   const teamMembers = team.members.map((m) => String(m._id ?? m));
 
   for (const registration of registrations) {
+    if (registration.status === "rejected") {
+      continue;
+    }
+
     const registeredMembers =
       registration.team.members.map(String);
 

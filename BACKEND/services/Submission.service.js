@@ -3,12 +3,25 @@ import ApiError from "../utils/ApiError.js";
 import SubmissionRepository from "../repository/Submission.repository.js";
 
 const createSubmission = async (
+  hackathon,
   registration,
   body
 ) => {
   if (registration.status !== "approved") {
      throw new ApiError(400, "Only approved teams can submit a project.");
    }
+
+  const deadline = hackathon.submissionDeadline;
+
+  if (
+    deadline &&
+    new Date() > new Date(deadline)
+  ) {
+    throw new ApiError(
+      400,
+      "Submission deadline has passed."
+    );
+  }
 
   const existing =
     await SubmissionRepository.findByRegistration(
