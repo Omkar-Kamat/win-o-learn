@@ -21,6 +21,10 @@ const createSubmission = async (
     );
   }
 
+  if (registration.status !== "approved") {
+     throw new ApiError(400, "Only approved teams can submit a project.");
+   }
+
   const existing =
     await SubmissionRepository.findByRegistration(
       registration._id

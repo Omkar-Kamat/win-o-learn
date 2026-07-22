@@ -19,7 +19,8 @@ import {
   validateSubmissionStatus,
   validateHackathonIdParam,
   validateSubmissionIdParam,
-  validateGetMySubmission
+  validateGetMySubmission,
+  validateUpdateSubmissionFiles
 } from "../validators/Submission.validator.js";
 
 const hackathonScopedSubmissionRoutes = Router();
@@ -42,7 +43,7 @@ hackathonScopedSubmissionRoutes.get(
   validateHackathonIdParam,
   validateGetMySubmission,
   LoadHackathon,
-  LoadTeam(),
+  LoadTeam({ requireMember: true }),
   SubmissionController.getMySubmission
 );
 
@@ -89,6 +90,7 @@ submissionRoutes.put(
   LoadSubmission({
     requireLeader: true,
   }),
+  validateUpdateSubmissionFiles,
   SubmissionController.updateSubmissionFiles
 );
 

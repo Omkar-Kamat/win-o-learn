@@ -14,7 +14,14 @@ const validate = (req, res, next) => {
   next();
 };
 
+const protectedFieldsValidation = () => [
+  body("status").not().exists().withMessage("Status cannot be set directly."),
+  body("registration").not().exists().withMessage("Registration cannot be changed."),
+];
+
 export const validateCreateSubmission = [
+   ...protectedFieldsValidation(),
+  body("projectName").optional().trim().notEmpty(),
   body("projectName")
     .trim()
     .notEmpty()
@@ -111,5 +118,13 @@ export const validateHackathonIdParam = [
 
 export const validateSubmissionIdParam = [
   param("id").isMongoId().withMessage("Invalid submission ID."),
+  validate,
+];
+
+export const validateUpdateSubmissionFiles = [
+  ...protectedFieldsValidation(),
+  body("screenshots").optional().isArray(),
+  body("presentation").optional({ checkFalsy: true }).isURL(),
+  body("demoVideo").optional({ checkFalsy: true }).isURL(),
   validate,
 ];

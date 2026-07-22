@@ -33,14 +33,14 @@ const findByRegistration = (registrationId) =>
   });
 
 const findAllByHackathon = async (hackathonId) => {
-  const submissions = await Submission.find()
+  const registrations = await Registration.find({ hackathon: hackathonId }).select("_id");
+  const registrationIds = registrations.map((r) => r._id);
+
+  return Submission.find({ registration: { $in: registrationIds } })
     .populate({
       path: "registration",
-      match: { hackathon: hackathonId },
-      populate: { path: "team" },
+      populate: [{ path: "team" }, { path: "hackathon" }],
     });
-
-  return submissions.filter((s) => s.registration !== null);
 };
 
 const updateById = (id, data) =>

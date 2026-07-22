@@ -70,6 +70,11 @@ const hackathonSchema = new mongoose.Schema(
       required: true,
     },
 
+    submissionDeadline: {
+      type: Date,
+      required: true,
+    },
+
     banner: {
       type: String,
       default: "",

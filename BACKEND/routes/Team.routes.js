@@ -22,7 +22,6 @@ router.post(
   "/",
   VerifyToken,
   AuthorizeRoles(ROLES.PARTICIPANT),
-  validateTeamId,
   validateCreateTeam,
   TeamController.createTeam
 );
@@ -58,7 +57,6 @@ router.post(
   "/:id/invite",
   VerifyToken,
   AuthorizeRoles(ROLES.PARTICIPANT),
-  validateTeamId,
   LoadTeam({ requireLeader: true }),
   validateInviteMember,
   TeamController.inviteMember
@@ -68,7 +66,6 @@ router.post(
   "/:id/invite/accept",
   VerifyToken,
   AuthorizeRoles(ROLES.PARTICIPANT),
-  validateTeamId,
   LoadTeam({ requireInvitee: true }),
   TeamController.acceptInvite
 );
@@ -77,7 +74,6 @@ router.post(
   "/:id/invite/reject",
   VerifyToken,
   AuthorizeRoles(ROLES.PARTICIPANT),
-  validateTeamId,
   LoadTeam(),
   TeamController.rejectInvite
 );
@@ -96,7 +92,6 @@ router.post(
   "/:id/leave",
   VerifyToken,
   AuthorizeRoles(ROLES.PARTICIPANT),
-  validateTeamId,
   LoadTeam({ requireMember: true }),
   TeamController.leaveTeam
 );
