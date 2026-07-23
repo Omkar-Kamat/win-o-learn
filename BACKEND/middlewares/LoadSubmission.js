@@ -14,7 +14,8 @@ const LoadSubmission = ({
     requireAccess = false,
 } = {}) =>
     AsyncHandler(async (req, res, next) => {
-        const submission = await SubmissionRepository.findById(req.params.id);
+        const submissionId = req.params.submissionId ?? req.params.id;
+        const submission = await SubmissionRepository.findById(submissionId);
         if (!submission) {
             throw new ApiError(404, 'Submission not found.');
         }

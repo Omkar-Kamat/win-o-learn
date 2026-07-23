@@ -17,6 +17,7 @@ import { hackathonScopedSubmissionRoutes, submissionRoutes } from './routes/Subm
 
 import hackathonJudgeRoutes from "./routes/HackathonJudge.routes.js";
 import judgeRoutes from "./routes/Judge.routes.js";
+import ReviewRoutes from './routes/Review.routes.js';
 
 const app = express();
 app.use(
@@ -37,6 +38,7 @@ app.get('/health', (req, res) => {
 });
 
 
+app.use('/api', ReviewRoutes);
 app.use('/api/auth', AuthRoutes);
 app.use('/api/users', UserRoutes);
 app.use('/api/hackathons', HackathonRoutes);

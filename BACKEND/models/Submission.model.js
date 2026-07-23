@@ -64,6 +64,16 @@ const submissionSchema = new mongoose.Schema(
             enum: ['pending', 'under_review', 'approved', 'rejected'],
             default: 'pending',
         },
+        
+        averageScore: {
+            type: Number,
+            default: 0,
+        },
+
+        reviewCount: {
+            type: Number,
+            default: 0,
+        },
     },
     {
         timestamps: true,
