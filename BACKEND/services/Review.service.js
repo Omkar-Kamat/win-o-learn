@@ -7,6 +7,7 @@ import ApiError from '../utils/ApiError.js';
 import ReviewRepository from '../repository/Review.repository.js';
 import JudgeAssignmentRepository from '../repository/JudgeAssignment.repository.js';
 import SubmissionRepository from '../repository/Submission.repository.js';
+import ScoreService from './Score.service.js';
 
 class ReviewService {
     // Calculates total score
@@ -56,16 +57,7 @@ class ReviewService {
         }
     }
 
-    // Updates submission average score
-    async updateSubmissionAverage(submissionId) {
-        const stats =
-            await ReviewRepository.calculateSubmissionStats(submissionId);
 
-        await SubmissionRepository.updateById(submissionId, {
-            averageScore: Number(stats.averageScore.toFixed(2)),
-            reviewCount: stats.reviewCount,
-        });
-    }
 
     // Submit review
     async submitReview(submission, judgeId, data) {
@@ -113,7 +105,7 @@ class ReviewService {
                 feedback: data.feedback,
             });
 
-        await this.updateSubmissionAverage(submission._id);
+        await ScoreService.updateSubmissionAverage(submission._id);
 
         return review;
     }
@@ -150,7 +142,7 @@ class ReviewService {
                 totalScore,
             });
 
-        await this.updateSubmissionAverage(review.submission._id || review.submission);
+        await ScoreService.updateSubmissionAverage(review.submission._id || review.submission);
 
         return updated;
     }

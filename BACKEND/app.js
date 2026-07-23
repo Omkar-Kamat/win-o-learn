@@ -18,6 +18,7 @@ import { hackathonScopedSubmissionRoutes, submissionRoutes } from './routes/Subm
 import hackathonJudgeRoutes from "./routes/HackathonJudge.routes.js";
 import judgeRoutes from "./routes/Judge.routes.js";
 import ReviewRoutes from './routes/Review.routes.js';
+import LeaderboardRoutes from './routes/Leaderboard.routes.js';
 
 const app = express();
 app.use(
@@ -49,6 +50,7 @@ app.use('/api/hackathons', hackathonScopedSubmissionRoutes);
 app.use('/api/submissions', submissionRoutes);
 app.use("/api/hackathons", hackathonJudgeRoutes);
 app.use("/api/judges", judgeRoutes);
+app.use('/api/hackathons', LeaderboardRoutes);
 
 app.use(ErrorHandler);
 

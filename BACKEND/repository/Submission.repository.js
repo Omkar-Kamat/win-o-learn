@@ -44,7 +44,6 @@ const findAllByHackathon = async (hackathonId) => {
         hackathon: hackathonId,
     }).select('_id');
 
-    // Performs the registration ids operation
     const registrationIds = registrations.map((r) => r._id);
 
     return Submission.find({
