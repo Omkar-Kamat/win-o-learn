@@ -1,0 +1,38 @@
+==================================================
+Timestamp: 2026-07-23T22:25:09.921Z
+HTTP Method: PATCH
+Route: /api/hackathons/:id/open-registration
+Final URL: /api/hackathons/6a6294c5ea035f4c979ae588/open-registration
+Headers: {
+  "Content-Type": "application/json",
+  "Authorization": "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjZhNjI5NGMzZWEwMzVmNGM5NzlhZTU4NCIsInJvbGUiOiJvcmdhbml6ZXIiLCJpYXQiOjE3ODQ4NDU1MDgsImV4cCI6MTc4NDg0NjQwOH0.-fgI1-MgdliDU5mBBlpCXc2pki8ktzLdYijYuwsZJUA"
+}
+Request Body: {
+  "title": "Audit Hackathon 1784845509644",
+  "description": "Description long enough to pass the validator for audit.",
+  "theme": "Audit",
+  "mode": "online",
+  "registrationStartDate": "2026-07-22T22:25:09.644Z",
+  "registrationDeadline": "2026-07-24T22:25:09.644Z",
+  "startDate": "2026-07-25T22:25:09.644Z",
+  "submissionDeadline": "2026-07-26T22:25:09.644Z",
+  "endDate": "2026-07-27T22:25:09.644Z",
+  "prizePool": 1000,
+  "maxTeamSize": 4,
+  "rules": [
+    "Rule 1"
+  ],
+  "judgingCriteria": [
+    {
+      "criterion": "Test",
+      "maxMarks": 100
+    }
+  ]
+}
+Response Status: 200
+Response Headers: {"access-control-allow-credentials":"true","access-control-allow-origin":"http://localhost:5173","connection":"keep-alive","content-length":"792","content-security-policy":"default-src 'self';base-uri 'self';font-src 'self' https: data:;form-action 'self';frame-ancestors 'self';img-src 'self' data:;object-src 'none';script-src 'self';script-src-attr 'none';style-src 'self' https: 'unsafe-inline';upgrade-insecure-requests","content-type":"application/json; charset=utf-8","cross-origin-opener-policy":"same-origin","cross-origin-resource-policy":"same-origin","date":"Thu, 23 Jul 2026 22:25:09 GMT","etag":"W/\"318-kevPpQQIugF6Gy4FtqzdsaXSaEM\"","keep-alive":"timeout=5","origin-agent-cluster":"?1","referrer-policy":"no-referrer","strict-transport-security":"max-age=31536000; includeSubDomains","vary":"Origin","x-content-type-options":"nosniff","x-dns-prefetch-control":"off","x-download-options":"noopen","x-frame-options":"SAMEORIGIN","x-permitted-cross-domain-policies":"none","x-xss-protection":"0"}
+Response Body: {"success":true,"message":"Registration opened successfully","data":{"_id":"6a6294c5ea035f4c979ae588","title":"Audit Hackathon 1784845509430","description":"Description long enough to pass the validator for audit.","theme":"Audit","mode":"online","venue":"","registrationStartDate":"2026-07-22T22:25:09.430Z","registrationDeadline":"2026-07-24T22:25:09.430Z","startDate":"2026-07-25T22:25:09.430Z","endDate":"2026-07-27T22:25:09.430Z","submissionDeadline":"2026-07-26T22:25:09.430Z","banner":"","bannerPublicId":null,"prizePool":1000,"maxTeamSize":4,"rules":["Rule 1"],"judgingCriteria":[{"criterion":"Test","maxMarks":100}],"organizer":"6a6294c3ea035f4c979ae584","registrationOpen":true,"resultsPublished":false,"createdAt":"2026-07-23T22:25:09.560Z","updatedAt":"2026-07-23T22:25:09.851Z"}}
+Execution Time: 277ms
+PASS/FAIL: PASS
+Error Stack: None
+==================================================

@@ -1,0 +1,17 @@
+==================================================
+Timestamp: 2026-07-23T22:25:15.780Z
+HTTP Method: GET
+Route: /api/hackathons/:hackathonId/register/status/:teamId
+Final URL: /api/hackathons/6a6294c5ea035f4c979ae588/register/status/6a6294c6ea035f4c979ae589
+Headers: {
+  "Content-Type": "application/json",
+  "Authorization": "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjZhNjI5NGM0ZWEwMzVmNGM5NzlhZTU4NiIsInJvbGUiOiJwYXJ0aWNpcGFudCIsImlhdCI6MTc4NDg0NTUwOCwiZXhwIjoxNzg0ODQ2NDA4fQ.ZNx4hBa7OLAXsI_ssgE8intqcnE8mu-f_-gGtCKfCGc"
+}
+Request Body: None
+Response Status: 200
+Response Headers: {"access-control-allow-credentials":"true","access-control-allow-origin":"http://localhost:5173","connection":"keep-alive","content-length":"98","content-security-policy":"default-src 'self';base-uri 'self';font-src 'self' https: data:;form-action 'self';frame-ancestors 'self';img-src 'self' data:;object-src 'none';script-src 'self';script-src-attr 'none';style-src 'self' https: 'unsafe-inline';upgrade-insecure-requests","content-type":"application/json; charset=utf-8","cross-origin-opener-policy":"same-origin","cross-origin-resource-policy":"same-origin","date":"Thu, 23 Jul 2026 22:25:15 GMT","etag":"W/\"62-BeMUm+hKbG8pt1ZJpjTfDASmEDA\"","keep-alive":"timeout=5","origin-agent-cluster":"?1","referrer-policy":"no-referrer","strict-transport-security":"max-age=31536000; includeSubDomains","vary":"Origin","x-content-type-options":"nosniff","x-dns-prefetch-control":"off","x-download-options":"noopen","x-frame-options":"SAMEORIGIN","x-permitted-cross-domain-policies":"none","x-xss-protection":"0"}
+Response Body: {"success":true,"message":"Registration status fetched successfully.","data":{"registered":false}}
+Execution Time: 457ms
+PASS/FAIL: PASS
+Error Stack: None
+==================================================

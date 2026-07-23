@@ -1,13 +1,7 @@
 import { Router } from 'express';
 import AuthController from '../controllers/Auth.controller.js';
 import VerifyToken from '../middlewares/VerifyToken.js';
-import {
-    validateSignup,
-    validateLogin,
-    validateChangePassword,
-    validateForgotPassword,
-    validateResetPassword,
-} from '../validators/Auth.validator.js';
+import { validateSignup, validateLogin, validateChangePassword, validateForgotPassword, validateResetPassword } from '../validators/Auth.validator.js';
 const router = Router();
 router.post('/signup', validateSignup, AuthController.signup);
 router.post('/login', validateLogin, AuthController.login);

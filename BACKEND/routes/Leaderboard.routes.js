@@ -5,11 +5,8 @@ import LoadHackathon from '../middlewares/LoadHackathon.js';
 import HasHackathonAccess from '../middlewares/HasHackathonAccess.js';
 const router = express.Router();
 router.get('/:hackathonId/leaderboard', LoadHackathon, LeaderboardController.getLeaderboard);
-router.get(
-    '/:hackathonId/leaderboard/recalculate',
-    VerifyToken,
-    LoadHackathon,
-    HasHackathonAccess({ allowAdmin: true, allowOrganizer: true }),
-    LeaderboardController.recalculateLeaderboard
-);
+router.get('/:hackathonId/leaderboard/recalculate', VerifyToken, LoadHackathon, HasHackathonAccess({
+  allowAdmin: true,
+  allowOrganizer: true
+}), LeaderboardController.recalculateLeaderboard);
 export default router;

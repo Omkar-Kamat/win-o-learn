@@ -1,0 +1,17 @@
+==================================================
+Timestamp: 2026-07-23T22:25:17.461Z
+HTTP Method: GET
+Route: /api/hackathons/:hackathonId/judges
+Final URL: /api/hackathons/6a6294c5ea035f4c979ae588/judges
+Headers: {
+  "Content-Type": "application/json",
+  "Authorization": "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjZhNjI5NGM0ZWEwMzVmNGM5NzlhZTU4NiIsInJvbGUiOiJwYXJ0aWNpcGFudCIsImlhdCI6MTc4NDg0NTUwOCwiZXhwIjoxNzg0ODQ2NDA4fQ.ZNx4hBa7OLAXsI_ssgE8intqcnE8mu-f_-gGtCKfCGc"
+}
+Request Body: None
+Response Status: 403
+Response Headers: {"access-control-allow-credentials":"true","access-control-allow-origin":"http://localhost:5173","connection":"keep-alive","content-length":"640","content-security-policy":"default-src 'self';base-uri 'self';font-src 'self' https: data:;form-action 'self';frame-ancestors 'self';img-src 'self' data:;object-src 'none';script-src 'self';script-src-attr 'none';style-src 'self' https: 'unsafe-inline';upgrade-insecure-requests","content-type":"application/json; charset=utf-8","cross-origin-opener-policy":"same-origin","cross-origin-resource-policy":"same-origin","date":"Thu, 23 Jul 2026 22:25:17 GMT","etag":"W/\"280-RiqgtKdryOT+BycaVcq085j2e9c\"","keep-alive":"timeout=5","origin-agent-cluster":"?1","referrer-policy":"no-referrer","strict-transport-security":"max-age=31536000; includeSubDomains","vary":"Origin","x-content-type-options":"nosniff","x-dns-prefetch-control":"off","x-download-options":"noopen","x-frame-options":"SAMEORIGIN","x-permitted-cross-domain-policies":"none","x-xss-protection":"0"}
+Response Body: {"success":false,"message":"You do not have permission to perform this action","errors":null,"stack":"Error: You do not have permission to perform this action\n    at file:///home/rythm/Desktop/win-o-learn/BACKEND/middlewares/AuthorizeRoles.js:6:25\n    at Layer.handleRequest (/home/rythm/Desktop/win-o-learn/BACKEND/node_modules/router/lib/layer.js:152:17)\n    at next (/home/rythm/Desktop/win-o-learn/BACKEND/node_modules/router/lib/route.js:157:13)\n    at VerifyToken (file:///home/rythm/Desktop/win-o-learn/BACKEND/middlewares/VerifyToken.js:20:9)\n    at process.processTicksAndRejections (node:internal/process/task_queues:104:5)"}
+Execution Time: 66ms
+PASS/FAIL: PASS
+Error Stack: None
+==================================================

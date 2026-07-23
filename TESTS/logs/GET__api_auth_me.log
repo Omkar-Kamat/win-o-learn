@@ -1,0 +1,17 @@
+==================================================
+Timestamp: 2026-07-23T22:25:09.414Z
+HTTP Method: GET
+Route: /api/auth/me
+Final URL: /api/auth/me
+Headers: {
+  "Content-Type": "application/json",
+  "Authorization": "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjZhNjI5NGM0ZWEwMzVmNGM5NzlhZTU4NiIsInJvbGUiOiJwYXJ0aWNpcGFudCIsImlhdCI6MTc4NDg0NTUwOCwiZXhwIjoxNzg0ODQ2NDA4fQ.ZNx4hBa7OLAXsI_ssgE8intqcnE8mu-f_-gGtCKfCGc"
+}
+Request Body: None
+Response Status: 200
+Response Headers: {"access-control-allow-credentials":"true","access-control-allow-origin":"http://localhost:5173","connection":"keep-alive","content-length":"400","content-security-policy":"default-src 'self';base-uri 'self';font-src 'self' https: data:;form-action 'self';frame-ancestors 'self';img-src 'self' data:;object-src 'none';script-src 'self';script-src-attr 'none';style-src 'self' https: 'unsafe-inline';upgrade-insecure-requests","content-type":"application/json; charset=utf-8","cross-origin-opener-policy":"same-origin","cross-origin-resource-policy":"same-origin","date":"Thu, 23 Jul 2026 22:25:09 GMT","etag":"W/\"190-56z0Bh0uins7rBA6fIj/5+z+dU8\"","keep-alive":"timeout=5","origin-agent-cluster":"?1","referrer-policy":"no-referrer","strict-transport-security":"max-age=31536000; includeSubDomains","vary":"Origin","x-content-type-options":"nosniff","x-dns-prefetch-control":"off","x-download-options":"noopen","x-frame-options":"SAMEORIGIN","x-permitted-cross-domain-policies":"none","x-xss-protection":"0"}
+Response Body: {"success":true,"message":"User profile fetched successfully","data":{"socials":{"github":"","linkedin":"","portfolio":""},"_id":"6a6294c4ea035f4c979ae586","name":"participant User","email":"participant.1784845508514@test.com","role":"participant","avatar":"","avatarPublicId":null,"bio":"","skills":[],"isBlocked":false,"createdAt":"2026-07-23T22:25:08.617Z","updatedAt":"2026-07-23T22:25:08.742Z"}}
+Execution Time: 95ms
+PASS/FAIL: PASS
+Error Stack: None
+==================================================

@@ -3,6 +3,8 @@ import express from 'express';
 import cookieParser from 'cookie-parser';
 import helmet from 'helmet';
 import cors from 'cors';
+import fs from 'fs';
+import swaggerUi from 'swagger-ui-express';
 import AuthRoutes from './routes/Auth.routes.js';
 import UserRoutes from './routes/User.routes.js';
 import HackathonRoutes from './routes/Hackathon.routes.js';
@@ -25,6 +27,9 @@ app.use(cors({ origin: process.env.CLIENT_URL, credentials: true }));
 app.use(helmet());
 app.use(express.json());
 app.use(cookieParser());
+
+const swaggerDocument = JSON.parse(fs.readFileSync(new URL('./swagger-output.json', import.meta.url), 'utf8'));
+app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(swaggerDocument));
 app.get('/health', (req, res) => {
     res.status(200).json({
         status: 'OK',
