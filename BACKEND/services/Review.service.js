@@ -16,11 +16,22 @@ class ReviewService {
 
     // Validates submitted scores against hackathon criteria
     validateScores(criteria, scores) {
-        if (criteria.length !== scores.length) {
-            throw new ApiError(400, 'All judging criteria must be scored.');
+        if (!scores || !Array.isArray(scores)) {
+            throw new ApiError(400, 'Scores must be provided as an array.');
         }
 
+        if (criteria.length !== scores.length) {
+            throw new ApiError(400, 'All judging criteria must be scored exactly once.');
+        }
+
+        const seenCriteria = new Set();
+
         for (const submitted of scores) {
+            if (seenCriteria.has(submitted.criterion)) {
+                throw new ApiError(400, `Duplicate score for criterion: ${submitted.criterion}`);
+            }
+            seenCriteria.add(submitted.criterion);
+
             const criterion = criteria.find(
                 (item) => item.criterion === submitted.criterion
             );
@@ -33,6 +44,7 @@ class ReviewService {
             }
 
             if (
+                typeof submitted.score !== 'number' ||
                 submitted.score < 0 ||
                 submitted.score > criterion.maxMarks
             ) {
@@ -108,7 +120,8 @@ class ReviewService {
 
     // Update review
     async updateReview(review, judgeId, data) {
-        if (String(review.judge) !== String(judgeId)) {
+        const reviewJudgeId = String(review.judge._id || review.judge);
+        if (reviewJudgeId !== String(judgeId)) {
             throw new ApiError(
                 403,
                 'You can only edit your own review.'
@@ -137,7 +150,7 @@ class ReviewService {
                 totalScore,
             });
 
-        await this.updateSubmissionAverage(review.submission);
+        await this.updateSubmissionAverage(review.submission._id || review.submission);
 
         return updated;
     }

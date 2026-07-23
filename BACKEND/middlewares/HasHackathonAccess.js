@@ -55,7 +55,8 @@ const HasHackathonAccess = ({
          * Organizer
          */
         if (allowOrganizer && user.role === ROLES.ORGANIZER) {
-            if (String(hackathon.organizer) === String(user._id)) {
+            const organizerId = String(hackathon.organizer._id || hackathon.organizer);
+            if (organizerId === String(user._id)) {
                 return next();
             }
         }
