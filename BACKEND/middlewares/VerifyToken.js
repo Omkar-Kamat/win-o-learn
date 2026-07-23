@@ -1,12 +1,6 @@
-/**
- * File: VerifyToken.js
- * Description: Implementation of VerifyToken.js
- */
 import jwt from 'jsonwebtoken';
 import UserRepository from '../repository/User.repository.js';
 import ApiError from '../utils/ApiError.js';
-
-// Performs the verify token operation
 const VerifyToken = async (req, res, next) => {
     try {
         const authHeader = req.headers.authorization;
@@ -34,6 +28,4 @@ const VerifyToken = async (req, res, next) => {
         next(err);
     }
 };
-
-
 export default VerifyToken;

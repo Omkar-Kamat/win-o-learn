@@ -1,32 +1,19 @@
-/**
- * File: Auth.validator.js
- * Description: Implementation of Auth.validator.js
- */
 import { body, validationResult } from 'express-validator';
-
-// Handles the validation errors event
 const handleValidationErrors = (req, res, next) => {
     const errors = validationResult(req);
     if (!errors.isEmpty()) {
-        return res.status(400).json({
-            success: false,
-            message: 'Validation failed',
-            errors: errors.array(),
-        });
+        return res
+            .status(400)
+            .json({ success: false, message: 'Validation failed', errors: errors.array() });
     }
     next();
 };
-
-
 export const validateSignup = [
     body('name')
         .trim()
         .notEmpty()
         .withMessage('Name is required')
-        .isLength({
-            min: 2,
-            max: 50,
-        })
+        .isLength({ min: 2, max: 50 })
         .withMessage('Name must be between 2 and 50 characters'),
     body('email')
         .trim()
@@ -38,9 +25,7 @@ export const validateSignup = [
     body('password')
         .notEmpty()
         .withMessage('Password is required')
-        .isLength({
-            min: 6,
-        })
+        .isLength({ min: 6 })
         .withMessage('Password must be at least 6 characters'),
     body('role').optional().isIn(['participant', 'organizer', 'judge']).withMessage('Invalid role'),
     handleValidationErrors,
@@ -61,9 +46,7 @@ export const validateChangePassword = [
     body('newPassword')
         .notEmpty()
         .withMessage('New password is required')
-        .isLength({
-            min: 6,
-        })
+        .isLength({ min: 6 })
         .withMessage('New password must be at least 6 characters'),
     handleValidationErrors,
 ];
@@ -81,9 +64,7 @@ export const validateResetPassword = [
     body('password')
         .notEmpty()
         .withMessage('Password is required')
-        .isLength({
-            min: 6,
-        })
+        .isLength({ min: 6 })
         .withMessage('Password must be at least 6 characters'),
     handleValidationErrors,
 ];

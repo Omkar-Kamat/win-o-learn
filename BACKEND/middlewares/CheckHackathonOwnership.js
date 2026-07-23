@@ -1,13 +1,7 @@
-/**
- * File: CheckHackathonOwnership.js
- * Description: Implementation of CheckHackathonOwnership.js
- */
 import ApiError from '../utils/ApiError.js';
 import { ROLES } from '../utils/Constants.js';
-
-// Performs the check hackathon ownership operation
 const CheckHackathonOwnership =
-    ({ allowAdminOverride = false } = {}) =>
+    ({ allowAdminOverride: allowAdminOverride = false } = {}) =>
     (req, res, next) => {
         if (allowAdminOverride && req.user.role === ROLES.ADMIN) {
             return next();
@@ -17,5 +11,4 @@ const CheckHackathonOwnership =
         }
         next();
     };
-
 export default CheckHackathonOwnership;

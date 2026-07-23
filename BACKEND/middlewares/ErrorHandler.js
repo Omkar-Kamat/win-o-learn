@@ -1,13 +1,7 @@
-/**
- * File: ErrorHandler.js
- * Description: Implementation of ErrorHandler.js
- */
-
-// Performs the error handler operation
 const ErrorHandler = (err, req, res, next) => {
     let statusCode = err.statusCode || 500;
     let message = err.message || 'Internal Server Error';
-    if (err.code === 11000) {
+    if (err.code === 11e3) {
         statusCode = 409;
         if (err.keyValue?.hackathon && err.keyValue?.team) {
             message = 'This team is already registered for this hackathon';
@@ -30,11 +24,7 @@ const ErrorHandler = (err, req, res, next) => {
         statusCode = 401;
         message = 'Token has expired';
     }
-    const response = {
-        success: false,
-        message,
-        errors: err.errors || null,
-    };
+    const response = { success: false, message: message, errors: err.errors || null };
     if (err.errors) {
         response.errors = err.errors;
     }
@@ -43,6 +33,4 @@ const ErrorHandler = (err, req, res, next) => {
     }
     res.status(statusCode).json(response);
 };
-
-
 export default ErrorHandler;

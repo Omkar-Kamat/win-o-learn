@@ -1,15 +1,10 @@
-/**
- * File: LoadRegistrationForSubmission.js
- * Description: Implementation of LoadRegistrationForSubmission.js
- */
 import asyncHandler from './AsyncHandler.js';
 import ApiError from '../utils/ApiError.js';
 import RegistrationRepository from '../repository/Registration.repository.js';
-
-// Performs the load registration for submission operation
 const LoadRegistrationForSubmission = (options = {}) =>
     asyncHandler(async (req, res, next) => {
-        const { requireLeader = false, requireMember = false } = options;
+        const { requireLeader: requireLeader = false, requireMember: requireMember = false } =
+            options;
         const registration = await RegistrationRepository.findByHackathonAndUser(
             req.params.hackathonId,
             req.user._id
@@ -35,5 +30,4 @@ const LoadRegistrationForSubmission = (options = {}) =>
         req.team = team;
         next();
     });
-
 export default LoadRegistrationForSubmission;

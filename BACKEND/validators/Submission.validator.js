@@ -1,24 +1,13 @@
-/**
- * File: Submission.validator.js
- * Description: Implementation of Submission.validator.js
- */
 import { body, param, validationResult } from 'express-validator';
-
-// Performs the validate operation
 const validate = (req, res, next) => {
     const errors = validationResult(req);
     if (!errors.isEmpty()) {
-        return res.status(400).json({
-            success: false,
-            message: 'Validation failed.',
-            errors: errors.array(),
-        });
+        return res
+            .status(400)
+            .json({ success: false, message: 'Validation failed.', errors: errors.array() });
     }
     next();
 };
-
-
-// Performs the protected fields validation operation
 const protectedFieldsValidation = () => [
     body('status').not().exists().withMessage('Status cannot be set directly.'),
     body('registration').not().exists().withMessage('Registration cannot be changed.'),
@@ -30,27 +19,19 @@ export const validateCreateSubmission = [
     body('problemStatement').trim().notEmpty().withMessage('Problem statement is required.'),
     body('solutionDescription').trim().notEmpty().withMessage('Solution description is required.'),
     body('githubRepo')
-        .optional({
-            checkFalsy: true,
-        })
+        .optional({ checkFalsy: true })
         .isURL()
         .withMessage('GitHub repository must be a valid URL.'),
     body('liveDemoUrl')
-        .optional({
-            checkFalsy: true,
-        })
+        .optional({ checkFalsy: true })
         .isURL()
         .withMessage('Live demo URL must be a valid URL.'),
     body('demoVideo')
-        .optional({
-            checkFalsy: true,
-        })
+        .optional({ checkFalsy: true })
         .isURL()
         .withMessage('Demo video must be a valid URL.'),
     body('presentation')
-        .optional({
-            checkFalsy: true,
-        })
+        .optional({ checkFalsy: true })
         .isURL()
         .withMessage('Presentation must be a valid URL.'),
     body('techStack').optional().isArray().withMessage('Tech stack must be an array.'),
@@ -61,26 +42,10 @@ export const validateUpdateSubmission = [
     body('projectName').optional().trim().notEmpty(),
     body('problemStatement').optional().trim().notEmpty(),
     body('solutionDescription').optional().trim().notEmpty(),
-    body('githubRepo')
-        .optional({
-            checkFalsy: true,
-        })
-        .isURL(),
-    body('liveDemoUrl')
-        .optional({
-            checkFalsy: true,
-        })
-        .isURL(),
-    body('presentation')
-        .optional({
-            checkFalsy: true,
-        })
-        .isURL(),
-    body('demoVideo')
-        .optional({
-            checkFalsy: true,
-        })
-        .isURL(),
+    body('githubRepo').optional({ checkFalsy: true }).isURL(),
+    body('liveDemoUrl').optional({ checkFalsy: true }).isURL(),
+    body('presentation').optional({ checkFalsy: true }).isURL(),
+    body('demoVideo').optional({ checkFalsy: true }).isURL(),
     body('techStack').optional().isArray(),
     validate,
 ];
@@ -101,15 +66,7 @@ export const validateSubmissionIdParam = [
 export const validateUpdateSubmissionFiles = [
     ...protectedFieldsValidation(),
     body('screenshots').optional().isArray(),
-    body('presentation')
-        .optional({
-            checkFalsy: true,
-        })
-        .isURL(),
-    body('demoVideo')
-        .optional({
-            checkFalsy: true,
-        })
-        .isURL(),
+    body('presentation').optional({ checkFalsy: true }).isURL(),
+    body('demoVideo').optional({ checkFalsy: true }).isURL(),
     validate,
 ];

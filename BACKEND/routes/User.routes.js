@@ -1,7 +1,3 @@
-/**
- * File: User.routes.js
- * Description: Implementation of User.routes.js
- */
 import { Router } from 'express';
 import UserController from '../controllers/User.controller.js';
 import VerifyToken from '../middlewares/VerifyToken.js';
@@ -14,17 +10,11 @@ import {
     validateUserId,
 } from '../validators/User.validator.js';
 import UploadAvatar from '../middlewares/UploadAvatar.js';
-
 const router = Router();
-
 router.get('/me', VerifyToken, UserController.getProfile);
-
 router.put('/me', VerifyToken, validateUpdateProfile, UserController.updateProfile);
-
 router.put('/me/avatar', VerifyToken, UploadAvatar.single('avatar'), UserController.uploadAvatar);
-
 router.get('/', VerifyToken, AuthorizeRoles(ROLES.ADMIN), UserController.getAllUsers);
-
 router.get(
     '/:id',
     VerifyToken,
@@ -32,7 +22,6 @@ router.get(
     validateUserId,
     UserController.getUserById
 );
-
 router.put(
     '/:id',
     VerifyToken,
@@ -40,7 +29,6 @@ router.put(
     validateAdminUpdate,
     UserController.updateUser
 );
-
 router.delete(
     '/:id',
     VerifyToken,
@@ -48,7 +36,6 @@ router.delete(
     validateUserId,
     UserController.deleteUser
 );
-
 router.patch(
     '/:id/block',
     VerifyToken,
@@ -56,7 +43,6 @@ router.patch(
     validateUserId,
     UserController.blockUser
 );
-
 router.patch(
     '/:id/unblock',
     VerifyToken,
@@ -64,7 +50,6 @@ router.patch(
     validateUserId,
     UserController.unblockUser
 );
-
 router.patch(
     '/:id/role',
     VerifyToken,
@@ -73,5 +58,4 @@ router.patch(
     validateRoleUpdate,
     UserController.updateRole
 );
-
 export default router;

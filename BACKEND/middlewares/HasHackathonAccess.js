@@ -1,86 +1,43 @@
-/**
- * File: HasHackathonAccess.js
- * Description: Generic middleware for hackathon resource authorization.
- */
-
 import AsyncHandler from './AsyncHandler.js';
 import ApiError from '../utils/ApiError.js';
 import JudgeAssignmentRepository from '../repository/JudgeAssignment.repository.js';
 import { ROLES } from '../utils/Constants.js';
-
 const HasHackathonAccess = ({
-    allowAdmin = false,
-    allowOrganizer = false,
-    allowJudge = false,
-} = {}) => {
-    return AsyncHandler(async (req, res, next) => {
-        const { user } = req;
-
+    allowAdmin: allowAdmin = false,
+    allowOrganizer: allowOrganizer = false,
+    allowJudge: allowJudge = false,
+} = {}) =>
+    AsyncHandler(async (req, res, next) => {
+        const { user: user } = req;
         let hackathon = null;
-
-        /**
-         * Determine the hackathon from the loaded resource.
-         */
-
-        // LoadHackathon
         if (req.hackathon) {
             hackathon = req.hackathon;
-        }
-
-        // LoadSubmission
-        else if (req.submission?.registration?.hackathon) {
+        } else if (req.submission?.registration?.hackathon) {
             hackathon = req.submission.registration.hackathon;
-        }
-
-        // LoadReview
-        else if (req.review?.hackathon) {
+        } else if (req.review?.hackathon) {
             hackathon = req.review.hackathon;
         }
-
         if (!hackathon) {
-            throw new ApiError(
-                500,
-                'Unable to determine the hackathon for authorization.'
-            );
+            throw new ApiError(500, 'Unable to determine the hackathon for authorization.');
         }
-
-        /**
-         * Admin
-         */
         if (allowAdmin && user.role === ROLES.ADMIN) {
             return next();
         }
-
-        /**
-         * Organizer
-         */
         if (allowOrganizer && user.role === ROLES.ORGANIZER) {
             const organizerId = String(hackathon.organizer._id || hackathon.organizer);
             if (organizerId === String(user._id)) {
                 return next();
             }
         }
-
-        /**
-         * Judge
-         */
         if (allowJudge && user.role === ROLES.JUDGE) {
-            const assignment =
-                await JudgeAssignmentRepository.findByHackathonAndJudge(
-                    hackathon._id,
-                    user._id
-                );
-
+            const assignment = await JudgeAssignmentRepository.findByHackathonAndJudge(
+                hackathon._id,
+                user._id
+            );
             if (assignment) {
                 return next();
             }
         }
-
-        throw new ApiError(
-            403,
-            'You are not authorized to access this resource.'
-        );
+        throw new ApiError(403, 'You are not authorized to access this resource.');
     });
-};
-
 export default HasHackathonAccess;

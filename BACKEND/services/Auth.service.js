@@ -1,39 +1,26 @@
-/**
- * File: Auth.service.js
- * Description: Implementation of Auth.service.js
- */
 import jwt from 'jsonwebtoken';
 import crypto from 'crypto';
 import UserRepository from '../repository/User.repository.js';
 import ApiError from '../utils/ApiError.js';
 import { generateAccessToken, generateRefreshToken } from '../utils/GenerateToken.js';
-
 class AuthService {
-    // Performs the signup operation
     async signup(data) {
-        const { name, email, password, role } = data;
+        const { name: name, email: email, password: password, role: role } = data;
         const existingUser = await UserRepository.findByEmail(email);
         if (existingUser) {
             throw new ApiError(409, 'Email already exists');
         }
         const user = await UserRepository.create({
-            name,
-            email,
-            password,
-            role,
+            name: name,
+            email: email,
+            password: password,
+            role: role,
         });
         const accessToken = generateAccessToken(user);
         const refreshToken = generateRefreshToken(user);
         await UserRepository.updateRefreshToken(user._id, refreshToken);
-
-        return {
-            user: user.toJSON(),
-            accessToken,
-            refreshToken,
-        };
+        return { user: user.toJSON(), accessToken: accessToken, refreshToken: refreshToken };
     }
-
-    // Performs the login operation
     async login(email, password) {
         const user = await UserRepository.findByEmail(email);
         if (!user) {
@@ -49,25 +36,14 @@ class AuthService {
         const accessToken = generateAccessToken(user);
         const refreshToken = generateRefreshToken(user);
         await UserRepository.updateRefreshToken(user._id, refreshToken);
-
-        return {
-            user: user.toJSON(),
-            accessToken,
-            refreshToken,
-        };
+        return { user: user.toJSON(), accessToken: accessToken, refreshToken: refreshToken };
     }
-
-    // Performs the logout operation
     async logout(userId) {
         await UserRepository.clearRefreshToken(userId);
     }
-
-    // Retrieves the me data
     async getMe(user) {
         return user.toJSON();
     }
-
-    // Performs the refresh token operation
     async refreshToken(token) {
         if (!token) {
             throw new ApiError(401, 'Refresh token is required');
@@ -86,13 +62,8 @@ class AuthService {
             throw new ApiError(401, 'Refresh token mismatch');
         }
         const accessToken = generateAccessToken(user);
-
-        return {
-            accessToken,
-        };
+        return { accessToken: accessToken };
     }
-
-    // Performs the change password operation
     async changePassword(userId, oldPassword, newPassword) {
         const user = await UserRepository.findByIdWithPassword(userId);
         if (!user) {
@@ -104,8 +75,6 @@ class AuthService {
         }
         await UserRepository.updatePassword(userId, newPassword);
     }
-
-    // Performs the forgot password operation
     async forgotPassword(email) {
         const user = await UserRepository.findByEmail(email);
         if (!user) {
@@ -113,13 +82,10 @@ class AuthService {
         }
         const resetToken = crypto.randomBytes(32).toString('hex');
         const hashedToken = crypto.createHash('sha256').update(resetToken).digest('hex');
-        const expires = Date.now() + 1000 * 60 * 15;
+        const expires = Date.now() + 1e3 * 60 * 15;
         await UserRepository.saveResetPasswordToken(user._id, hashedToken, expires);
-
         return resetToken;
     }
-
-    // Performs the reset password operation
     async resetPassword(token, newPassword) {
         const hashedToken = crypto.createHash('sha256').update(token).digest('hex');
         const user = await UserRepository.findByResetToken(hashedToken);
@@ -132,6 +98,4 @@ class AuthService {
         await user.save();
     }
 }
-
-
 export default new AuthService();

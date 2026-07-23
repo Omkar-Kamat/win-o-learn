@@ -1,23 +1,13 @@
-/**
- * File: Hackathon.validator.js
- * Description: Implementation of Hackathon.validator.js
- */
 import { body, param, query, validationResult } from 'express-validator';
-
-// Handles the validation errors event
 const handleValidationErrors = (req, res, next) => {
     const errors = validationResult(req);
     if (!errors.isEmpty()) {
-        return res.status(400).json({
-            success: false,
-            message: 'Validation failed',
-            errors: errors.array(),
-        });
+        return res
+            .status(400)
+            .json({ success: false, message: 'Validation failed', errors: errors.array() });
     }
     next();
 };
-
-
 export const validateHackathonId = [
     param('id').isMongoId().withMessage('Invalid hackathon ID'),
     handleValidationErrors,
@@ -35,184 +25,99 @@ export const validateListHackathons = [
     query('search').optional().isString(),
     query('theme').optional().isString(),
     query('sort').optional().isString(),
-    query('page')
-        .optional()
-        .isInt({
-            min: 1,
-        })
-        .withMessage('Page must be at least 1'),
+    query('page').optional().isInt({ min: 1 }).withMessage('Page must be at least 1'),
     query('limit')
         .optional()
-        .isInt({
-            min: 1,
-            max: 100,
-        })
+        .isInt({ min: 1, max: 100 })
         .withMessage('Limit must be between 1 and 100'),
     handleValidationErrors,
 ];
-
-// Performs the title validation operation
 const titleValidation = (optional = false) => {
     let validator = body('title')
         .trim()
-        .isLength({
-            min: 5,
-            max: 150,
-        })
+        .isLength({ min: 5, max: 150 })
         .withMessage('Title must be between 5 and 150 characters');
-
     return optional ? validator.optional() : validator.notEmpty();
 };
-
-
-// Performs the description validation operation
 const descriptionValidation = (optional = false) => {
     let validator = body('description')
         .trim()
-        .isLength({
-            min: 20,
-            max: 5000,
-        })
+        .isLength({ min: 20, max: 5e3 })
         .withMessage('Description must be between 20 and 5000 characters');
-
     return optional ? validator.optional() : validator.notEmpty();
 };
-
-
-// Performs the theme validation operation
 const themeValidation = (optional = false) => {
     let validator = body('theme')
         .trim()
-        .isLength({
-            min: 2,
-            max: 100,
-        })
+        .isLength({ min: 2, max: 100 })
         .withMessage('Theme must be between 2 and 100 characters');
-
     return optional ? validator.optional() : validator.notEmpty();
 };
-
-
-// Performs the mode validation operation
 const modeValidation = (optional = false) => {
     let validator = body('mode')
         .isIn(['online', 'offline'])
         .withMessage('Mode must be online or offline');
-
     return optional ? validator.optional() : validator.notEmpty();
 };
-
-
-// Performs the venue validation operation
 const venueValidation = (optional = false) => {
-    // Performs the validator operation
-    let validator = body('venue').custom((value, { req }) => {
+    let validator = body('venue').custom((value, { req: req }) => {
         const mode = req.body.mode ?? req.hackathon?.mode;
         if (mode === 'offline') {
             if (!value || value.trim() === '') {
                 throw new Error('Venue is required for offline hackathons');
             }
         }
-
         return true;
     });
-
     return optional ? validator.optional() : validator;
 };
-
-
-// Performs the prize pool validation operation
 const prizePoolValidation = (optional = false) => {
     let validator = body('prizePool')
-        .isFloat({
-            min: 0,
-        })
+        .isFloat({ min: 0 })
         .withMessage('Prize pool must be a positive number');
-
     return optional ? validator.optional() : validator.notEmpty();
 };
-
-
-// Performs the max team size validation operation
 const maxTeamSizeValidation = (optional = false) => {
     let validator = body('maxTeamSize')
-        .isInt({
-            min: 1,
-            max: 10,
-        })
+        .isInt({ min: 1, max: 10 })
         .withMessage('Maximum team size must be between 1 and 10');
-
     return optional ? validator.optional() : validator.notEmpty();
 };
-
-
-// Performs the rules validation operation
 const rulesValidation = (optional = false) => {
-    let validator = body('rules')
-        .isArray({
-            max: 20,
-        })
-        .withMessage('Maximum 20 rules are allowed');
-
+    let validator = body('rules').isArray({ max: 20 }).withMessage('Maximum 20 rules are allowed');
     return optional ? validator.optional() : validator.notEmpty();
 };
-
-
-// Performs the rule item validation operation
 const ruleItemValidation = (optional = false) => {
     let validator = body('rules.*')
-        .isLength({
-            max: 200,
-        })
+        .isLength({ max: 200 })
         .withMessage('Each rule cannot exceed 200 characters');
-
     return optional ? validator.optional() : validator;
 };
-
-
-// Performs the judging criteria validation operation
 const judgingCriteriaValidation = (optional = false) => {
     let validator = body('judgingCriteria')
-        .isArray({
-            min: 1,
-        })
+        .isArray({ min: 1 })
         .withMessage('At least one judging criterion is required');
-
     return optional ? validator.optional() : validator.notEmpty();
 };
-
-
-// Performs the criterion validation operation
 const criterionValidation = (optional = false) => {
     let validator = body('judgingCriteria.*.criterion')
         .trim()
         .notEmpty()
         .withMessage('Criterion is required');
-
     return optional ? validator.optional() : validator;
 };
-
-
-// Performs the marks validation operation
 const marksValidation = (optional = false) => {
     let validator = body('judgingCriteria.*.maxMarks')
-        .isInt({
-            min: 1,
-            max: 100,
-        })
+        .isInt({ min: 1, max: 100 })
         .withMessage('Maximum marks must be between 1 and 100');
-
     return optional ? validator.optional() : validator;
 };
-
-
-// Performs the validate date order operation
 const validateDateOrder = ({
-    registrationStartDate,
-    registrationDeadline,
-    startDate,
-    submissionDeadline,
-    endDate,
+    registrationStartDate: registrationStartDate,
+    registrationDeadline: registrationDeadline,
+    startDate: startDate,
+    submissionDeadline: submissionDeadline,
+    endDate: endDate,
 }) => {
     const registrationStart = new Date(registrationStartDate);
     const registrationEnd = new Date(registrationDeadline);
@@ -232,12 +137,14 @@ const validateDateOrder = ({
         throw new Error('Submission deadline cannot be after hackathon end date.');
     }
 };
-
-
-// Performs the date validation operation
-const dateValidation = body().custom((_, { req }) => {
-    const { registrationStartDate, registrationDeadline, startDate, submissionDeadline, endDate } =
-        req.body;
+const dateValidation = body().custom((_, { req: req }) => {
+    const {
+        registrationStartDate: registrationStartDate,
+        registrationDeadline: registrationDeadline,
+        startDate: startDate,
+        submissionDeadline: submissionDeadline,
+        endDate: endDate,
+    } = req.body;
     if (
         !registrationStartDate ||
         !registrationDeadline ||
@@ -248,162 +155,99 @@ const dateValidation = body().custom((_, { req }) => {
         return true;
     }
     validateDateOrder({
-        registrationStartDate,
-        registrationDeadline,
-        startDate,
-        submissionDeadline,
-        endDate,
+        registrationStartDate: registrationStartDate,
+        registrationDeadline: registrationDeadline,
+        startDate: startDate,
+        submissionDeadline: submissionDeadline,
+        endDate: endDate,
     });
-
     return true;
 });
-
-
-// Performs the registration start date validation operation
 const registrationStartDateValidation = (optional = false) => {
     let validator = body('registrationStartDate');
     if (optional) {
         return validator
             .optional()
-            .isISO8601({
-                strict: true,
-                strictSeparator: true,
-            })
+            .isISO8601({ strict: true, strictSeparator: true })
             .withMessage('Invalid registration start date')
             .toDate();
     }
-
     return validator
-        .exists({
-            checkFalsy: true,
-        })
+        .exists({ checkFalsy: true })
         .withMessage('Registration start date is required')
         .bail()
-        .isISO8601({
-            strict: true,
-            strictSeparator: true,
-        })
+        .isISO8601({ strict: true, strictSeparator: true })
         .withMessage('Invalid registration start date')
         .toDate();
 };
-
-
-// Performs the registration deadline validation operation
 const registrationDeadlineValidation = (optional = false) => {
     let validator = body('registrationDeadline');
     if (optional) {
         return validator
             .optional()
-            .isISO8601({
-                strict: true,
-                strictSeparator: true,
-            })
+            .isISO8601({ strict: true, strictSeparator: true })
             .withMessage('Invalid registration deadline')
             .toDate();
     }
-
     return validator
-        .exists({
-            checkFalsy: true,
-        })
+        .exists({ checkFalsy: true })
         .withMessage('Registration deadline is required')
         .bail()
-        .isISO8601({
-            strict: true,
-            strictSeparator: true,
-        })
+        .isISO8601({ strict: true, strictSeparator: true })
         .withMessage('Invalid registration deadline')
         .toDate();
 };
-
-
-// Performs the start date validation operation
 const startDateValidation = (optional = false) => {
     let validator = body('startDate');
     if (optional) {
         return validator
             .optional()
-            .isISO8601({
-                strict: true,
-                strictSeparator: true,
-            })
+            .isISO8601({ strict: true, strictSeparator: true })
             .withMessage('Invalid hackathon start date')
             .toDate();
     }
-
     return validator
-        .exists({
-            checkFalsy: true,
-        })
+        .exists({ checkFalsy: true })
         .withMessage('Hackathon start date is required')
         .bail()
-        .isISO8601({
-            strict: true,
-            strictSeparator: true,
-        })
+        .isISO8601({ strict: true, strictSeparator: true })
         .withMessage('Invalid hackathon start date')
         .toDate();
 };
-
-
-// Performs the submission deadline validation operation
 const submissionDeadlineValidation = (optional = false) => {
     let validator = body('submissionDeadline');
     if (optional) {
         return validator
             .optional()
-            .isISO8601({
-                strict: true,
-                strictSeparator: true,
-            })
+            .isISO8601({ strict: true, strictSeparator: true })
             .withMessage('Invalid submission deadline')
             .toDate();
     }
-
     return validator
-        .exists({
-            checkFalsy: true,
-        })
+        .exists({ checkFalsy: true })
         .withMessage('Submission deadline is required')
         .bail()
-        .isISO8601({
-            strict: true,
-            strictSeparator: true,
-        })
+        .isISO8601({ strict: true, strictSeparator: true })
         .withMessage('Invalid submission deadline')
         .toDate();
 };
-
-
-// Performs the end date validation operation
 const endDateValidation = (optional = false) => {
     let validator = body('endDate');
     if (optional) {
         return validator
             .optional()
-            .isISO8601({
-                strict: true,
-                strictSeparator: true,
-            })
+            .isISO8601({ strict: true, strictSeparator: true })
             .withMessage('Invalid hackathon end date')
             .toDate();
     }
-
     return validator
-        .exists({
-            checkFalsy: true,
-        })
+        .exists({ checkFalsy: true })
         .withMessage('Hackathon end date is required')
         .bail()
-        .isISO8601({
-            strict: true,
-            strictSeparator: true,
-        })
+        .isISO8601({ strict: true, strictSeparator: true })
         .withMessage('Invalid hackathon end date')
         .toDate();
 };
-
-
 const protectedFieldsValidation = body([
     'organizer',
     'registrationOpen',
@@ -414,9 +258,7 @@ const protectedFieldsValidation = body([
     .not()
     .exists()
     .withMessage('These fields cannot be updated directly');
-
-// Updates the date validation data
-const updateDateValidation = body().custom((_, { req }) => {
+const updateDateValidation = body().custom((_, { req: req }) => {
     const hackathon = req.hackathon;
     validateDateOrder({
         registrationStartDate: req.body.registrationStartDate ?? hackathon.registrationStartDate,
@@ -425,11 +267,8 @@ const updateDateValidation = body().custom((_, { req }) => {
         submissionDeadline: req.body.submissionDeadline ?? hackathon.submissionDeadline,
         endDate: req.body.endDate ?? hackathon.endDate,
     });
-
     return true;
 });
-
-
 export const validateCreateHackathon = [
     titleValidation(),
     descriptionValidation(),

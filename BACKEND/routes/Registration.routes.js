@@ -1,7 +1,3 @@
-/**
- * File: Registration.routes.js
- * Description: Implementation of Registration.routes.js
- */
 import { Router } from 'express';
 import RegistrationController from '../controllers/Registration.controller.js';
 import VerifyToken from '../middlewares/VerifyToken.js';
@@ -18,45 +14,34 @@ import {
     validateHackathonRegistrations,
     validateRegistrationId,
 } from '../validators/Registration.validator.js';
-
 const hackathonScopedRouter = Router();
-
 hackathonScopedRouter.post(
     '/:hackathonId/register',
     VerifyToken,
     AuthorizeRoles(ROLES.PARTICIPANT),
     validateRegister,
     LoadHackathon,
-    LoadTeam({
-        requireLeader: true,
-    }),
+    LoadTeam({ requireLeader: true }),
     RegistrationController.registerTeam
 );
-
 hackathonScopedRouter.delete(
     '/:hackathonId/register/:teamId',
     VerifyToken,
     AuthorizeRoles(ROLES.PARTICIPANT),
     validateCancelRegistration,
     LoadHackathon,
-    LoadTeam({
-        requireLeader: true,
-    }),
+    LoadTeam({ requireLeader: true }),
     RegistrationController.cancelRegistration
 );
-
 hackathonScopedRouter.get(
     '/:hackathonId/register/status/:teamId',
     VerifyToken,
     AuthorizeRoles(ROLES.PARTICIPANT),
     validateRegistrationStatus,
     LoadHackathon,
-    LoadTeam({
-        requireMember: true,
-    }),
+    LoadTeam({ requireMember: true }),
     RegistrationController.getRegistrationStatus
 );
-
 hackathonScopedRouter.get(
     '/:hackathonId/registrations',
     VerifyToken,
@@ -66,9 +51,7 @@ hackathonScopedRouter.get(
     CheckHackathonOwnership(),
     RegistrationController.getHackathonRegistrations
 );
-
 const registrationScopedRouter = Router();
-
 registrationScopedRouter.patch(
     '/:registrationId/approve',
     VerifyToken,
@@ -78,7 +61,6 @@ registrationScopedRouter.patch(
     CheckHackathonOwnership(),
     RegistrationController.approveRegistration
 );
-
 registrationScopedRouter.patch(
     '/:registrationId/reject',
     VerifyToken,
@@ -88,5 +70,4 @@ registrationScopedRouter.patch(
     CheckHackathonOwnership(),
     RegistrationController.rejectRegistration
 );
-
 export { registrationScopedRouter, hackathonScopedRouter };

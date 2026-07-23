@@ -1,9 +1,4 @@
-/**
- * File: ApiError.js
- * Description: Implementation of ApiError.js
- */
 class ApiError extends Error {
-    // Performs the constructor operation
     constructor(statusCode, message, errors = null) {
         super(message);
         this.statusCode = statusCode;
@@ -12,6 +7,4 @@ class ApiError extends Error {
         Error.captureStackTrace(this, this.constructor);
     }
 }
-
-
 export default ApiError;

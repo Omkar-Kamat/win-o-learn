@@ -1,15 +1,13 @@
-/**
- * File: LoadTeam.js
- * Description: Implementation of LoadTeam.js
- */
 import asyncHandler from './AsyncHandler.js';
 import ApiError from '../utils/ApiError.js';
 import TeamRepository from '../repository/Team.repository.js';
-
-// Performs the load team operation
 const LoadTeam = (options = {}) =>
     asyncHandler(async (req, res, next) => {
-        const { requireLeader = false, requireMember = false, requireInvitee = false } = options;
+        const {
+            requireLeader: requireLeader = false,
+            requireMember: requireMember = false,
+            requireInvitee: requireInvitee = false,
+        } = options;
         const teamId = req.params.id ?? req.params.teamId ?? req.body?.teamId ?? req.query?.teamId;
         const team = await TeamRepository.findById(teamId);
         if (!team) {
@@ -26,7 +24,6 @@ const LoadTeam = (options = {}) =>
             throw new ApiError(403, 'You are not a member of this team.');
         }
         if (requireInvitee) {
-            // Checks if invitee
             const isInvitee = team.pendingInvites.some((invite) =>
                 (invite.user._id ?? invite.user).equals(req.user._id)
             );
@@ -37,5 +34,4 @@ const LoadTeam = (options = {}) =>
         req.team = team;
         next();
     });
-
 export default LoadTeam;

@@ -1,0 +1,28 @@
+{
+  "name": "tests",
+  "version": "1.0.0",
+  "description": "",
+  "main": "test-auth-routes.js",
+  "scripts": {
+    "test": "node test-auth.js && node test-users.js && node test-hackathons.js && node test-teams-registrations.js && node test-teams.js && node test-submissions.js && node test-judge-assignments.js && node test-reviews.js && node test-leaderboard.js && node test-dashboard.js && node test-options.js",
+    "test-auth": "node test-auth.js",
+    "test-users": "node test-users.js",
+    "test-hackathons": "node test-hackathons.js",
+    "test-teams-registrations": "node test-teams-registrations.js",
+    "test-teams": "node test-teams.js",
+    "test-submissions": "node test-submissions.js",
+    "test-judge-assignments": "node test-judge-assignments.js",
+    "test-reviews": "node test-reviews.js",
+    "test-leaderboard": "node test-leaderboard.js",
+    "test-dashboard":"node test-dashboard.js",
+    "test-options":"node test-options.js"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "type": "module",
+  "dependencies": {
+    "axios": "^1.18.1",
+    "mongoose": "^9.8.0"
+  }
+}

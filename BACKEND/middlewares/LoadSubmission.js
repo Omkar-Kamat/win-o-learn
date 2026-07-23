@@ -1,17 +1,11 @@
-/**
- * File: LoadSubmission.js
- * Description: Implementation of LoadSubmission.js
- */
 import SubmissionRepository from '../repository/Submission.repository.js';
 import ApiError from '../utils/ApiError.js';
 import { ROLES } from '../utils/Constants.js';
 import AsyncHandler from './AsyncHandler.js';
-
-// Performs the load submission operation
 const LoadSubmission = ({
-    requireLeader = false,
-    requireOrganizer = false,
-    requireAccess = false,
+    requireLeader: requireLeader = false,
+    requireOrganizer: requireOrganizer = false,
+    requireAccess: requireAccess = false,
 } = {}) =>
     AsyncHandler(async (req, res, next) => {
         const submissionId = req.params.submissionId ?? req.params.id;
@@ -32,8 +26,6 @@ const LoadSubmission = ({
         if (requireAccess) {
             const isAdmin = req.user.role === ROLES.ADMIN;
             const isOrganizer = organizerId.equals(req.user._id);
-
-            // Checks if team member
             const isTeamMember = team.members.some(
                 (member) => String(member._id ?? member) === String(req.user._id)
             );
@@ -45,5 +37,4 @@ const LoadSubmission = ({
         req.submission = submission;
         next();
     });
-
 export default LoadSubmission;

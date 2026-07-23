@@ -1,7 +1,3 @@
-/**
- * File: Hackathon.routes.js
- * Description: Implementation of Hackathon.routes.js
- */
 import { Router } from 'express';
 import HackathonController from '../controllers/Hackathon.controller.js';
 import VerifyToken from '../middlewares/VerifyToken.js';
@@ -16,11 +12,8 @@ import {
 } from '../validators/Hackathon.validator.js';
 import UploadBanner from '../middlewares/UploadBanner.js';
 import { ROLES } from '../utils/Constants.js';
-
 const router = Router();
-
 router.get('/', validateListHackathons, HackathonController.getHackathons);
-
 router.post(
     '/',
     VerifyToken,
@@ -28,7 +21,6 @@ router.post(
     validateCreateHackathon,
     HackathonController.createHackathon
 );
-
 router.get(
     '/my',
     VerifyToken,
@@ -36,9 +28,7 @@ router.get(
     validateListHackathons,
     HackathonController.getMyHackathons
 );
-
 router.get('/:id', validateHackathonId, HackathonController.getHackathonById);
-
 router.put(
     '/:id',
     VerifyToken,
@@ -49,19 +39,15 @@ router.put(
     validateUpdateHackathon,
     HackathonController.updateHackathon
 );
-
 router.delete(
     '/:id',
     VerifyToken,
     AuthorizeRoles(ROLES.ORGANIZER, ROLES.ADMIN),
     validateHackathonId,
     LoadHackathon,
-    CheckHackathonOwnership({
-        allowAdminOverride: true,
-    }),
+    CheckHackathonOwnership({ allowAdminOverride: true }),
     HackathonController.deleteHackathon
 );
-
 router.patch(
     '/:id/open-registration',
     VerifyToken,
@@ -71,7 +57,6 @@ router.patch(
     CheckHackathonOwnership(),
     HackathonController.openRegistration
 );
-
 router.patch(
     '/:id/close-registration',
     VerifyToken,
@@ -81,7 +66,6 @@ router.patch(
     CheckHackathonOwnership(),
     HackathonController.closeRegistration
 );
-
 router.patch(
     '/:id/publish-results',
     VerifyToken,
@@ -91,7 +75,6 @@ router.patch(
     CheckHackathonOwnership(),
     HackathonController.publishResults
 );
-
 router.put(
     '/:id/banner',
     VerifyToken,
@@ -102,5 +85,4 @@ router.put(
     UploadBanner.single('banner'),
     HackathonController.updateBanner
 );
-
 export default router;

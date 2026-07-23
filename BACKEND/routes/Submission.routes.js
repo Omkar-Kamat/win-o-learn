@@ -1,7 +1,3 @@
-/**
- * File: Submission.routes.js
- * Description: Implementation of Submission.routes.js
- */
 import { Router } from 'express';
 import SubmissionController from '../controllers/Submission.controller.js';
 import VerifyToken from '../middlewares/VerifyToken.js';
@@ -19,34 +15,26 @@ import {
     validateSubmissionIdParam,
     validateUpdateSubmissionFiles,
 } from '../validators/Submission.validator.js';
-
 const hackathonScopedSubmissionRoutes = Router();
-
 hackathonScopedSubmissionRoutes.post(
     '/:hackathonId/submissions',
     VerifyToken,
     AuthorizeRoles(ROLES.PARTICIPANT),
     validateHackathonIdParam,
     LoadHackathon,
-    LoadRegistrationForSubmission({
-        requireLeader: true,
-    }),
+    LoadRegistrationForSubmission({ requireLeader: true }),
     validateCreateSubmission,
     SubmissionController.createSubmission
 );
-
 hackathonScopedSubmissionRoutes.get(
     '/:hackathonId/submissions/mine',
     VerifyToken,
     AuthorizeRoles(ROLES.PARTICIPANT),
     validateHackathonIdParam,
     LoadHackathon,
-    LoadRegistrationForSubmission({
-        requireMember: true,
-    }),
+    LoadRegistrationForSubmission({ requireMember: true }),
     SubmissionController.getMySubmission
 );
-
 hackathonScopedSubmissionRoutes.get(
     '/:hackathonId/submissions',
     VerifyToken,
@@ -56,55 +44,40 @@ hackathonScopedSubmissionRoutes.get(
     CheckHackathonOwnership(),
     SubmissionController.getHackathonSubmissions
 );
-
 const submissionRoutes = Router();
-
 submissionRoutes.get('/', VerifyToken, SubmissionController.getSubmissions);
-
 submissionRoutes.get(
     '/:id',
     VerifyToken,
     validateSubmissionIdParam,
-    LoadSubmission({
-        requireAccess: true,
-    }),
+    LoadSubmission({ requireAccess: true }),
     SubmissionController.getSubmission
 );
-
 submissionRoutes.put(
     '/:id',
     VerifyToken,
     AuthorizeRoles(ROLES.PARTICIPANT),
     validateSubmissionIdParam,
-    LoadSubmission({
-        requireLeader: true,
-    }),
+    LoadSubmission({ requireLeader: true }),
     validateUpdateSubmission,
     SubmissionController.updateSubmission
 );
-
 submissionRoutes.put(
     '/:id/files',
     VerifyToken,
     AuthorizeRoles(ROLES.PARTICIPANT),
     validateSubmissionIdParam,
-    LoadSubmission({
-        requireLeader: true,
-    }),
+    LoadSubmission({ requireLeader: true }),
     validateUpdateSubmissionFiles,
     SubmissionController.updateSubmissionFiles
 );
-
 submissionRoutes.patch(
     '/:id/status',
     VerifyToken,
     AuthorizeRoles(ROLES.ORGANIZER),
     validateSubmissionIdParam,
-    LoadSubmission({
-        requireOrganizer: true,
-    }),
+    LoadSubmission({ requireOrganizer: true }),
     validateSubmissionStatus,
     SubmissionController.updateSubmissionStatus
 );
-
 export { hackathonScopedSubmissionRoutes, submissionRoutes };

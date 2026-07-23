@@ -1,7 +1,3 @@
-/**
- * File: User.model.js
- * Description: Implementation of User.model.js
- */
 import mongoose from 'mongoose';
 import bcrypt from 'bcrypt';
 const userSchema = new mongoose.Schema(
@@ -32,82 +28,38 @@ const userSchema = new mongoose.Schema(
             enum: ['admin', 'organizer', 'participant', 'judge'],
             default: 'participant',
         },
-        avatar: {
-            type: String,
-            default: '',
-        },
-        avatarPublicId: {
-            type: String,
-            default: null,
-        },
+        avatar: { type: String, default: '' },
+        avatarPublicId: { type: String, default: null },
         socials: {
-            github: {
-                type: String,
-                default: '',
-            },
-            linkedin: {
-                type: String,
-                default: '',
-            },
-            portfolio: {
-                type: String,
-                default: '',
-            },
+            github: { type: String, default: '' },
+            linkedin: { type: String, default: '' },
+            portfolio: { type: String, default: '' },
         },
-        bio: {
-            type: String,
-            maxlength: [300, 'Bio cannot exceed 300 characters'],
-            default: '',
-        },
-        skills: {
-            type: [String],
-            default: [],
-        },
-        isBlocked: {
-            type: Boolean,
-            default: false,
-        },
-        refreshToken: {
-            type: String,
-            select: false,
-        },
-        resetPasswordToken: {
-            type: String,
-            select: false,
-        },
-        resetPasswordExpires: {
-            type: Date,
-            select: false,
-        },
+        bio: { type: String, maxlength: [300, 'Bio cannot exceed 300 characters'], default: '' },
+        skills: { type: [String], default: [] },
+        isBlocked: { type: Boolean, default: false },
+        refreshToken: { type: String, select: false },
+        resetPasswordToken: { type: String, select: false },
+        resetPasswordExpires: { type: Date, select: false },
     },
-    {
-        timestamps: true,
-    }
+    { timestamps: true }
 );
 userSchema.pre('save', async function () {
     if (!this.isModified('password')) return;
     const salt = await bcrypt.genSalt(10);
     this.password = await bcrypt.hash(this.password, salt);
 });
-
-
 userSchema.methods.comparePassword = async function (candidatePassword) {
     return bcrypt.compare(candidatePassword, this.password);
 };
-
-
 userSchema.set('toJSON', {
-    // Performs the transform operation
     transform(doc, ret) {
         delete ret.password;
         delete ret.refreshToken;
         delete ret.resetPasswordToken;
         delete ret.resetPasswordExpires;
         delete ret.__v;
-
         return ret;
     },
 });
-
-
 export default mongoose.model('User', userSchema);
