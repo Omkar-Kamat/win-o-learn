@@ -21,7 +21,9 @@ const findAll = async ({
     search = '',
     mode,
     registrationOpen,
-    timeStatus,
+    status,
+    theme,
+    sort,
     page = 1,
     limit = 20,
 }) => {
@@ -40,21 +42,30 @@ const findAll = async ({
                     $options: 'i',
                 },
             },
+            {
+                description: {
+                    $regex: search,
+                    $options: 'i',
+                },
+            },
         ];
+    }
+    if (theme) {
+        filter.theme = theme;
     }
     if (mode) {
         filter.mode = mode;
     }
     if (typeof registrationOpen !== 'undefined') {
-        filter.registrationOpen = registrationOpen;
+        filter.registrationOpen = registrationOpen === 'true' || registrationOpen === true;
     }
     const now = new Date();
-    if (timeStatus === 'upcoming') {
-        filter.startDate = {
+    if (status === 'upcoming') {
+        filter.registrationStartDate = {
             $gt: now,
         };
     }
-    if (timeStatus === 'ongoing') {
+    if (status === 'ongoing') {
         filter.startDate = {
             $lte: now,
         };
@@ -62,16 +73,24 @@ const findAll = async ({
             $gte: now,
         };
     }
-    if (timeStatus === 'completed') {
+    if (status === 'completed') {
         filter.endDate = {
             $lt: now,
         };
     }
+    
+    let sortOption = { startDate: 1 };
+    if (sort) {
+        sortOption = {};
+        if (sort.startsWith('-')) {
+            sortOption[sort.substring(1)] = -1;
+        } else {
+            sortOption[sort] = 1;
+        }
+    }
     const hackathons = await Hackathon.find(filter)
         .populate('organizer', 'name avatar')
-        .sort({
-            startDate: 1,
-        })
+        .sort(sortOption)
         .skip((page - 1) * limit)
         .limit(limit);
     const total = await Hackathon.countDocuments(filter);

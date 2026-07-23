@@ -13,6 +13,12 @@ const createTeam = asyncHandler(async (req, res) => {
     return SendResponse(res, 201, true, 'Team created successfully.', team);
 });
 
+// Retrieves all teams
+const getTeams = asyncHandler(async (req, res) => {
+    const teams = await TeamService.getTeams(req.query);
+    return SendResponse(res, 200, true, 'Teams fetched successfully.', teams);
+});
+
 
 // Retrieves the team data
 const getTeam = asyncHandler(async (req, res) => {
@@ -82,6 +88,7 @@ const removeMember = asyncHandler(async (req, res) => {
 
 export default {
     createTeam,
+    getTeams,
     getTeam,
     updateTeam,
     deleteTeam,

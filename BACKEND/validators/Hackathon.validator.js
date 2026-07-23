@@ -28,10 +28,13 @@ export const validateListHackathons = [
         .optional()
         .isBoolean()
         .withMessage('registrationOpen must be true or false'),
-    query('timeStatus')
+    query('status')
         .optional()
         .isIn(['upcoming', 'ongoing', 'completed'])
-        .withMessage('Invalid time status'),
+        .withMessage('Invalid status'),
+    query('search').optional().isString(),
+    query('theme').optional().isString(),
+    query('sort').optional().isString(),
     query('page')
         .optional()
         .isInt({

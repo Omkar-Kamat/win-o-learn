@@ -59,6 +59,8 @@ hackathonScopedSubmissionRoutes.get(
 
 const submissionRoutes = Router();
 
+submissionRoutes.get('/', VerifyToken, SubmissionController.getSubmissions);
+
 submissionRoutes.get(
     '/:id',
     VerifyToken,

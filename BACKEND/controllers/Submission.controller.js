@@ -44,9 +44,15 @@ const updateSubmissionFiles = asyncHandler(async (req, res) => {
 });
 
 
-// Retrieves the hackathon submissions data
 const getHackathonSubmissions = asyncHandler(async (req, res) => {
     const submissions = await SubmissionService.getHackathonSubmissions(req.hackathon._id);
+    SendResponse(res, 200, true, 'Submissions retrieved successfully.', submissions);
+});
+
+
+// Retrieves all submissions
+const getSubmissions = asyncHandler(async (req, res) => {
+    const submissions = await SubmissionService.getSubmissions(req.query);
     SendResponse(res, 200, true, 'Submissions retrieved successfully.', submissions);
 });
 
@@ -68,5 +74,6 @@ export default {
     updateSubmission,
     updateSubmissionFiles,
     getHackathonSubmissions,
+    getSubmissions,
     updateSubmissionStatus,
 };

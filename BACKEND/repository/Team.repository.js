@@ -21,6 +21,41 @@ const create = async (teamData) => {
 };
 
 
+// Performs the find all operation
+const findAll = async ({ search = '', page = 1, limit = 20, sort }) => {
+    const filter = {};
+    if (search) {
+        filter.name = {
+            $regex: search,
+            $options: 'i',
+        };
+    }
+    
+    let sortOption = { createdAt: -1 };
+    if (sort) {
+        sortOption = {};
+        if (sort.startsWith('-')) {
+            sortOption[sort.substring(1)] = -1;
+        } else {
+            sortOption[sort] = 1;
+        }
+    }
+
+    const teams = await Team.find(filter)
+        .populate('leader', 'name avatar')
+        .populate('members', 'name avatar')
+        .sort(sortOption)
+        .skip((page - 1) * limit)
+        .limit(limit);
+    const total = await Team.countDocuments(filter);
+
+    return {
+        teams,
+        total,
+    };
+};
+
+
 // Performs the find by id operation
 const findById = (teamId) =>
     Team.findById(teamId).populate('leader', 'name avatar').populate('members', 'name avatar');
@@ -149,6 +184,7 @@ const removeMember = (teamId, userId) =>
 
 export default {
     create,
+    findAll,
     findById,
     findByLeader,
     findByMember,

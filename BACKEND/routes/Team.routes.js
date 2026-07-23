@@ -19,6 +19,8 @@ import {
 
 const router = Router();
 
+router.get('/', VerifyToken, TeamController.getTeams);
+
 router.post(
     '/',
     VerifyToken,

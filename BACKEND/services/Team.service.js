@@ -19,6 +19,11 @@ const createTeam = async (userId, teamData) => {
     });
 };
 
+// Retrieves all teams
+const getTeams = async (queryParams) => {
+    return await TeamRepository.findAll(queryParams);
+};
+
 
 // Retrieves the team by id data
 const getTeamById = async (team) => {
@@ -165,6 +170,7 @@ const removeMember = async (team, userId) => {
 
 export default {
     createTeam,
+    getTeams,
     getTeamById,
     updateTeam,
     deleteTeam,

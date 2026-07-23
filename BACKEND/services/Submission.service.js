@@ -65,6 +65,12 @@ const getHackathonSubmissions = async (hackathonId) => {
 };
 
 
+// Retrieves all submissions
+const getSubmissions = async (queryParams) => {
+    return await SubmissionRepository.findAll(queryParams);
+};
+
+
 // Updates the submission status data
 const updateSubmissionStatus = async (submission, status) => {
     return SubmissionRepository.updateById(submission._id, {
@@ -79,5 +85,6 @@ export default {
     updateSubmission,
     updateSubmissionFiles,
     getHackathonSubmissions,
+    getSubmissions,
     updateSubmissionStatus,
 };

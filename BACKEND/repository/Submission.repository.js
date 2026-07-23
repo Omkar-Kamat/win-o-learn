@@ -22,6 +22,46 @@ const findById = (id) =>
         ],
     });
 
+// Performs the find all operation
+const findAll = async ({ search = '', page = 1, limit = 20, sort }) => {
+    const filter = {};
+    if (search) {
+        filter.projectName = {
+            $regex: search,
+            $options: 'i',
+        };
+    }
+    
+    let sortOption = { createdAt: -1 };
+    if (sort) {
+        sortOption = {};
+        if (sort.startsWith('-')) {
+            sortOption[sort.substring(1)] = -1;
+        } else {
+            sortOption[sort] = 1;
+        }
+    }
+
+    const submissions = await Submission.find(filter)
+        .populate({
+            path: 'registration',
+            populate: [
+                { path: 'team' },
+                { path: 'hackathon' },
+            ],
+        })
+        .sort(sortOption)
+        .skip((page - 1) * limit)
+        .limit(limit);
+        
+    const total = await Submission.countDocuments(filter);
+
+    return {
+        submissions,
+        total,
+    };
+};
+
 // Performs the find by registration operation
 const findByRegistration = (registrationId) =>
     Submission.findOne({
@@ -83,6 +123,7 @@ const updateById = (id, data) =>
 
 export default {
     create,
+    findAll,
     findById,
     findByRegistration,
     findAllByHackathon,
