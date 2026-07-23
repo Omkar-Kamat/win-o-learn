@@ -14,6 +14,10 @@ import TeamRoutes from './routes/Team.routes.js';
 import { hackathonScopedRouter, registrationScopedRouter } from './routes/Registration.routes.js';
 import ErrorHandler from './middlewares/ErrorHandler.js';
 import { hackathonScopedSubmissionRoutes, submissionRoutes } from './routes/Submission.routes.js';
+
+import hackathonJudgeRoutes from "./routes/HackathonJudge.routes.js";
+import judgeRoutes from "./routes/Judge.routes.js";
+
 const app = express();
 app.use(
     cors({
@@ -41,6 +45,9 @@ app.use('/api/hackathons', hackathonScopedRouter);
 app.use('/api/registrations', registrationScopedRouter);
 app.use('/api/hackathons', hackathonScopedSubmissionRoutes);
 app.use('/api/submissions', submissionRoutes);
+app.use("/api/hackathons", hackathonJudgeRoutes);
+app.use("/api/judges", judgeRoutes);
+
 app.use(ErrorHandler);
 
 export default app;
