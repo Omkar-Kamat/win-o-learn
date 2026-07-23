@@ -1,166 +1,137 @@
-import jwt from "jsonwebtoken";
-import crypto from "crypto";
-
-import UserRepository from "../repository/User.repository.js";
-import ApiError from "../utils/ApiError.js";
-import {
-  generateAccessToken,
-  generateRefreshToken,
-} from "../utils/GenerateToken.js";
+/**
+ * File: Auth.service.js
+ * Description: Implementation of Auth.service.js
+ */
+import jwt from 'jsonwebtoken';
+import crypto from 'crypto';
+import UserRepository from '../repository/User.repository.js';
+import ApiError from '../utils/ApiError.js';
+import { generateAccessToken, generateRefreshToken } from '../utils/GenerateToken.js';
 
 class AuthService {
-  async signup(data) {
-    const { name, email, password, role } = data;
+    // Performs the signup operation
+    async signup(data) {
+        const { name, email, password, role } = data;
+        const existingUser = await UserRepository.findByEmail(email);
+        if (existingUser) {
+            throw new ApiError(409, 'Email already exists');
+        }
+        const user = await UserRepository.create({
+            name,
+            email,
+            password,
+            role,
+        });
+        const accessToken = generateAccessToken(user);
+        const refreshToken = generateRefreshToken(user);
+        await UserRepository.updateRefreshToken(user._id, refreshToken);
 
-    const existingUser = await UserRepository.findByEmail(email);
-
-    if (existingUser) {
-      throw new ApiError(409, "Email already exists");
+        return {
+            user: user.toJSON(),
+            accessToken,
+            refreshToken,
+        };
     }
 
-    const user = await UserRepository.create({
-      name,
-      email,
-      password,
-      role,
-    });
+    // Performs the login operation
+    async login(email, password) {
+        const user = await UserRepository.findByEmail(email);
+        if (!user) {
+            throw new ApiError(401, 'Invalid email or password');
+        }
+        if (user.isBlocked) {
+            throw new ApiError(403, 'Your account has been blocked');
+        }
+        const isMatch = await user.comparePassword(password);
+        if (!isMatch) {
+            throw new ApiError(401, 'Invalid email or password');
+        }
+        const accessToken = generateAccessToken(user);
+        const refreshToken = generateRefreshToken(user);
+        await UserRepository.updateRefreshToken(user._id, refreshToken);
 
-    const accessToken = generateAccessToken(user);
-    const refreshToken = generateRefreshToken(user);
-
-    await UserRepository.updateRefreshToken(user._id, refreshToken);
-
-    return {
-      user: user.toJSON(),
-      accessToken,
-      refreshToken,
-    };
-  }
-
-  async login(email, password) {
-    const user = await UserRepository.findByEmail(email);
-
-    if (!user) {
-      throw new ApiError(401, "Invalid email or password");
+        return {
+            user: user.toJSON(),
+            accessToken,
+            refreshToken,
+        };
     }
 
-    if (user.isBlocked) {
-      throw new ApiError(403, "Your account has been blocked");
+    // Performs the logout operation
+    async logout(userId) {
+        await UserRepository.clearRefreshToken(userId);
     }
 
-    const isMatch = await user.comparePassword(password);
-
-    if (!isMatch) {
-      throw new ApiError(401, "Invalid email or password");
+    // Retrieves the me data
+    async getMe(user) {
+        return user.toJSON();
     }
 
-    const accessToken = generateAccessToken(user);
-    const refreshToken = generateRefreshToken(user);
+    // Performs the refresh token operation
+    async refreshToken(token) {
+        if (!token) {
+            throw new ApiError(401, 'Refresh token is required');
+        }
+        let decoded;
+        try {
+            decoded = jwt.verify(token, process.env.JWT_REFRESH_SECRET);
+        } catch {
+            throw new ApiError(401, 'Invalid refresh token');
+        }
+        const user = await UserRepository.findByIdWithRefreshToken(decoded.id);
+        if (!user) {
+            throw new ApiError(401, 'User not found');
+        }
+        if (user.refreshToken !== token) {
+            throw new ApiError(401, 'Refresh token mismatch');
+        }
+        const accessToken = generateAccessToken(user);
 
-    await UserRepository.updateRefreshToken(user._id, refreshToken);
-
-    return {
-      user: user.toJSON(),
-      accessToken,
-      refreshToken,
-    };
-  }
-
-  async logout(userId) {
-    await UserRepository.clearRefreshToken(userId);
-  }
-
-  async getMe(user) {
-    return user.toJSON();
-  }
-
-  async refreshToken(token) {
-    if (!token) {
-      throw new ApiError(401, "Refresh token is required");
+        return {
+            accessToken,
+        };
     }
 
-    let decoded;
-
-    try {
-      decoded = jwt.verify(token, process.env.JWT_REFRESH_SECRET);
-    } catch {
-      throw new ApiError(401, "Invalid refresh token");
+    // Performs the change password operation
+    async changePassword(userId, oldPassword, newPassword) {
+        const user = await UserRepository.findByIdWithPassword(userId);
+        if (!user) {
+            throw new ApiError(404, 'User not found');
+        }
+        const isMatch = await user.comparePassword(oldPassword);
+        if (!isMatch) {
+            throw new ApiError(400, 'Old password is incorrect');
+        }
+        await UserRepository.updatePassword(userId, newPassword);
     }
 
-    const user = await UserRepository.findByIdWithRefreshToken(decoded.id);
+    // Performs the forgot password operation
+    async forgotPassword(email) {
+        const user = await UserRepository.findByEmail(email);
+        if (!user) {
+            return;
+        }
+        const resetToken = crypto.randomBytes(32).toString('hex');
+        const hashedToken = crypto.createHash('sha256').update(resetToken).digest('hex');
+        const expires = Date.now() + 1000 * 60 * 15;
+        await UserRepository.saveResetPasswordToken(user._id, hashedToken, expires);
 
-    if (!user) {
-    throw new ApiError(401, "User not found");
+        return resetToken;
     }
 
-    if (user.refreshToken !== token) {
-    throw new ApiError(401, "Refresh token mismatch");
+    // Performs the reset password operation
+    async resetPassword(token, newPassword) {
+        const hashedToken = crypto.createHash('sha256').update(token).digest('hex');
+        const user = await UserRepository.findByResetToken(hashedToken);
+        if (!user) {
+            throw new ApiError(400, 'Invalid or expired reset token');
+        }
+        user.password = newPassword;
+        user.resetPasswordToken = undefined;
+        user.resetPasswordExpires = undefined;
+        await user.save();
     }
-
-    const accessToken = generateAccessToken(user);
-
-    return { accessToken };
-  }
-
-  async changePassword(userId, oldPassword, newPassword) {
-    const user = await UserRepository.findByIdWithPassword(userId);
-
-    if (!user) {
-        throw new ApiError(404, "User not found");
-    }
-
-    const isMatch = await user.comparePassword(oldPassword);
-
-    if (!isMatch) {
-      throw new ApiError(400, "Old password is incorrect");
-    }
-
-    await UserRepository.updatePassword(userId, newPassword);
-  }
-
-  async forgotPassword(email) {
-    const user = await UserRepository.findByEmail(email);
-
-    if (!user) {
-      return;
-    }
-
-    const resetToken = crypto.randomBytes(32).toString("hex");
-
-    const hashedToken = crypto
-      .createHash("sha256")
-      .update(resetToken)
-      .digest("hex");
-      
-    const expires = Date.now() + 1000 * 60 * 15;
-
-    await UserRepository.saveResetPasswordToken(
-      user._id,
-      hashedToken,
-      expires
-    );
-
-    return resetToken;
-  }
-
-  async resetPassword(token, newPassword) {
-    const hashedToken = crypto
-      .createHash("sha256")
-      .update(token)
-      .digest("hex");
-
-    const user = await UserRepository.findByResetToken(hashedToken);
-
-    if (!user) {
-      throw new ApiError(400, "Invalid or expired reset token");
-    }
-
-    user.password = newPassword;
-    user.resetPasswordToken = undefined;
-    user.resetPasswordExpires = undefined;
-
-    await user.save();
-  }
 }
+
 
 export default new AuthService();
