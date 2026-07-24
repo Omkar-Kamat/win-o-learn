@@ -1,5 +1,0 @@
-QR Code Registration
-• Certificate Generation
-Countdown Timer
-• Public Project Gallery
-coding contest feature - code editor and compiler - SQL only

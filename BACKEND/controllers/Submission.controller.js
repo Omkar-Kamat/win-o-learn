@@ -5,7 +5,7 @@ import { ROLES } from '../utils/Constants.js';
 const filterSubmissionScores = (submission, userRole) => {
   const doc = submission.toObject ? submission.toObject() : submission;
   const isParticipant = userRole === ROLES.PARTICIPANT;
-  if (isParticipant && !doc.registration.hackathon.resultsPublished) {
+  if (isParticipant && !doc.registration?.hackathon?.resultsPublished) {
     delete doc.averageScore;
     delete doc.reviewCount;
   }
