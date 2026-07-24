@@ -5,6 +5,8 @@ import helmet from 'helmet';
 import cors from 'cors';
 import fs from 'fs';
 import swaggerUi from 'swagger-ui-express';
+import morgan from 'morgan';
+import logger from './utils/logger.js';
 import AuthRoutes from './routes/Auth.routes.js';
 import UserRoutes from './routes/User.routes.js';
 import HackathonRoutes from './routes/Hackathon.routes.js';
@@ -26,6 +28,13 @@ app.use(cors({ origin: process.env.CLIENT_URL, credentials: true }));
 app.use(helmet());
 app.use(express.json());
 app.use(cookieParser());
+
+const morganFormat = process.env.NODE_ENV !== 'production' ? 'dev' : 'combined';
+app.use(morgan(morganFormat, {
+    stream: {
+        write: (message) => logger.info(message.trim())
+    }
+}));
 
 const swaggerDocument = JSON.parse(fs.readFileSync(new URL('./swagger-output.json', import.meta.url), 'utf8'));
 app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(swaggerDocument));

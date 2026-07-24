@@ -1,0 +1,15 @@
+{
+    "keep": {
+        "days": true,
+        "amount": 14
+    },
+    "auditLog": "/home/rythm/Desktop/win-o-learn/BACKEND/logs/.9d246cc75b756bacec344dbd7135f2c36ed73519-audit.json",
+    "files": [
+        {
+            "date": 1784906444043,
+            "name": "/home/rythm/Desktop/win-o-learn/BACKEND/logs/2026-07-24-error.log",
+            "hash": "e9892c12c67a8783bb8204a96bcecea5355b0b8d76c496683516a97cc2685518"
+        }
+    ],
+    "hashType": "sha256"
+}

@@ -1,4 +1,6 @@
 // Errors handler. 
+import logger from '../utils/logger.js';
+
 const ErrorHandler = (err, req, res, next) => {
   let statusCode = err.statusCode || 500;
   let message = err.message || 'Internal Server Error';
@@ -33,6 +35,10 @@ const ErrorHandler = (err, req, res, next) => {
   }
   if (process.env.NODE_ENV === 'development') {
     response.stack = err.stack;
+  }
+  logger.error(`${statusCode} - ${message} - ${req.originalUrl} - ${req.method} - ${req.ip}`);
+  if (err.stack) {
+    logger.error(err.stack);
   }
   res.status(statusCode).json(response);
 };

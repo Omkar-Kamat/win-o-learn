@@ -1,0 +1,111 @@
+2026-07-24 20:50:49 info: MongoDB connected: ac-p6ivwxv-shard-00-02.ugf3qf7.mongodb.net
+2026-07-24 20:50:49 info: Server running on http://localhost:3000
+2026-07-24 20:51:21 info: MongoDB connected: ac-p6ivwxv-shard-00-00.ugf3qf7.mongodb.net
+2026-07-24 20:51:21 info: Server running on http://localhost:3000
+2026-07-24 20:51:40 info: [0mPOST /api/auth/signup [33m400[0m 8.996 ms - 867[0m
+2026-07-24 20:51:40 info: [0mPOST /api/auth/signup [33m400[0m 2.602 ms - 194[0m
+2026-07-24 20:51:40 info: [0mPOST /api/auth/signup [33m400[0m 2.192 ms - 194[0m
+2026-07-24 20:51:40 error: 401 - Invalid email or password - /api/auth/login - POST - ::ffff:127.0.0.1
+2026-07-24 20:51:40 error: Error: Invalid email or password
+    at AuthService.login (file:///home/rythm/Desktop/win-o-learn/BACKEND/services/Auth.service.js:38:13)
+    at process.processTicksAndRejections (node:internal/process/task_queues:104:5)
+    at async file:///home/rythm/Desktop/win-o-learn/BACKEND/controllers/Auth.controller.js:21:20
+2026-07-24 20:51:40 info: [0mPOST /api/auth/login [33m401[0m 94.254 ms - 400[0m
+2026-07-24 20:51:40 error: 401 - Invalid email or password - /api/auth/login - POST - ::ffff:127.0.0.1
+2026-07-24 20:51:40 error: Error: Invalid email or password
+    at AuthService.login (file:///home/rythm/Desktop/win-o-learn/BACKEND/services/Auth.service.js:38:13)
+    at process.processTicksAndRejections (node:internal/process/task_queues:104:5)
+    at async file:///home/rythm/Desktop/win-o-learn/BACKEND/controllers/Auth.controller.js:21:20
+2026-07-24 20:51:40 info: [0mPOST /api/auth/login [33m401[0m 75.393 ms - 400[0m
+2026-07-24 20:51:40 error: 401 - Access token is required - /api/auth/me - GET - ::ffff:127.0.0.1
+2026-07-24 20:51:40 error: Error: Access token is required
+    at VerifyToken (file:///home/rythm/Desktop/win-o-learn/BACKEND/middlewares/VerifyToken.js:9:13)
+    at Layer.handleRequest (/home/rythm/Desktop/win-o-learn/BACKEND/node_modules/router/lib/layer.js:152:17)
+    at next (/home/rythm/Desktop/win-o-learn/BACKEND/node_modules/router/lib/route.js:157:13)
+    at Route.dispatch (/home/rythm/Desktop/win-o-learn/BACKEND/node_modules/router/lib/route.js:117:3)
+    at handle (/home/rythm/Desktop/win-o-learn/BACKEND/node_modules/router/index.js:435:11)
+    at Layer.handleRequest (/home/rythm/Desktop/win-o-learn/BACKEND/node_modules/router/lib/layer.js:152:17)
+    at /home/rythm/Desktop/win-o-learn/BACKEND/node_modules/router/index.js:295:15
+    at processParams (/home/rythm/Desktop/win-o-learn/BACKEND/node_modules/router/index.js:582:12)
+    at next (/home/rythm/Desktop/win-o-learn/BACKEND/node_modules/router/index.js:291:5)
+    at router.handle (/home/rythm/Desktop/win-o-learn/BACKEND/node_modules/router/index.js:186:3)
+2026-07-24 20:51:40 info: [0mGET /api/auth/me [33m401[0m 20.053 ms - 1096[0m
+2026-07-24 20:51:40 error: 401 - Access token is required - /api/auth/me - GET - ::ffff:127.0.0.1
+2026-07-24 20:51:40 error: Error: Access token is required
+    at VerifyToken (file:///home/rythm/Desktop/win-o-learn/BACKEND/middlewares/VerifyToken.js:9:13)
+    at Layer.handleRequest (/home/rythm/Desktop/win-o-learn/BACKEND/node_modules/router/lib/layer.js:152:17)
+    at next (/home/rythm/Desktop/win-o-learn/BACKEND/node_modules/router/lib/route.js:157:13)
+    at Route.dispatch (/home/rythm/Desktop/win-o-learn/BACKEND/node_modules/router/lib/route.js:117:3)
+    at handle (/home/rythm/Desktop/win-o-learn/BACKEND/node_modules/router/index.js:435:11)
+    at Layer.handleRequest (/home/rythm/Desktop/win-o-learn/BACKEND/node_modules/router/lib/layer.js:152:17)
+    at /home/rythm/Desktop/win-o-learn/BACKEND/node_modules/router/index.js:295:15
+    at processParams (/home/rythm/Desktop/win-o-learn/BACKEND/node_modules/router/index.js:582:12)
+    at next (/home/rythm/Desktop/win-o-learn/BACKEND/node_modules/router/index.js:291:5)
+    at router.handle (/home/rythm/Desktop/win-o-learn/BACKEND/node_modules/router/index.js:186:3)
+2026-07-24 20:51:40 info: [0mGET /api/auth/me [33m401[0m 18.180 ms - 1096[0m
+2026-07-24 20:51:40 error: 401 - Access token is required - /api/auth/change-password - PUT - ::ffff:127.0.0.1
+2026-07-24 20:51:40 error: Error: Access token is required
+    at VerifyToken (file:///home/rythm/Desktop/win-o-learn/BACKEND/middlewares/VerifyToken.js:9:13)
+    at Layer.handleRequest (/home/rythm/Desktop/win-o-learn/BACKEND/node_modules/router/lib/layer.js:152:17)
+    at next (/home/rythm/Desktop/win-o-learn/BACKEND/node_modules/router/lib/route.js:157:13)
+    at Route.dispatch (/home/rythm/Desktop/win-o-learn/BACKEND/node_modules/router/lib/route.js:117:3)
+    at handle (/home/rythm/Desktop/win-o-learn/BACKEND/node_modules/router/index.js:435:11)
+    at Layer.handleRequest (/home/rythm/Desktop/win-o-learn/BACKEND/node_modules/router/lib/layer.js:152:17)
+    at /home/rythm/Desktop/win-o-learn/BACKEND/node_modules/router/index.js:295:15
+    at processParams (/home/rythm/Desktop/win-o-learn/BACKEND/node_modules/router/index.js:582:12)
+    at next (/home/rythm/Desktop/win-o-learn/BACKEND/node_modules/router/index.js:291:5)
+    at router.handle (/home/rythm/Desktop/win-o-learn/BACKEND/node_modules/router/index.js:186:3)
+2026-07-24 20:51:40 info: [0mPUT /api/auth/change-password [33m401[0m 9.351 ms - 1096[0m
+2026-07-24 20:51:40 error: 401 - Access token is required - /api/auth/change-password - PUT - ::ffff:127.0.0.1
+2026-07-24 20:51:40 error: Error: Access token is required
+    at VerifyToken (file:///home/rythm/Desktop/win-o-learn/BACKEND/middlewares/VerifyToken.js:9:13)
+    at Layer.handleRequest (/home/rythm/Desktop/win-o-learn/BACKEND/node_modules/router/lib/layer.js:152:17)
+    at next (/home/rythm/Desktop/win-o-learn/BACKEND/node_modules/router/lib/route.js:157:13)
+    at Route.dispatch (/home/rythm/Desktop/win-o-learn/BACKEND/node_modules/router/lib/route.js:117:3)
+    at handle (/home/rythm/Desktop/win-o-learn/BACKEND/node_modules/router/index.js:435:11)
+    at Layer.handleRequest (/home/rythm/Desktop/win-o-learn/BACKEND/node_modules/router/lib/layer.js:152:17)
+    at /home/rythm/Desktop/win-o-learn/BACKEND/node_modules/router/index.js:295:15
+    at processParams (/home/rythm/Desktop/win-o-learn/BACKEND/node_modules/router/index.js:582:12)
+    at next (/home/rythm/Desktop/win-o-learn/BACKEND/node_modules/router/index.js:291:5)
+    at router.handle (/home/rythm/Desktop/win-o-learn/BACKEND/node_modules/router/index.js:186:3)
+2026-07-24 20:51:40 info: [0mPUT /api/auth/change-password [33m401[0m 2.710 ms - 1096[0m
+2026-07-24 20:51:40 error: 401 - Invalid email or password - /api/auth/login - POST - ::ffff:127.0.0.1
+2026-07-24 20:51:40 error: Error: Invalid email or password
+    at AuthService.login (file:///home/rythm/Desktop/win-o-learn/BACKEND/services/Auth.service.js:38:13)
+    at process.processTicksAndRejections (node:internal/process/task_queues:104:5)
+    at async file:///home/rythm/Desktop/win-o-learn/BACKEND/controllers/Auth.controller.js:21:20
+2026-07-24 20:51:40 info: [0mPOST /api/auth/login [33m401[0m 63.782 ms - 400[0m
+2026-07-24 20:51:40 error: 401 - Refresh token is required - /api/auth/refresh-token - POST - ::ffff:127.0.0.1
+2026-07-24 20:51:40 error: Error: Refresh token is required
+    at AuthService.refreshToken (file:///home/rythm/Desktop/win-o-learn/BACKEND/services/Auth.service.js:67:13)
+    at file:///home/rythm/Desktop/win-o-learn/BACKEND/controllers/Auth.controller.js:43:38
+    at file:///home/rythm/Desktop/win-o-learn/BACKEND/middlewares/AsyncHandler.js:3:19
+    at Layer.handleRequest (/home/rythm/Desktop/win-o-learn/BACKEND/node_modules/router/lib/layer.js:152:17)
+    at next (/home/rythm/Desktop/win-o-learn/BACKEND/node_modules/router/lib/route.js:157:13)
+    at Route.dispatch (/home/rythm/Desktop/win-o-learn/BACKEND/node_modules/router/lib/route.js:117:3)
+    at handle (/home/rythm/Desktop/win-o-learn/BACKEND/node_modules/router/index.js:435:11)
+    at Layer.handleRequest (/home/rythm/Desktop/win-o-learn/BACKEND/node_modules/router/lib/layer.js:152:17)
+    at /home/rythm/Desktop/win-o-learn/BACKEND/node_modules/router/index.js:295:15
+    at processParams (/home/rythm/Desktop/win-o-learn/BACKEND/node_modules/router/index.js:582:12)
+2026-07-24 20:51:40 info: [0mPOST /api/auth/refresh-token [33m401[0m 1.218 ms - 1101[0m
+2026-07-24 20:51:40 error: 401 - Access token is required - /api/auth/logout - POST - ::ffff:127.0.0.1
+2026-07-24 20:51:40 error: Error: Access token is required
+    at VerifyToken (file:///home/rythm/Desktop/win-o-learn/BACKEND/middlewares/VerifyToken.js:9:13)
+    at Layer.handleRequest (/home/rythm/Desktop/win-o-learn/BACKEND/node_modules/router/lib/layer.js:152:17)
+    at next (/home/rythm/Desktop/win-o-learn/BACKEND/node_modules/router/lib/route.js:157:13)
+    at Route.dispatch (/home/rythm/Desktop/win-o-learn/BACKEND/node_modules/router/lib/route.js:117:3)
+    at handle (/home/rythm/Desktop/win-o-learn/BACKEND/node_modules/router/index.js:435:11)
+    at Layer.handleRequest (/home/rythm/Desktop/win-o-learn/BACKEND/node_modules/router/lib/layer.js:152:17)
+    at /home/rythm/Desktop/win-o-learn/BACKEND/node_modules/router/index.js:295:15
+    at processParams (/home/rythm/Desktop/win-o-learn/BACKEND/node_modules/router/index.js:582:12)
+    at next (/home/rythm/Desktop/win-o-learn/BACKEND/node_modules/router/index.js:291:5)
+    at router.handle (/home/rythm/Desktop/win-o-learn/BACKEND/node_modules/router/index.js:186:3)
+2026-07-24 20:51:40 info: [0mPOST /api/auth/logout [33m401[0m 0.769 ms - 1096[0m
+2026-07-24 20:51:40 info: [0mPOST /api/auth/forgot-password [32m200[0m 48.436 ms - 76[0m
+2026-07-24 20:51:40 info: [0mPOST /api/auth/reset-password/not-a-real-token [33m400[0m 0.676 ms - 199[0m
+2026-07-24 20:51:41 error: 401 - Invalid email or password - /api/auth/login - POST - ::ffff:127.0.0.1
+2026-07-24 20:51:41 error: Error: Invalid email or password
+    at AuthService.login (file:///home/rythm/Desktop/win-o-learn/BACKEND/services/Auth.service.js:38:13)
+    at process.processTicksAndRejections (node:internal/process/task_queues:104:5)
+    at async file:///home/rythm/Desktop/win-o-learn/BACKEND/controllers/Auth.controller.js:21:20
+2026-07-24 20:51:41 info: [0mPOST /api/auth/login [33m401[0m 48.127 ms - 400[0m
