@@ -4,11 +4,10 @@ import ApiError from '../utils/ApiError.js';
 // Verifies the validity of token by executing underlying operations (findById). Includes validation checks preventing actions if access token is required or user not found. 
 const VerifyToken = async (req, res, next) => {
   try {
-    const authHeader = req.headers.authorization;
-    if (!authHeader || !authHeader.startsWith('Bearer ')) {
+    const token = req.cookies?.accessToken || (req.headers.authorization?.startsWith('Bearer ') ? req.headers.authorization.split(' ')[1] : null);
+    if (!token) {
       throw new ApiError(401, 'Access token is required');
     }
-    const token = authHeader.split(' ')[1];
     const decoded = jwt.verify(token, process.env.JWT_SECRET);
     const user = await UserRepository.findById(decoded.id);
     if (!user) {

@@ -110,7 +110,7 @@ function authHeader(token) {
 async function signup(user) {
     const res = await authApi.post('/signup', user);
     return {
-        token: res.data?.data?.accessToken || null,
+        token: (res.headers['set-cookie']?.find(c => c.startsWith('accessToken='))?.split(';')[0]?.split('=')[1]) || null,
         id: res.data?.data?.user?.id || res.data?.data?.user?._id || null,
         res: res,
     };

@@ -51,7 +51,7 @@ async function login(email, password) {
     const res = await authApi.post('/login', { email: email, password: password });
     if (res.status !== 200) return { token: null, id: null, res: res };
     return {
-        token: res.data?.data?.accessToken || null,
+        token: (res.headers['set-cookie']?.find(c => c.startsWith('accessToken='))?.split(';')[0]?.split('=')[1]) || null,
         id: res.data?.data?.user?.id || res.data?.data?.user?._id || null,
         res: res,
     };
@@ -63,7 +63,7 @@ async function run() {
     {
         const res = await authApi.post('/signup', participant);
         check('Participant signup succeeds (201)', res.status === 201, `got ${res.status}`);
-        participantToken = res.data?.data?.accessToken;
+        participantToken = (res.headers['set-cookie']?.find(c => c.startsWith('accessToken='))?.split(';')[0]?.split('=')[1]);
         participantId = res.data?.data?.user?.id || res.data?.data?.user?._id;
         check('Participant token captured', !!participantToken);
         check('Participant id captured', !!participantId);

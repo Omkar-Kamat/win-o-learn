@@ -61,12 +61,12 @@ function authHeader(token) {
 }
 async function login(email, password) {
     const res = await authApi.post('/login', { email: email, password: password });
-    return { token: res.data?.data?.accessToken || null, res: res };
+    return { token: (res.headers['set-cookie']?.find(c => c.startsWith('accessToken='))?.split(';')[0]?.split('=')[1]) || null, res: res };
 }
 async function signup(user) {
     const res = await authApi.post('/signup', user);
     return {
-        token: res.data?.data?.accessToken || null,
+        token: (res.headers['set-cookie']?.find(c => c.startsWith('accessToken='))?.split(';')[0]?.split('=')[1]) || null,
         id: res.data?.data?.user?._id || res.data?.data?.user?.id || null,
         res: res,
     };

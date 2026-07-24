@@ -6,7 +6,9 @@ class AuthController {
   // Registers a new user account by executing underlying operations (signup). Constructs and sends the final API response to the client. 
   signup = AsyncHandler(async (req, res) => {
     const result = await AuthService.signup(req.body);
+    res.cookie('accessToken', result.accessToken, CookieOptions);
     res.cookie('refreshToken', result.refreshToken, CookieOptions);
+    delete result.accessToken;
     delete result.refreshToken;
     SendResponse(res, 201, true, 'User registered successfully', result);
   });
@@ -17,13 +19,16 @@ class AuthController {
       password: password
     } = req.body;
     const result = await AuthService.login(email, password);
+    res.cookie('accessToken', result.accessToken, CookieOptions);
     res.cookie('refreshToken', result.refreshToken, CookieOptions);
+    delete result.accessToken;
     delete result.refreshToken;
     SendResponse(res, 200, true, 'Login successful', result);
   });
   // Terminates the current user session by executing underlying operations (logout). Constructs and sends the final API response to the client. 
   logout = AsyncHandler(async (req, res) => {
     await AuthService.logout(req.user._id);
+    res.clearCookie('accessToken', CookieOptions);
     res.clearCookie('refreshToken', CookieOptions);
     SendResponse(res, 200, true, 'Logout successful');
   });
@@ -36,6 +41,8 @@ class AuthController {
   refreshToken = AsyncHandler(async (req, res) => {
     const refreshToken = req.cookies.refreshToken;
     const result = await AuthService.refreshToken(refreshToken);
+    res.cookie('accessToken', result.accessToken, CookieOptions);
+    delete result.accessToken;
     SendResponse(res, 200, true, 'Access token refreshed', result);
   });
   // Changes password by executing underlying operations (changePassword). Constructs and sends the final API response to the client. 

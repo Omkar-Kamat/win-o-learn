@@ -28,7 +28,7 @@ async function request(
     { body: body, useAuth: useAuth = false, useCookie: useCookie = false } = {}
 ) {
     const headers = {};
-    if (useAuth && accessToken) headers.Authorization = `Bearer ${accessToken}`;
+    if (useAuth && accessToken) { headers.Cookie = (headers.Cookie ? headers.Cookie + '; ' : '') + `accessToken=${accessToken}`; }
     if (useCookie && refreshCookie) headers.Cookie = refreshCookie;
     const res = await api.request({ method: method, url: path, data: body, headers: headers });
     const setCookie = res.headers['set-cookie'];
@@ -72,14 +72,14 @@ async function run() {
         check('Signup response has success:true', res.data?.success === true);
         check(
             'Signup response includes accessToken',
-            typeof res.data?.data?.accessToken === 'string'
+            res.headers['set-cookie']?.some(c => c.startsWith('accessToken='))
         );
         check(
             'Signup response does NOT include password',
             res.data?.data?.user?.password === undefined
         );
         check('Refresh token cookie was set', !!refreshCookie);
-        accessToken = res.data?.data?.accessToken;
+        accessToken = (res.headers['set-cookie']?.find(c => c.startsWith('accessToken='))?.split(';')[0]?.split('=')[1]);
     }
     section('3. Duplicate signup rejection');
     {
@@ -101,9 +101,9 @@ async function run() {
         check('Login returns 200', res.status === 200, `got ${res.status}`);
         check(
             'Login response includes accessToken',
-            typeof res.data?.data?.accessToken === 'string'
+            res.headers['set-cookie']?.some(c => c.startsWith('accessToken='))
         );
-        accessToken = res.data?.data?.accessToken;
+        accessToken = (res.headers['set-cookie']?.find(c => c.startsWith('accessToken='))?.split(';')[0]?.split('=')[1]);
     }
     section('6. GET /me - no auth header');
     {
@@ -139,13 +139,13 @@ async function run() {
             body: { email: testUser.email, password: testUser.password },
         });
         check('New password logs in successfully (200)', res.status === 200, `got ${res.status}`);
-        accessToken = res.data?.data?.accessToken;
+        accessToken = (res.headers['set-cookie']?.find(c => c.startsWith('accessToken='))?.split(';')[0]?.split('=')[1]);
     }
     section('11. Refresh access token via cookie');
     {
         const res = await request('post', '/refresh-token', { useCookie: true });
         check('Refresh returns 200', res.status === 200, `got ${res.status}`);
-        check('Refresh returns a new accessToken', typeof res.data?.data?.accessToken === 'string');
+        check('Refresh returns a new accessToken', res.headers['set-cookie']?.some(c => c.startsWith('accessToken=')));
     }
     section('12. Logout');
     {

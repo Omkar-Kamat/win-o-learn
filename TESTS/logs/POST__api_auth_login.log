@@ -1,5 +1,5 @@
 ==================================================
-Timestamp: 2026-07-23T22:25:09.319Z
+Timestamp: 2026-07-24T11:09:51.861Z
 HTTP Method: POST
 Route: /api/auth/login
 Final URL: /api/auth/login
@@ -7,13 +7,13 @@ Headers: {
   "Content-Type": "application/json"
 }
 Request Body: {
-  "email": "admin.1784845508878@test.com",
+  "email": "admin.1784891391457@test.com",
   "password": "Password123"
 }
 Response Status: 401
-Response Headers: {"access-control-allow-credentials":"true","access-control-allow-origin":"http://localhost:5173","connection":"keep-alive","content-length":"400","content-security-policy":"default-src 'self';base-uri 'self';font-src 'self' https: data:;form-action 'self';frame-ancestors 'self';img-src 'self' data:;object-src 'none';script-src 'self';script-src-attr 'none';style-src 'self' https: 'unsafe-inline';upgrade-insecure-requests","content-type":"application/json; charset=utf-8","cross-origin-opener-policy":"same-origin","cross-origin-resource-policy":"same-origin","date":"Thu, 23 Jul 2026 22:25:09 GMT","etag":"W/\"190-x0TnWhvCu272tKFevNtIbl1Gke0\"","keep-alive":"timeout=5","origin-agent-cluster":"?1","referrer-policy":"no-referrer","strict-transport-security":"max-age=31536000; includeSubDomains","vary":"Origin","x-content-type-options":"nosniff","x-dns-prefetch-control":"off","x-download-options":"noopen","x-frame-options":"SAMEORIGIN","x-permitted-cross-domain-policies":"none","x-xss-protection":"0"}
-Response Body: {"success":false,"message":"Invalid email or password","errors":null,"stack":"Error: Invalid email or password\n    at AuthService.login (file:///home/rythm/Desktop/win-o-learn/BACKEND/services/Auth.service.js:27:19)\n    at process.processTicksAndRejections (node:internal/process/task_queues:104:5)\n    at async file:///home/rythm/Desktop/win-o-learn/BACKEND/controllers/Auth.controller.js:14:24"}
-Execution Time: 91ms
+Response Headers: {"access-control-allow-credentials":"true","access-control-allow-origin":"http://localhost:5173","connection":"keep-alive","content-length":"400","content-security-policy":"default-src 'self';base-uri 'self';font-src 'self' https: data:;form-action 'self';frame-ancestors 'self';img-src 'self' data:;object-src 'none';script-src 'self';script-src-attr 'none';style-src 'self' https: 'unsafe-inline';upgrade-insecure-requests","content-type":"application/json; charset=utf-8","cross-origin-opener-policy":"same-origin","cross-origin-resource-policy":"same-origin","date":"Fri, 24 Jul 2026 11:09:51 GMT","etag":"W/\"190-HiDTE3WKE39pOTs/gLXOxx6Z0xg\"","keep-alive":"timeout=5","origin-agent-cluster":"?1","referrer-policy":"no-referrer","strict-transport-security":"max-age=31536000; includeSubDomains","vary":"Origin","x-content-type-options":"nosniff","x-dns-prefetch-control":"off","x-download-options":"noopen","x-frame-options":"SAMEORIGIN","x-permitted-cross-domain-policies":"none","x-xss-protection":"0"}
+Response Body: {"success":false,"message":"Invalid email or password","errors":null,"stack":"Error: Invalid email or password\n    at AuthService.login (file:///home/rythm/Desktop/win-o-learn/BACKEND/services/Auth.service.js:38:13)\n    at process.processTicksAndRejections (node:internal/process/task_queues:104:5)\n    at async file:///home/rythm/Desktop/win-o-learn/BACKEND/controllers/Auth.controller.js:21:20"}
+Execution Time: 63ms
 PASS/FAIL: PASS
 Error Stack: None
 ==================================================

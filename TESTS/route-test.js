@@ -235,7 +235,7 @@ async function seedContext() {
                 body: JSON.stringify(user)
             });
             const data = await r.json();
-            return { token: data?.data?.accessToken, id: data?.data?.user?.id || data?.data?.user?._id, email: user.email };
+            return { token: (data?.headers?.['set-cookie']?.find(c => c.startsWith('accessToken='))?.split(';')[0]?.split('=')[1]), id: data?.data?.user?.id || data?.data?.user?._id, email: user.email };
         } catch (e) {
             console.log(color.red(`Failed to seed ${role}: `) + e.message);
             return { token: null, id: null };
