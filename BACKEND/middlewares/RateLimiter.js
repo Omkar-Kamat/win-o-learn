@@ -6,4 +6,5 @@ export const authLimiter = rateLimit({
   message: 'Too many requests from this IP, please try again after 15 minutes',
   standardHeaders: true,
   legacyHeaders: false,
+  skip: (req, res) => process.env.NODE_ENV === 'development',
 });
