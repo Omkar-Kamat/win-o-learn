@@ -1,0 +1,12 @@
+import { Router } from 'express';
+import RegistrationController from '../controllers/Registration.controller.js';
+import VerifyToken from '../middlewares/VerifyToken.js';
+import AuthorizeRoles from '../middlewares/AuthorizeRoles.js';
+import LoadRegistration from '../middlewares/LoadRegistration.js';
+import CheckHackathonOwnership from '../middlewares/CheckHackathonOwnership.js';
+import { ROLES } from '../utils/Constants.js';
+import { validateRegistrationId } from '../validators/Registration.validator.js';
+const router = Router();
+router.patch('/:registrationId/approve', VerifyToken, AuthorizeRoles(ROLES.ORGANIZER), validateRegistrationId, LoadRegistration, CheckHackathonOwnership(), RegistrationController.approveRegistration);
+router.patch('/:registrationId/reject', VerifyToken, AuthorizeRoles(ROLES.ORGANIZER), validateRegistrationId, LoadRegistration, CheckHackathonOwnership(), RegistrationController.rejectRegistration);
+export default router;

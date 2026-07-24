@@ -61,9 +61,6 @@ class ReviewService {
     if (reviewJudgeId !== String(judgeId)) {
       throw new ApiError(403, 'You can only edit your own review.');
     }
-    if (review.isFinal) {
-      throw new ApiError(400, 'This review has been locked.');
-    }
     const criteria = review.hackathon.judgingCriteria;
     this.validateScores(criteria, data.scores);
     const totalScore = this.calculateTotalScore(data.scores);

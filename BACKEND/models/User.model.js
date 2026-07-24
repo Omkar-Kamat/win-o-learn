@@ -38,7 +38,7 @@ const userSchema = new mongoose.Schema(
         bio: { type: String, maxlength: [300, 'Bio cannot exceed 300 characters'], default: '' },
         skills: { type: [String], default: [] },
         isBlocked: { type: Boolean, default: false },
-        refreshToken: { type: String, select: false },
+        refreshToken: { type: [String], select: false, default: [] },
         resetPasswordToken: { type: String, select: false },
         resetPasswordExpires: { type: Date, select: false },
     },

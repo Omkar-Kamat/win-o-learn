@@ -8,6 +8,19 @@ const handleValidationErrors = (req, res, next) => {
     }
     next();
 };
+const passwordValidation = (field = 'password') => 
+    body(field)
+        .notEmpty()
+        .withMessage(`${field} is required`)
+        .isLength({ min: 8 })
+        .withMessage(`${field} must be at least 8 characters`)
+        .matches(/[A-Z]/)
+        .withMessage(`${field} must contain at least one uppercase letter`)
+        .matches(/[0-9]/)
+        .withMessage(`${field} must contain at least one number`)
+        .matches(/[!@#$%^&*(),.?":{}|<>]/)
+        .withMessage(`${field} must contain at least one special character`);
+
 export const validateSignup = [
     body('name')
         .trim()
@@ -22,11 +35,7 @@ export const validateSignup = [
         .isEmail()
         .withMessage('Invalid email address')
         .normalizeEmail(),
-    body('password')
-        .notEmpty()
-        .withMessage('Password is required')
-        .isLength({ min: 6 })
-        .withMessage('Password must be at least 6 characters'),
+    passwordValidation('password'),
     body('role').optional().isIn(['participant', 'organizer', 'judge']).withMessage('Invalid role'),
     handleValidationErrors,
 ];
@@ -43,11 +52,7 @@ export const validateLogin = [
 ];
 export const validateChangePassword = [
     body('oldPassword').notEmpty().withMessage('Old password is required'),
-    body('newPassword')
-        .notEmpty()
-        .withMessage('New password is required')
-        .isLength({ min: 6 })
-        .withMessage('New password must be at least 6 characters'),
+    passwordValidation('newPassword'),
     handleValidationErrors,
 ];
 export const validateForgotPassword = [
@@ -61,10 +66,6 @@ export const validateForgotPassword = [
     handleValidationErrors,
 ];
 export const validateResetPassword = [
-    body('password')
-        .notEmpty()
-        .withMessage('Password is required')
-        .isLength({ min: 6 })
-        .withMessage('Password must be at least 6 characters'),
+    passwordValidation('password'),
     handleValidationErrors,
 ];

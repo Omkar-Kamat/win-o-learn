@@ -22,7 +22,6 @@ const reviewSchema = new mongoose.Schema(
         },
         totalScore: { type: Number, required: true, default: 0 },
         feedback: { type: String, trim: true, maxlength: 5e3, default: '' },
-        isFinal: { type: Boolean, default: false },
     },
     { timestamps: true }
 );

@@ -9,17 +9,16 @@ import AuthRoutes from './routes/Auth.routes.js';
 import UserRoutes from './routes/User.routes.js';
 import HackathonRoutes from './routes/Hackathon.routes.js';
 import TeamRoutes from './routes/Team.routes.js';
-import { hackathonScopedRouter, registrationScopedRouter } from './routes/Registration.routes.js';
+import HackathonRegistrationRoutes from './routes/Registration.routes.js';
+import ActionRegistrationRoutes from './routes/RegistrationAction.routes.js';
 import ErrorHandler from './middlewares/ErrorHandler.js';
 import { hackathonScopedSubmissionRoutes, submissionRoutes } from './routes/Submission.routes.js';
 import hackathonJudgeRoutes from './routes/HackathonJudge.routes.js';
 import judgeRoutes from './routes/Judge.routes.js';
-import {
-    submissionScopedReviewRouter,
-    hackathonScopedReviewRouter,
-    reviewRouter,
-    judgeScopedReviewRouter,
-} from './routes/Review.routes.js';
+import ReviewRoutes from './routes/Review.routes.js';
+import ReviewSubmissionRoutes from './routes/ReviewSubmission.routes.js';
+import ReviewHackathonRoutes from './routes/ReviewHackathon.routes.js';
+import ReviewJudgeRoutes from './routes/ReviewJudge.routes.js';
 import LeaderboardRoutes from './routes/Leaderboard.routes.js';
 import DashboardRoutes from './routes/Dashboard.routes.js';
 const app = express();
@@ -41,17 +40,17 @@ app.use('/api/auth', AuthRoutes);
 app.use('/api/users', UserRoutes);
 app.use('/api/hackathons', HackathonRoutes);
 app.use('/api/teams', TeamRoutes);
-app.use('/api/hackathons', hackathonScopedRouter);
-app.use('/api/registrations', registrationScopedRouter);
+app.use('/api/hackathons', HackathonRegistrationRoutes);
+app.use('/api/registrations', ActionRegistrationRoutes);
 app.use('/api/hackathons', hackathonScopedSubmissionRoutes);
 app.use('/api/submissions', submissionRoutes);
 app.use('/api/hackathons', hackathonJudgeRoutes);
 app.use('/api/judges', judgeRoutes);
 app.use('/api/hackathons', LeaderboardRoutes);
-app.use('/api/reviews', reviewRouter);
-app.use('/api/submissions', submissionScopedReviewRouter);
-app.use('/api/hackathons', hackathonScopedReviewRouter);
-app.use('/api/judges', judgeScopedReviewRouter);
+app.use('/api/reviews', ReviewRoutes);
+app.use('/api/submissions', ReviewSubmissionRoutes);
+app.use('/api/hackathons', ReviewHackathonRoutes);
+app.use('/api/judges', ReviewJudgeRoutes);
 app.use('/api/dashboard', DashboardRoutes);
 app.use(ErrorHandler);
 export default app;

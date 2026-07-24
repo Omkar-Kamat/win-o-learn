@@ -4,9 +4,9 @@ import AuthorizeRoles from '../middlewares/AuthorizeRoles.js';
 import LoadTeam from '../middlewares/LoadTeam.js';
 import { ROLES } from '../utils/Constants.js';
 import TeamController from '../controllers/Team.controller.js';
-import { validateCreateTeam, validateUpdateTeam, validateInviteMember, validateTransferLeadership, validateRemoveMember, validateTeamId } from '../validators/Team.validator.js';
+import { validateCreateTeam, validateUpdateTeam, validateInviteMember, validateTransferLeadership, validateRemoveMember, validateTeamId, validateListTeams } from '../validators/Team.validator.js';
 const router = Router();
-router.get('/', VerifyToken, TeamController.getTeams);
+router.get('/', VerifyToken, AuthorizeRoles(ROLES.ADMIN), validateListTeams, TeamController.getTeams);
 router.post('/', VerifyToken, AuthorizeRoles(ROLES.PARTICIPANT), validateCreateTeam, TeamController.createTeam);
 router.get('/:id', VerifyToken, validateTeamId, LoadTeam(), TeamController.getTeam);
 router.put('/:id', VerifyToken, AuthorizeRoles(ROLES.PARTICIPANT), validateTeamId, LoadTeam({

@@ -19,7 +19,4 @@ hackathonScopedRouter.get('/:hackathonId/register/status/:teamId', VerifyToken, 
   requireMember: true
 }), RegistrationController.getRegistrationStatus);
 hackathonScopedRouter.get('/:hackathonId/registrations', VerifyToken, AuthorizeRoles(ROLES.ORGANIZER), validateHackathonRegistrations, LoadHackathon, CheckHackathonOwnership(), RegistrationController.getHackathonRegistrations);
-const registrationScopedRouter = Router();
-registrationScopedRouter.patch('/:registrationId/approve', VerifyToken, AuthorizeRoles(ROLES.ORGANIZER), validateRegistrationId, LoadRegistration, CheckHackathonOwnership(), RegistrationController.approveRegistration);
-registrationScopedRouter.patch('/:registrationId/reject', VerifyToken, AuthorizeRoles(ROLES.ORGANIZER), validateRegistrationId, LoadRegistration, CheckHackathonOwnership(), RegistrationController.rejectRegistration);
-export { registrationScopedRouter, hackathonScopedRouter };
+export default hackathonScopedRouter;

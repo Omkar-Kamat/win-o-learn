@@ -76,7 +76,7 @@ class AuthService {
     if (!user) {
       throw new ApiError(401, 'User not found');
     }
-    if (user.refreshToken !== token) {
+    if (!user.refreshToken || !user.refreshToken.includes(token)) {
       throw new ApiError(401, 'Refresh token mismatch');
     }
     const accessToken = generateAccessToken(user);
@@ -95,6 +95,7 @@ class AuthService {
       throw new ApiError(400, 'Old password is incorrect');
     }
     await UserRepository.updatePassword(userId, newPassword);
+    await UserRepository.clearRefreshToken(userId);
   }
   // Forgots password by orchestrating multiple underlying operations. 
   async forgotPassword(email) {
@@ -118,6 +119,7 @@ class AuthService {
     user.password = newPassword;
     user.resetPasswordToken = undefined;
     user.resetPasswordExpires = undefined;
+    user.refreshToken = undefined;
     await user.save();
   }
 }

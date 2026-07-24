@@ -84,6 +84,9 @@ class UserService {
     if (!user) {
       throw new ApiError(404, 'User not found');
     }
+    if (user.avatarPublicId) {
+      await cloudinary.uploader.destroy(user.avatarPublicId);
+    }
     return;
   }
   // Blocks user by executing underlying operations (setBlockedStatus). Includes validation checks preventing actions if you cannot block your own account or user not found. 

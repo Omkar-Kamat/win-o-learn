@@ -107,6 +107,15 @@ const existsByTeam = teamId => Registration.exists({
     $ne: 'rejected'
   }
 });
+// Searches and retrieves by multiple hackathons
+const findAllByHackathons = hackathonIds => Registration.find({
+  hackathon: { $in: hackathonIds }
+}).select('_id');
+// Searches and retrieves by team with hackathon populated.
+const findByTeamWithHackathon = teamId => Registration.find({
+  team: teamId,
+  status: { $ne: 'rejected' }
+}).populate('hackathon');
 export default {
   create: create,
   findById: findById,
@@ -114,6 +123,8 @@ export default {
   findByHackathonAndUser: findByHackathonAndUser,
   findByHackathon: findByHackathon,
   findAllByHackathon: findAllByHackathon,
+  findAllByHackathons: findAllByHackathons,
+  findByTeamWithHackathon: findByTeamWithHackathon,
   deleteByHackathonAndTeam: deleteByHackathonAndTeam,
   setStatus: setStatus,
   existsByTeam: existsByTeam

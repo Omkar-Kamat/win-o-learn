@@ -1,4 +1,5 @@
 import SubmissionRepository from '../repository/Submission.repository.js';
+import JudgeAssignmentRepository from '../repository/JudgeAssignment.repository.js';
 import ApiError from '../utils/ApiError.js';
 import { ROLES } from '../utils/Constants.js';
 import AsyncHandler from './AsyncHandler.js';
@@ -6,7 +7,8 @@ import AsyncHandler from './AsyncHandler.js';
 const LoadSubmission = ({
   requireLeader = false,
   requireOrganizer = false,
-  requireAccess = false
+  requireAccess = false,
+  allowAdminOverride = true
 } = {}) => AsyncHandler(async (req, res, next) => {
   const submissionId = req.params.submissionId ?? req.params.id;
   const submission = await SubmissionRepository.findById(submissionId);
@@ -17,17 +19,25 @@ const LoadSubmission = ({
   const hackathon = submission.registration.hackathon;
   const leaderId = team.leader._id ?? team.leader;
   const organizerId = hackathon.organizer._id ?? hackathon.organizer;
-  if (requireLeader && !leaderId.equals(req.user._id)) {
-    throw new ApiError(403, 'Only the team leader can perform this action.');
-  }
-  if (requireOrganizer && !organizerId.equals(req.user._id)) {
-    throw new ApiError(403, 'Only the organizer can perform this action.');
+  const isAdmin = req.user.role === ROLES.ADMIN;
+  
+  if (!isAdmin || !allowAdminOverride) {
+    if (requireLeader && !leaderId.equals(req.user._id)) {
+      throw new ApiError(403, 'Only the team leader can perform this action.');
+    }
+    if (requireOrganizer && !organizerId.equals(req.user._id)) {
+      throw new ApiError(403, 'Only the organizer can perform this action.');
+    }
   }
   if (requireAccess) {
-    const isAdmin = req.user.role === ROLES.ADMIN;
     const isOrganizer = organizerId.equals(req.user._id);
     const isTeamMember = team.members.some(member => String(member._id ?? member) === String(req.user._id));
-    const isJudge = false;
+    
+    let isJudge = false;
+    if (req.user.role === ROLES.JUDGE) {
+      isJudge = !!(await JudgeAssignmentRepository.findByHackathonAndJudge(hackathon._id, req.user._id));
+    }
+
     if (!(isAdmin || isOrganizer || isTeamMember || isJudge)) {
       throw new ApiError(403, 'You are not authorized to access this submission.');
     }

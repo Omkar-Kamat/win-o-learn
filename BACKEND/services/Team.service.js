@@ -6,6 +6,12 @@ import UserRepository from '../repository/User.repository.js';
 const createTeam = async (userId, teamData) => {
   const members = [userId.toString(), ...(teamData.members ?? []).map(String)];
   const uniqueMembers = [...new Set(members)];
+  
+  const existingUsersCount = await UserRepository.countByIds(uniqueMembers);
+  if (existingUsersCount !== uniqueMembers.length) {
+    throw new ApiError(400, 'One or more member IDs are invalid or do not exist.');
+  }
+
   return await TeamRepository.create({
     name: teamData.name,
     leader: userId,
@@ -54,6 +60,14 @@ const acceptInvite = async (team, userId) => {
   if (!invite) {
     throw new ApiError(404, 'Invite not found.');
   }
+  
+  const registrations = await RegistrationRepository.findByTeamWithHackathon(team._id);
+  for (const reg of registrations) {
+    if (team.members.length + 1 > reg.hackathon.maxTeamSize) {
+      throw new ApiError(400, `Cannot accept invite: exceeds max team size (${reg.hackathon.maxTeamSize}) for hackathon ${reg.hackathon.title}.`);
+    }
+  }
+
   return TeamRepository.acceptInvite(team._id, userId);
 };
 // Rejects invite by executing underlying operations (removeInvite). Validates inputs and throws an error if invite not found.. 

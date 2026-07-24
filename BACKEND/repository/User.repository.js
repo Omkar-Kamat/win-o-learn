@@ -11,18 +11,17 @@ const findByIdWithPassword = id => User.findById(id).select('+password');
 const create = userData => User.create(userData);
 // Updates an existing refresh token. 
 const updateRefreshToken = (id, refreshToken) => User.findByIdAndUpdate(id, {
-  refreshToken: refreshToken
+  $push: { refreshToken: refreshToken }
 }, {
   new: true
 });
 // Clears the refresh token. 
-const clearRefreshToken = id => User.findByIdAndUpdate(id, {
-  $unset: {
-    refreshToken: ''
+const clearRefreshToken = (id, token = null) => {
+  if (token) {
+    return User.findByIdAndUpdate(id, { $pull: { refreshToken: token } }, { new: true });
   }
-}, {
-  new: true
-});
+  return User.findByIdAndUpdate(id, { $set: { refreshToken: [] } }, { new: true });
+};
 // Updates an existing password. 
 const updatePassword = async (id, password) => {
   const user = await User.findById(id).select('+password');
@@ -68,14 +67,15 @@ const findAll = async ({
 }) => {
   const filter = {};
   if (search) {
+    const escapedSearch = search.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
     filter.$or = [{
       name: {
-        $regex: search,
+        $regex: escapedSearch,
         $options: 'i'
       }
     }, {
       email: {
-        $regex: search,
+        $regex: escapedSearch,
         $options: 'i'
       }
     }];
@@ -86,8 +86,9 @@ const findAll = async ({
   if (typeof isBlocked !== 'undefined') {
     filter.isBlocked = isBlocked;
   }
-  limit = Math.min(Math.max(limit, 1), 100);
-  const users = await User.find(filter).skip((page - 1) * limit).limit(limit).sort({
+  const parsedPage = Math.max(1, Number(page) || 1);
+  const parsedLimit = Math.min(100, Math.max(1, Number(limit) || 20));
+  const users = await User.find(filter).skip((parsedPage - 1) * parsedLimit).limit(parsedLimit).sort({
     createdAt: -1
   });
   const total = await User.countDocuments(filter);
@@ -112,6 +113,8 @@ const updateRole = (id, role) => User.findByIdAndUpdate(id, {
   new: true,
   runValidators: true
 });
+// Counts users by ids.
+const countByIds = ids => User.countDocuments({ _id: { $in: ids } });
 export default {
   findByEmail: findByEmail,
   findById: findById,
@@ -128,5 +131,6 @@ export default {
   findAll: findAll,
   deleteById: deleteById,
   setBlockedStatus: setBlockedStatus,
-  updateRole: updateRole
+  updateRole: updateRole,
+  countByIds: countByIds
 };

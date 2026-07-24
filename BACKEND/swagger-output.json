@@ -799,126 +799,6 @@
         }
       }
     },
-    "/api/hackathons/{registrationId}/approve": {
-      "patch": {
-        "description": "",
-        "parameters": [
-          {
-            "name": "registrationId",
-            "in": "path",
-            "required": true,
-            "type": "string"
-          }
-        ],
-        "responses": {
-          "default": {
-            "description": ""
-          }
-        }
-      }
-    },
-    "/api/hackathons/{registrationId}/reject": {
-      "patch": {
-        "description": "",
-        "parameters": [
-          {
-            "name": "registrationId",
-            "in": "path",
-            "required": true,
-            "type": "string"
-          }
-        ],
-        "responses": {
-          "default": {
-            "description": ""
-          }
-        }
-      }
-    },
-    "/api/registrations/{hackathonId}/register": {
-      "post": {
-        "description": "",
-        "parameters": [
-          {
-            "name": "hackathonId",
-            "in": "path",
-            "required": true,
-            "type": "string"
-          }
-        ],
-        "responses": {
-          "default": {
-            "description": ""
-          }
-        }
-      }
-    },
-    "/api/registrations/{hackathonId}/register/{teamId}": {
-      "delete": {
-        "description": "",
-        "parameters": [
-          {
-            "name": "hackathonId",
-            "in": "path",
-            "required": true,
-            "type": "string"
-          },
-          {
-            "name": "teamId",
-            "in": "path",
-            "required": true,
-            "type": "string"
-          }
-        ],
-        "responses": {
-          "default": {
-            "description": ""
-          }
-        }
-      }
-    },
-    "/api/registrations/{hackathonId}/register/status/{teamId}": {
-      "get": {
-        "description": "",
-        "parameters": [
-          {
-            "name": "hackathonId",
-            "in": "path",
-            "required": true,
-            "type": "string"
-          },
-          {
-            "name": "teamId",
-            "in": "path",
-            "required": true,
-            "type": "string"
-          }
-        ],
-        "responses": {
-          "default": {
-            "description": ""
-          }
-        }
-      }
-    },
-    "/api/registrations/{hackathonId}/registrations": {
-      "get": {
-        "description": "",
-        "parameters": [
-          {
-            "name": "hackathonId",
-            "in": "path",
-            "required": true,
-            "type": "string"
-          }
-        ],
-        "responses": {
-          "default": {
-            "description": ""
-          }
-        }
-      }
-    },
     "/api/registrations/{registrationId}/approve": {
       "patch": {
         "description": "",
@@ -1034,18 +914,6 @@
             "in": "path",
             "required": true,
             "type": "string"
-          },
-          {
-            "name": "body",
-            "in": "body",
-            "schema": {
-              "type": "object",
-              "properties": {
-                "status": {
-                  "example": "any"
-                }
-              }
-            }
           }
         ],
         "responses": {
@@ -1178,18 +1046,6 @@
             "in": "path",
             "required": true,
             "type": "string"
-          },
-          {
-            "name": "body",
-            "in": "body",
-            "schema": {
-              "type": "object",
-              "properties": {
-                "status": {
-                  "example": "any"
-                }
-              }
-            }
           }
         ],
         "responses": {
@@ -1303,51 +1159,9 @@
         }
       }
     },
-    "/api/reviews/{submissionId}/reviews": {
-      "post": {
-        "description": "",
-        "parameters": [
-          {
-            "name": "submissionId",
-            "in": "path",
-            "required": true,
-            "type": "string"
-          }
-        ],
-        "responses": {
-          "default": {
-            "description": ""
-          }
-        }
-      },
-      "get": {
-        "description": "",
-        "parameters": [
-          {
-            "name": "submissionId",
-            "in": "path",
-            "required": true,
-            "type": "string"
-          }
-        ],
-        "responses": {
-          "default": {
-            "description": ""
-          }
-        }
-      }
-    },
     "/api/reviews/{id}": {
       "put": {
         "description": "",
-        "parameters": [
-          {
-            "name": "id",
-            "in": "path",
-            "required": true,
-            "type": "string"
-          }
-        ],
         "responses": {
           "default": {
             "description": ""
@@ -1356,42 +1170,6 @@
       },
       "get": {
         "description": "",
-        "parameters": [
-          {
-            "name": "id",
-            "in": "path",
-            "required": true,
-            "type": "string"
-          }
-        ],
-        "responses": {
-          "default": {
-            "description": ""
-          }
-        }
-      }
-    },
-    "/api/reviews/me/reviews": {
-      "get": {
-        "description": "",
-        "responses": {
-          "default": {
-            "description": ""
-          }
-        }
-      }
-    },
-    "/api/reviews/{hackathonId}/reviews": {
-      "get": {
-        "description": "",
-        "parameters": [
-          {
-            "name": "hackathonId",
-            "in": "path",
-            "required": true,
-            "type": "string"
-          }
-        ],
         "responses": {
           "default": {
             "description": ""
@@ -1433,78 +1211,6 @@
         }
       }
     },
-    "/api/submissions/me/reviews": {
-      "get": {
-        "description": "",
-        "responses": {
-          "default": {
-            "description": ""
-          }
-        }
-      }
-    },
-    "/api/submissions/{hackathonId}/reviews": {
-      "get": {
-        "description": "",
-        "parameters": [
-          {
-            "name": "hackathonId",
-            "in": "path",
-            "required": true,
-            "type": "string"
-          }
-        ],
-        "responses": {
-          "default": {
-            "description": ""
-          }
-        }
-      }
-    },
-    "/api/hackathons/{submissionId}/reviews": {
-      "post": {
-        "description": "",
-        "parameters": [
-          {
-            "name": "submissionId",
-            "in": "path",
-            "required": true,
-            "type": "string"
-          }
-        ],
-        "responses": {
-          "default": {
-            "description": ""
-          }
-        }
-      },
-      "get": {
-        "description": "",
-        "parameters": [
-          {
-            "name": "submissionId",
-            "in": "path",
-            "required": true,
-            "type": "string"
-          }
-        ],
-        "responses": {
-          "default": {
-            "description": ""
-          }
-        }
-      }
-    },
-    "/api/hackathons/me/reviews": {
-      "get": {
-        "description": "",
-        "responses": {
-          "default": {
-            "description": ""
-          }
-        }
-      }
-    },
     "/api/hackathons/{hackathonId}/reviews": {
       "get": {
         "description": "",
@@ -1523,95 +1229,9 @@
         }
       }
     },
-    "/api/judges/{submissionId}/reviews": {
-      "post": {
-        "description": "",
-        "parameters": [
-          {
-            "name": "submissionId",
-            "in": "path",
-            "required": true,
-            "type": "string"
-          }
-        ],
-        "responses": {
-          "default": {
-            "description": ""
-          }
-        }
-      },
-      "get": {
-        "description": "",
-        "parameters": [
-          {
-            "name": "submissionId",
-            "in": "path",
-            "required": true,
-            "type": "string"
-          }
-        ],
-        "responses": {
-          "default": {
-            "description": ""
-          }
-        }
-      }
-    },
-    "/api/judges/{id}": {
-      "put": {
-        "description": "",
-        "parameters": [
-          {
-            "name": "id",
-            "in": "path",
-            "required": true,
-            "type": "string"
-          }
-        ],
-        "responses": {
-          "default": {
-            "description": ""
-          }
-        }
-      },
-      "get": {
-        "description": "",
-        "parameters": [
-          {
-            "name": "id",
-            "in": "path",
-            "required": true,
-            "type": "string"
-          }
-        ],
-        "responses": {
-          "default": {
-            "description": ""
-          }
-        }
-      }
-    },
     "/api/judges/me/reviews": {
       "get": {
         "description": "",
-        "responses": {
-          "default": {
-            "description": ""
-          }
-        }
-      }
-    },
-    "/api/judges/{hackathonId}/reviews": {
-      "get": {
-        "description": "",
-        "parameters": [
-          {
-            "name": "hackathonId",
-            "in": "path",
-            "required": true,
-            "type": "string"
-          }
-        ],
         "responses": {
           "default": {
             "description": ""

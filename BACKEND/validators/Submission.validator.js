@@ -1,4 +1,4 @@
-import { body, param, validationResult } from 'express-validator';
+import { body, param, query, validationResult } from 'express-validator';
 const validate = (req, res, next) => {
     const errors = validationResult(req);
     if (!errors.isEmpty()) {
@@ -8,9 +8,18 @@ const validate = (req, res, next) => {
     }
     next();
 };
+export const validateListSubmissions = [
+    query('search').optional().isString().trim(),
+    query('page').optional().isInt({ min: 1 }),
+    query('limit').optional().isInt({ min: 1, max: 100 }),
+    query('sort').optional().isString(),
+    validate
+];
 const protectedFieldsValidation = () => [
-    body('status').not().exists().withMessage('Status cannot be set directly.'),
-    body('registration').not().exists().withMessage('Registration cannot be changed.'),
+    body(['status', 'registration', 'averageScore', 'reviewCount', '_id', 'createdAt', 'updatedAt'])
+        .not()
+        .exists()
+        .withMessage('This field cannot be set directly.'),
 ];
 export const validateCreateSubmission = [
     ...protectedFieldsValidation(),

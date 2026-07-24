@@ -17,11 +17,12 @@ const findAll = async ({
   page = 1,
   limit = 20,
   sort: sort
-}) => {
+}, allowedRegistrationIds = null) => {
   const filter = {};
   if (search) {
+    const escapedSearch = search.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
     filter.projectName = {
-      $regex: search,
+      $regex: escapedSearch,
       $options: 'i'
     };
   }
@@ -36,6 +37,13 @@ const findAll = async ({
       sortOption[sort] = 1;
     }
   }
+  if (allowedRegistrationIds) {
+    filter.registration = { $in: allowedRegistrationIds };
+  }
+  
+  const parsedPage = Math.max(1, Number(page) || 1);
+  const parsedLimit = Math.min(100, Math.max(1, Number(limit) || 20));
+  
   const submissions = await Submission.find(filter).populate({
     path: 'registration',
     populate: [{
@@ -43,7 +51,7 @@ const findAll = async ({
     }, {
       path: 'hackathon'
     }]
-  }).sort(sortOption).skip((page - 1) * limit).limit(limit);
+  }).sort(sortOption).skip((parsedPage - 1) * parsedLimit).limit(parsedLimit);
   const total = await Submission.countDocuments(filter);
   return {
     submissions: submissions,

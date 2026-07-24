@@ -4,7 +4,7 @@ import JudgeAssignmentRepository from '../repository/JudgeAssignment.repository.
 import { ROLES } from '../utils/Constants.js';
 // Determines if it has hackathon access by executing underlying operations (findByHackathonAndJudge). Includes validation checks preventing actions if unable to determine the hackathon for authorization. or you are not authorized to access this resource.. 
 const HasHackathonAccess = ({
-  allowAdmin = false,
+  allowAdmin = true,
   allowOrganizer = false,
   allowJudge = false
 } = {}) => AsyncHandler(async (req, res, next) => {

@@ -19,8 +19,9 @@ const findAll = async ({
 }) => {
   const filter = {};
   if (search) {
+    const escapedSearch = search.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
     filter.name = {
-      $regex: search,
+      $regex: escapedSearch,
       $options: 'i'
     };
   }
@@ -35,7 +36,10 @@ const findAll = async ({
       sortOption[sort] = 1;
     }
   }
-  const teams = await Team.find(filter).populate('leader', 'name avatar').populate('members', 'name avatar').sort(sortOption).skip((page - 1) * limit).limit(limit);
+  const parsedPage = Math.max(1, Number(page) || 1);
+  const parsedLimit = Math.min(100, Math.max(1, Number(limit) || 20));
+
+  const teams = await Team.find(filter).populate('leader', 'name avatar').populate('members', 'name avatar').sort(sortOption).skip((parsedPage - 1) * parsedLimit).limit(parsedLimit);
   const total = await Team.countDocuments(filter);
   return {
     teams: teams,

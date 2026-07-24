@@ -1,4 +1,4 @@
-import { body, param, validationResult } from 'express-validator';
+import { body, param, query, validationResult } from 'express-validator';
 import { ROLES } from '../utils/Constants.js';
 const handleValidationErrors = (req, res, next) => {
     const errors = validationResult(req);
@@ -9,6 +9,14 @@ const handleValidationErrors = (req, res, next) => {
     }
     next();
 };
+export const validateListUsers = [
+    query('search').optional().isString().trim(),
+    query('page').optional().isInt({ min: 1 }),
+    query('limit').optional().isInt({ min: 1, max: 100 }),
+    query('role').optional().isIn([ROLES.PARTICIPANT, ROLES.ORGANIZER, ROLES.JUDGE, ROLES.ADMIN]),
+    query('isBlocked').optional().isBoolean(),
+    handleValidationErrors
+];
 export const validateUpdateProfile = [
     body('name')
         .optional()

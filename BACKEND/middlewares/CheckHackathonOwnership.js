@@ -2,7 +2,7 @@ import ApiError from '../utils/ApiError.js';
 import { ROLES } from '../utils/Constants.js';
 // Checks the status of hackathon ownership. Validates inputs and throws an error if you are not authorized to manage this hackathon. 
 const CheckHackathonOwnership = ({
-  allowAdminOverride = false
+  allowAdminOverride = true
 } = {}) => (req, res, next) => {
   if (allowAdminOverride && req.user.role === ROLES.ADMIN) {
     return next();

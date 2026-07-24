@@ -1,4 +1,4 @@
-import { body, param, validationResult } from 'express-validator';
+import { body, param, query, validationResult } from 'express-validator';
 const nameValidation = () =>
     body('name')
         .exists({ checkFalsy: true })
@@ -101,3 +101,10 @@ export const validateInviteMember = [inviteEmailValidation(), validate];
 export const validateTransferLeadership = [newLeaderValidation(), validate];
 export const validateRemoveMember = [userIdValidation(), validate];
 export const validateTeamId = [param('id').isMongoId().withMessage('Invalid team ID.'), validate];
+export const validateListTeams = [
+    query('search').optional().isString().trim(),
+    query('page').optional().isInt({ min: 1 }),
+    query('limit').optional().isInt({ min: 1, max: 100 }),
+    query('sort').optional().isString(),
+    validate
+];

@@ -1,4 +1,5 @@
 import HackathonRepository from '../repository/Hackathon.repository.js';
+import RegistrationRepository from '../repository/Registration.repository.js';
 import ApiError from '../utils/ApiError.js';
 import { DeleteImageFromCloudinary } from '../utils/Cloudinary.js';
 // Creates a new hackathon by executing underlying operations (create). 
@@ -61,6 +62,10 @@ const getMyHackathons = async (organizerId, filters = {}) => {
 const updateHackathon = async (hackathon, data) => await HackathonRepository.updateById(hackathon._id, data);
 // Removes the specified hackathon by executing underlying operations (deleteById). 
 const deleteHackathon = async hackathon => {
+  const { total } = await RegistrationRepository.findAllByHackathon(hackathon._id, { limit: 1 });
+  if (total > 0) {
+    throw new ApiError(400, 'Cannot delete hackathon with existing registrations.');
+  }
   if (hackathon.bannerPublicId) {
     await DeleteImageFromCloudinary(hackathon.bannerPublicId);
   }
@@ -71,6 +76,9 @@ const deleteHackathon = async hackathon => {
 const openRegistration = async hackathon => {
   if (hackathon.registrationOpen) {
     throw new ApiError(400, 'Registration is already open');
+  }
+  if (new Date() < hackathon.registrationStartDate) {
+    throw new ApiError(400, 'Registration has not started yet.');
   }
   if (new Date() > hackathon.registrationDeadline) {
     throw new ApiError(400, 'Registration deadline has already passed');

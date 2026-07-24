@@ -59,18 +59,14 @@ const modeValidation = (optional = false) => {
         .withMessage('Mode must be online or offline');
     return optional ? validator.optional() : validator.notEmpty();
 };
-const venueValidation = (optional = false) => {
-    let validator = body('venue').custom((value, { req: req }) => {
-        const mode = req.body.mode ?? req.hackathon?.mode;
-        if (mode === 'offline') {
-            if (!value || value.trim() === '') {
-                throw new Error('Venue is required for offline hackathons');
-            }
-        }
-        return true;
-    });
-    return optional ? validator.optional() : validator;
-};
+const globalVenueValidation = body().custom((_, { req }) => {
+    const mode = req.body.mode ?? req.hackathon?.mode;
+    const venue = req.body.venue ?? req.hackathon?.venue;
+    if (mode === 'offline' && (!venue || venue.trim() === '')) {
+        throw new Error('Venue is required for offline hackathons');
+    }
+    return true;
+});
 const prizePoolValidation = (optional = false) => {
     let validator = body('prizePool')
         .isFloat({ min: 0 })
@@ -279,7 +275,7 @@ export const validateCreateHackathon = [
     startDateValidation(),
     submissionDeadlineValidation(),
     endDateValidation(),
-    venueValidation(),
+    globalVenueValidation,
     prizePoolValidation(),
     maxTeamSizeValidation(),
     rulesValidation(),
@@ -301,7 +297,7 @@ export const validateUpdateHackathon = [
     startDateValidation(true),
     submissionDeadlineValidation(true),
     endDateValidation(true),
-    venueValidation(true),
+    globalVenueValidation,
     prizePoolValidation(true),
     maxTeamSizeValidation(true),
     rulesValidation(true),

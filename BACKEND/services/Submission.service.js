@@ -1,5 +1,8 @@
 import ApiError from '../utils/ApiError.js';
 import SubmissionRepository from '../repository/Submission.repository.js';
+import HackathonRepository from '../repository/Hackathon.repository.js';
+import JudgeAssignmentRepository from '../repository/JudgeAssignment.repository.js';
+import RegistrationRepository from '../repository/Registration.repository.js';
 // Creates a new submission by executing underlying operations (findByRegistration, create). Includes validation checks preventing actions if only approved teams can submit a project. or submission deadline has passed.. 
 const createSubmission = async (hackathon, registration, body) => {
   if (registration.status !== 'approved') {
@@ -45,7 +48,27 @@ const updateSubmissionFiles = async (submission, files) => {
 // Retrieves hackathon submissions by executing underlying operations (findAllByHackathon). 
 const getHackathonSubmissions = async hackathonId => SubmissionRepository.findAllByHackathon(hackathonId);
 // Retrieves submissions by executing underlying operations (findAll). 
-const getSubmissions = async queryParams => await SubmissionRepository.findAll(queryParams);
+const getSubmissions = async (queryParams, user) => {
+  let allowedRegistrationIds = undefined;
+
+  if (user.role === 'admin') {
+    allowedRegistrationIds = null;
+  } else if (user.role === 'organizer') {
+    const { hackathons } = await HackathonRepository.findByOrganizer(user._id);
+    const hackathonIds = hackathons.map(h => h._id);
+    const registrations = await RegistrationRepository.findAllByHackathons(hackathonIds);
+    allowedRegistrationIds = registrations.map(r => r._id);
+  } else if (user.role === 'judge') {
+    const assignments = await JudgeAssignmentRepository.findAllByJudge(user._id);
+    const hackathonIds = assignments.map(a => a.hackathon);
+    const registrations = await RegistrationRepository.findAllByHackathons(hackathonIds);
+    allowedRegistrationIds = registrations.map(r => r._id);
+  } else {
+    throw new ApiError(403, 'Participants cannot access this route.');
+  }
+
+  return await SubmissionRepository.findAll(queryParams, allowedRegistrationIds);
+};
 // Updates an existing submission status by executing underlying operations (updateById). 
 const updateSubmissionStatus = async (submission, status) => SubmissionRepository.updateById(submission._id, {
   status: status

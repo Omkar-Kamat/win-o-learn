@@ -7,7 +7,7 @@ import LoadRegistrationForSubmission from '../middlewares/LoadRegistrationForSub
 import LoadSubmission from '../middlewares/LoadSubmission.js';
 import CheckHackathonOwnership from '../middlewares/CheckHackathonOwnership.js';
 import { ROLES } from '../utils/Constants.js';
-import { validateCreateSubmission, validateUpdateSubmission, validateSubmissionStatus, validateHackathonIdParam, validateSubmissionIdParam, validateUpdateSubmissionFiles } from '../validators/Submission.validator.js';
+import { validateCreateSubmission, validateUpdateSubmission, validateSubmissionStatus, validateHackathonIdParam, validateSubmissionIdParam, validateUpdateSubmissionFiles, validateListSubmissions } from '../validators/Submission.validator.js';
 const hackathonScopedSubmissionRoutes = Router();
 hackathonScopedSubmissionRoutes.post('/:hackathonId/submissions', VerifyToken, AuthorizeRoles(ROLES.PARTICIPANT), validateHackathonIdParam, LoadHackathon, LoadRegistrationForSubmission({
   requireLeader: true
@@ -17,7 +17,7 @@ hackathonScopedSubmissionRoutes.get('/:hackathonId/submissions/mine', VerifyToke
 }), SubmissionController.getMySubmission);
 hackathonScopedSubmissionRoutes.get('/:hackathonId/submissions', VerifyToken, AuthorizeRoles(ROLES.ORGANIZER), validateHackathonIdParam, LoadHackathon, CheckHackathonOwnership(), SubmissionController.getHackathonSubmissions);
 const submissionRoutes = Router();
-submissionRoutes.get('/', VerifyToken, SubmissionController.getSubmissions);
+submissionRoutes.get('/', VerifyToken, AuthorizeRoles(ROLES.ADMIN), validateListSubmissions, SubmissionController.getSubmissions);
 submissionRoutes.get('/:id', VerifyToken, validateSubmissionIdParam, LoadSubmission({
   requireAccess: true
 }), SubmissionController.getSubmission);
