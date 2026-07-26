@@ -43,6 +43,11 @@
     "nodemon": "^3.1.14",
     "supertest": "^7.2.2"
   },
+  "overrides": {
+    "multer-storage-cloudinary": {
+      "cloudinary": "$cloudinary"
+    }
+  },
   "allowScripts": {
     "bcrypt@6.0.0": true,
     "core-js@3.49.0": true,
