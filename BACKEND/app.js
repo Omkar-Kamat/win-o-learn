@@ -24,7 +24,21 @@ import ReviewJudgeRoutes from './routes/ReviewJudge.routes.js';
 import LeaderboardRoutes from './routes/Leaderboard.routes.js';
 import DashboardRoutes from './routes/Dashboard.routes.js';
 const app = express();
-app.use(cors({ origin: process.env.CLIENT_URL, credentials: true }));
+app.use(cors({ 
+    origin: function (origin, callback) {
+        if (!origin) return callback(null, true);
+        
+        const clientUrl = process.env.CLIENT_URL ? process.env.CLIENT_URL.replace(/\/$/, '') : '';
+        const allowedOrigins = [clientUrl, 'https://win-o-learn.vercel.app', 'http://localhost:5173', 'http://localhost:3000'];
+        
+        if (allowedOrigins.includes(origin) || origin.endsWith('.vercel.app')) {
+            callback(null, true);
+        } else {
+            callback(new Error('Not allowed by CORS'));
+        }
+    }, 
+    credentials: true 
+}));
 app.use(helmet());
 app.use(express.json());
 app.use(cookieParser());
