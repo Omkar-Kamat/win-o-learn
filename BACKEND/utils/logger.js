@@ -7,9 +7,16 @@ import { fileURLToPath } from 'url';
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 
-const logDir = path.join(__dirname, '../logs');
+const logDir = process.env.NODE_ENV === 'production' || process.env.VERCEL
+    ? '/tmp/logs'
+    : path.join(__dirname, '../logs');
+    
 if (!fs.existsSync(logDir)) {
-    fs.mkdirSync(logDir, { recursive: true });
+    try {
+        fs.mkdirSync(logDir, { recursive: true });
+    } catch (error) {
+        console.warn('Could not create logs directory:', error.message);
+    }
 }
 
 const { combine, timestamp, printf, colorize, errors } = winston.format;
