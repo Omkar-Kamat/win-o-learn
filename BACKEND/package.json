@@ -13,10 +13,6 @@
   "license": "ISC",
   "type": "module",
   "dependencies": {
-    "@babel/core": "^8.0.1",
-    "@babel/generator": "^8.0.0",
-    "@babel/parser": "^8.0.4",
-    "@babel/traverse": "^8.0.4",
     "bcrypt": "^6.0.0",
     "cloudinary": "^2.10.0",
     "cookie-parser": "^1.4.7",
@@ -37,6 +33,10 @@
     "winston-daily-rotate-file": "^5.0.0"
   },
   "devDependencies": {
+    "@babel/core": "^7.29.7",
+    "@babel/generator": "^7.29.7",
+    "@babel/parser": "^7.29.7",
+    "@babel/traverse": "^7.29.7",
     "cross-env": "^10.1.0",
     "jest": "^30.4.2",
     "mongodb-memory-server": "^11.2.0",
@@ -45,6 +45,9 @@
   },
   "allowScripts": {
     "bcrypt@6.0.0": true,
-    "core-js@3.49.0": true
+    "core-js@3.49.0": true,
+    "mongodb-memory-server@11.2.0": true,
+    "unrs-resolver@1.12.2": true,
+    "@scarf/scarf@1.4.0": true
   }
 }
