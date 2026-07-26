@@ -59,13 +59,13 @@ class DashboardService {
   async getParticipantDashboard(user) {
     const teams = await Team.find({
       members: user._id
-    }).select('name');
+    }).populate('leader members', 'name email');
     const teamIds = teams.map(team => team._id);
     const registrations = await Registration.find({
       team: {
         $in: teamIds
       }
-    }).populate('hackathon', 'title resultsPublished');
+    }).populate('hackathon', 'title resultsPublished').populate('team', 'name');
     const registrationIds = registrations.map(registration => registration._id);
     const submissions = await Submission.find({
       registration: {
@@ -73,24 +73,16 @@ class DashboardService {
       }
     }).populate({
       path: 'registration',
-      populate: {
-        path: 'hackathon',
-        select: 'title'
-      }
+      populate: [
+        { path: 'hackathon', select: 'title' },
+        { path: 'team', select: 'name' }
+      ]
     });
     return {
       registeredHackathons: registrations.length,
-      teams: teams.map(team => ({
-        id: team._id,
-        name: team.name
-      })),
-      submissions: submissions.map(submission => ({
-        id: submission._id,
-        projectName: submission.projectName,
-        averageScore: submission.averageScore,
-        reviewCount: submission.reviewCount,
-        hackathon: submission.registration.hackathon.title
-      })),
+      teams: teams,
+      registrations: registrations,
+      submissions: submissions,
       resultsPublished: registrations.filter(registration => registration.hackathon.resultsPublished).length
     };
   }
@@ -116,20 +108,29 @@ class DashboardService {
         }
       }
     }, {
-      $project: {
-        _id: 1
+      $lookup: {
+        from: 'teams',
+        localField: 'registration.team',
+        foreignField: '_id',
+        as: 'registration.team'
       }
+    }, {
+      $unwind: '$registration.team'
     }]);
+
     const reviews = await Review.find({
       judge: user._id
-    });
+    }).populate('submission', 'projectName');
     const reviewedSubmissionIds = new Set(reviews.map(review => review.submission.toString()));
     const pendingReviews = assignedSubmissions.filter(submission => !reviewedSubmissionIds.has(submission._id.toString())).length;
     return {
       assignedHackathons: assignments.length,
       assignedProjects: assignedSubmissions.length,
       completedReviews: reviews.length,
-      pendingReviews: pendingReviews
+      pendingReviews: pendingReviews,
+      hackathons: assignments.map(a => a.hackathon),
+      assignedSubmissions: assignedSubmissions,
+      reviews: reviews
     };
   }
 }

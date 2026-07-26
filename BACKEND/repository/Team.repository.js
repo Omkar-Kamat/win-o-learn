@@ -47,7 +47,7 @@ const findAll = async ({
   };
 };
 // Searches and retrieves by id. 
-const findById = teamId => Team.findById(teamId).populate('leader', 'name avatar').populate('members', 'name avatar');
+const findById = teamId => Team.findById(teamId).populate('leader', 'name avatar').populate('members', 'name avatar').populate('pendingInvites.user', 'name email avatar').populate('pendingInvites.invitedBy', 'name avatar');
 // Searches and retrieves by leader. 
 const findByLeader = leaderId => Team.find({
   leader: leaderId

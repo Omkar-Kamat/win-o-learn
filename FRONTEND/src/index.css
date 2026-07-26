@@ -1,0 +1,81 @@
+@import "tailwindcss";
+
+@theme {
+  --color-bg: #eee0cb;
+  --color-surface: #f7f1e6;
+  --color-card: #f7f1e6;
+  --color-border: #d9c9ae;
+  --color-text: #000000;
+  --color-muted: #4a4440;
+
+  --color-primary: #839788;
+  --color-primary-hover: #6f8378;
+  --color-primary-light: #dbe3dc;
+  --color-primary-text-on: #000000;
+
+  --color-secondary: #baa898;
+  --color-accent: #bfd7ea;
+
+  --color-success: #7c9a7c;
+  --color-warning: #c2954f;
+  --color-error: #b56b5f;
+  --color-info: #6f93ab;
+
+  --radius-md: 10px;
+  --radius-lg: 16px;
+  --radius-xl: 20px;
+
+  --shadow-card: 0 1px 2px rgba(0,0,0,.06);
+  --shadow-raised: 0 6px 20px rgba(0,0,0,.10);
+  --shadow-lg: 0 12px 32px rgba(0,0,0,.16);
+}
+
+.dark {
+  --color-bg: #111f34;
+  --color-surface: #1a2b45;
+  --color-card: #1a2b45;
+  --color-border: #2a3d5c;
+  --color-text: #ffffff;
+  --color-muted: #b7c2d0;
+
+  --color-primary: #7c6877;
+  --color-primary-hover: #927b87;
+  --color-secondary: #455767;
+  --color-accent: #402815;
+  --color-primary-light: #2c2530;
+  --color-primary-text-on: #ffffff;
+
+  --color-success: #93b48f;
+  --color-warning: #d1a562;
+  --color-error: #c98177;
+  --color-info: #8fb3cf;
+
+  --shadow-card: 0 1px 2px rgba(0,0,0,.4);
+  --shadow-raised: 0 6px 20px rgba(0,0,0,.5);
+  --shadow-lg: 0 12px 32px rgba(0,0,0,.6);
+}
+
+@layer base {
+  body {
+    background-color: var(--color-bg);
+    color: var(--color-text);
+    transition: background-color .2s, color .2s;
+  }
+}
+
+.bg-primary    { background-color: var(--color-primary); }
+.text-on-primary { color: var(--color-primary-text-on); }
+.bg-surface    { background-color: var(--color-surface); }
+.bg-card       { background-color: var(--color-card); }
+.text-body     { color: var(--color-text); }
+.text-muted    { color: var(--color-muted); }
+.border-base   { border-color: var(--color-border); }
+
+.badge-success { background-color: color-mix(in srgb, var(--color-success) 15%, transparent); color: var(--color-success); }
+.badge-warning { background-color: color-mix(in srgb, var(--color-warning) 15%, transparent); color: var(--color-warning); }
+.badge-error   { background-color: color-mix(in srgb, var(--color-error) 15%, transparent); color: var(--color-error); }
+.badge-info    { background-color: color-mix(in srgb, var(--color-info) 15%, transparent); color: var(--color-info); }
+
+.card  { border-radius: var(--radius-lg); box-shadow: var(--shadow-card); }
+.modal { border-radius: var(--radius-xl); box-shadow: var(--shadow-lg); }
+.btn, .input { border-radius: var(--radius-md); }
