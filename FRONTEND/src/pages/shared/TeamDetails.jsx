@@ -9,6 +9,7 @@ import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import MemberList from '../../components/team/MemberList';
+import StatusBadge from '../../components/submission/StatusBadge';
 import {
   Dialog,
   DialogContent,
@@ -222,9 +223,7 @@ export default function TeamDetails() {
                     <Link to={`/hackathons/${reg.hackathon?._id || reg.hackathon}`} className="font-medium hover:underline text-primary">
                       {reg.hackathon?.title || 'Hackathon'}
                     </Link>
-                    <span className={`px-2 py-0.5 rounded-full text-xs badge-${reg.status === 'approved' ? 'success' : reg.status === 'pending' ? 'warning' : 'error'}`}>
-                      {reg.status}
-                    </span>
+                    <StatusBadge status={reg.status} />
                   </li>
                 ))}
               </ul>

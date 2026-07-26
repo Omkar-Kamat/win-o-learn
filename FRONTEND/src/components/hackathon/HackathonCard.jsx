@@ -16,7 +16,14 @@ export default function HackathonCard({ hackathon }) {
   const status = getHackathonStatus(hackathon);
   return (
     <Card className="hover:shadow-md transition-shadow overflow-hidden flex flex-col h-full shadow-card p-0">
-      <div className="aspect-[16/9] bg-muted/50 w-full rounded-t-[16px] border-b border-border relative">
+      <div className="aspect-[16/9] bg-muted/50 w-full rounded-t-[16px] border-b border-border relative overflow-hidden">
+        {hackathon?.banner && (
+          <img 
+            src={hackathon.banner} 
+            alt={title} 
+            className="w-full h-full object-cover" 
+          />
+        )}
         <div className="absolute top-3 right-3">
           <StatusBadge status={status} />
         </div>

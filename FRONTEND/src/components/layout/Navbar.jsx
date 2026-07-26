@@ -19,20 +19,22 @@ export default function Navbar({ onMenuClick }) {
     <nav className="h-[72px] bg-card border-b border-border px-6 flex items-center justify-between sticky top-0 z-50">
       <div className="flex items-center gap-4 md:gap-8">
         {onMenuClick && (
-          <button className="md:hidden p-2 -ml-2 text-muted-foreground hover:text-foreground" onClick={onMenuClick}>
+          <button aria-label="Toggle menu" className="md:hidden p-2 -ml-2 text-muted-foreground hover:text-foreground" onClick={onMenuClick}>
             <MenuIcon className="w-6 h-6" />
           </button>
         )}
         <Link to="/" className="text-xl font-bold text-foreground">Win-O-Learn</Link>
-        <div className="hidden md:flex items-center gap-4">
+        <div className="flex items-center gap-4">
           <Link to="/hackathons" className="text-sm font-medium text-muted-foreground hover:text-foreground transition-colors">Browse Hackathons</Link>
         </div>
       </div>
 
-      <div className="flex items-center gap-4">
+      <div className="flex items-center gap-2 sm:gap-4">
         <Dialog>
-          <DialogTrigger render={<button className="p-2 text-muted-foreground hover:text-foreground transition-colors cursor-pointer" />}>
-            <MagnifyingGlassIcon className="w-5 h-5" />
+          <DialogTrigger asChild>
+            <button aria-label="Search" className="p-2 text-muted-foreground hover:text-foreground transition-colors cursor-pointer">
+              <MagnifyingGlassIcon className="w-5 h-5" />
+            </button>
           </DialogTrigger>
           <DialogContent className="sm:max-w-md">
             <DialogHeader>
@@ -51,6 +53,7 @@ export default function Navbar({ onMenuClick }) {
         </Dialog>
 
         <button
+          aria-label="Toggle theme"
           onClick={toggleTheme}
           className="p-2 rounded-full hover:bg-muted/50 text-foreground transition-colors"
         >
@@ -73,7 +76,7 @@ export default function Navbar({ onMenuClick }) {
         ) : (
           <div className="flex items-center gap-3">
             <Link to="/login" className="text-sm font-medium text-foreground hover:text-primary transition-colors">Log In</Link>
-            <Link to="/signup" className="px-4 py-2 bg-primary text-on-primary rounded-[10px] text-sm font-medium hover:bg-primary-hover transition-colors">Sign Up</Link>
+            <Link to="/signup" className="px-4 py-2 bg-primary text-primary-foreground rounded-[10px] text-sm font-medium hover:bg-primary/90 transition-colors">Sign Up</Link>
           </div>
         )}
       </div>

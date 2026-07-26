@@ -51,19 +51,19 @@ export default function Listing() {
           />
         </div>
         <div className="w-full md:w-1/4">
-          <Select value={mode} onChange={(e) => updateParam('mode', e.target.value)}>
+          <select className="flex h-10 w-full items-center justify-between rounded-md border border-input bg-background px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-ring focus:ring-offset-2" value={mode} onChange={(e) => updateParam('mode', e.target.value)}>
             <option value="">All Modes</option>
             <option value="online">Online</option>
             <option value="offline">Offline</option>
-          </Select>
+          </select>
         </div>
         <div className="w-full md:w-1/4">
-          <Select value={status} onChange={(e) => updateParam('status', e.target.value)}>
+          <select className="flex h-10 w-full items-center justify-between rounded-md border border-input bg-background px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-ring focus:ring-offset-2" value={status} onChange={(e) => updateParam('status', e.target.value)}>
             <option value="">All Statuses</option>
             <option value="upcoming">Upcoming</option>
             <option value="ongoing">Ongoing</option>
-            <option value="closed">Closed</option>
-          </Select>
+            <option value="completed">Closed</option>
+          </select>
         </div>
       </div>
 

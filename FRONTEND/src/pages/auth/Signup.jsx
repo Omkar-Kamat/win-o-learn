@@ -69,12 +69,18 @@ export default function Signup() {
           {...register('password')}
           error={errors.password?.message}
          /></div>
-        <div className="space-y-1"><Label>I want to join as</Label><Select   {...register('role')} error={errors.role?.message}>
-          <option value={ROLES.PARTICIPANT}>Participant</option>
-          <option value={ROLES.ORGANIZER}>Organizer</option>
-          <option value={ROLES.JUDGE}>Judge</option>
-        </Select></div>
-        
+        <div className="space-y-1">
+          <Label>I want to join as</Label>
+          <select 
+            className="flex h-10 w-full items-center justify-between rounded-md border border-input bg-background px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-ring focus:ring-offset-2" 
+            {...register('role')}
+          >
+            <option value={ROLES.PARTICIPANT}>Participant</option>
+            <option value={ROLES.ORGANIZER}>Organizer</option>
+            <option value={ROLES.JUDGE}>Judge</option>
+          </select>
+          {errors.role?.message && <p className="text-xs text-destructive">{errors.role.message}</p>}
+        </div>
         <Button type="submit" className="w-full mt-2" disabled={isLoading}>
           Sign up
         </Button>

@@ -45,9 +45,7 @@ export default function ParticipantDashboard() {
                   <p className="font-medium text-foreground">{reg.hackathon?.title}</p>
                   <p className="text-muted-foreground">Team: {reg.team?.name}</p>
                 </div>
-                <span className={`px-2 py-1 rounded-full font-medium text-[10px] uppercase tracking-wider badge-${reg.status === 'approved' ? 'success' : reg.status === 'pending' ? 'warning' : 'error'}`}>
-                  {reg.status}
-                </span>
+                <StatusBadge status={reg.status} />
               </div>
             ))}
             {(!dashboard?.registrations || dashboard.registrations.length === 0) && (
@@ -68,7 +66,7 @@ export default function ParticipantDashboard() {
                   <p className="font-medium text-foreground">{sub.projectName}</p>
                   <p className="text-muted-foreground">{sub.hackathon}</p>
                 </div>
-                <StatusBadge status="under_review" />
+                <StatusBadge status={sub.status || 'under_review'} />
               </div>
             ))}
             {!dashboard?.submissions?.length && (

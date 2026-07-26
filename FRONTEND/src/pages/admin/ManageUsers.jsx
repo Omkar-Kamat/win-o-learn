@@ -4,6 +4,7 @@ import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
 import { axiosClient } from '../../api/axiosClient';
 import { Card, CardHeader, CardTitle, CardContent, CardFooter } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
+import { Badge } from '@/components/ui/badge';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import {
   Dialog,
@@ -79,7 +80,8 @@ export default function ManageUsers() {
           <form onSubmit={handleUpdateRole} className="space-y-4 pt-4">
             <div className="space-y-2">
               <label className="text-sm font-medium">Role for {selectedUser?.name}</label>
-              <Select
+              <select
+                className="flex h-10 w-full items-center justify-between rounded-md border border-input bg-background px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-ring focus:ring-offset-2"
                 value={newRole}
                 onChange={(e) => setNewRole(e.target.value)}
               >
@@ -87,7 +89,7 @@ export default function ManageUsers() {
                 <option value="organizer">Organizer</option>
                 <option value="judge">Judge</option>
                 <option value="admin">Admin</option>
-              </Select>
+              </select>
             </div>
             <DialogFooter>
               <Button type="button" variant="ghost" onClick={() => setSelectedUser(null)}>Cancel</Button>
@@ -121,9 +123,9 @@ export default function ManageUsers() {
                 </td>
                 <td className="px-6 py-4 capitalize">{u.role}</td>
                 <td className="px-6 py-4">
-                  <span className={`px-2 py-1 rounded-full font-medium text-xs ${u.isBlocked ? 'badge-error' : 'badge-success'}`}>
+                  <Badge variant={u.isBlocked ? 'error' : 'success'}>
                     {u.isBlocked ? 'Blocked' : 'Active'}
-                  </span>
+                  </Badge>
                 </td>
                 <td className="px-6 py-4 text-right flex justify-end gap-2">
                   <Button 

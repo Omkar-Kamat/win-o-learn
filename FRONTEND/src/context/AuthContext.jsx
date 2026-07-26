@@ -32,8 +32,10 @@ export function AuthProvider({ children }) {
     const handleRefreshFailed = () => {
       setUser(null);
       setRole(null);
-      toast.error('Your session has expired. Please log in again.');
-      window.location.href = '/login';
+      if (window.location.pathname !== '/login' && window.location.pathname !== '/signup') {
+        toast.error('Your session has expired. Please log in again.');
+        window.location.href = '/login';
+      }
     };
 
     window.addEventListener('auth:refresh-failed', handleRefreshFailed);

@@ -178,17 +178,24 @@ export default function CreateEditHackathon() {
             <div className="flex flex-col gap-1 w-full">
               <label className="text-sm font-medium text-foreground">Description</label>
               <textarea
-                className={`h-32 py-3 px-4 rounded-[10px] bg-card border ${errors.description ? 'border-error' : 'border-border'} text-foreground focus:outline-none focus:ring-2 focus:ring-primary resize-none`}
+                className={`h-32 py-3 px-4 rounded-[10px] bg-card border ${errors.description ? 'border-destructive' : 'border-border'} text-foreground focus:outline-none focus:ring-2 focus:ring-primary resize-none`}
                 {...register('description')}
               ></textarea>
               {errors.description && <span className="text-xs text-destructive">{errors.description.message}</span>}
             </div>
             <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
               <div className="space-y-1"><Label>Theme</Label><Input   {...register('theme')} error={errors.theme?.message}  /></div>
-              <div className="space-y-1"><Label>Mode</Label><Select   {...register('mode')} error={errors.mode?.message}>
-                <option value="online">Online</option>
-                <option value="offline">Offline</option>
-              </Select></div>
+              <div className="space-y-1">
+                <Label>Mode</Label>
+                <select 
+                  className="flex h-10 w-full items-center justify-between rounded-md border border-input bg-background px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-ring focus:ring-offset-2" 
+                  {...register('mode')}
+                >
+                  <option value="online">Online</option>
+                  <option value="offline">Offline</option>
+                </select>
+                {errors.mode?.message && <p className="text-xs text-destructive">{errors.mode.message}</p>}
+              </div>
             </div>
             {mode === 'offline' && (
               <div className="space-y-1"><Label>Venue</Label><Input   {...register('venue')} error={errors.venue?.message}  /></div>

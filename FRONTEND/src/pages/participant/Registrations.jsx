@@ -3,6 +3,7 @@ import { axiosClient } from '../../api/axiosClient';
 import toast from 'react-hot-toast';
 import { Card, CardHeader, CardTitle, CardContent, CardFooter } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
+import StatusBadge from '../../components/submission/StatusBadge';
 
 export default function Registrations() {
   const queryClient = useQueryClient();
@@ -60,9 +61,7 @@ export default function Registrations() {
                 <td className="px-6 py-4 text-muted-foreground">{reg.team?.name || 'Unknown Team'}</td>
                 <td className="px-6 py-4 text-muted-foreground">{new Date(reg.createdAt).toLocaleDateString()}</td>
                 <td className="px-6 py-4">
-                  <span className={`px-2 py-1 rounded-full font-medium text-xs badge-${reg.status === 'approved' ? 'success' : reg.status === 'pending' ? 'warning' : 'error'}`}>
-                    {reg.status.charAt(0).toUpperCase() + reg.status.slice(1)}
-                  </span>
+                  <StatusBadge status={reg.status} />
                 </td>
                 <td className="px-6 py-4 text-right">
                   {reg.status === 'pending' && (

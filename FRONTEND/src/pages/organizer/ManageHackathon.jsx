@@ -228,7 +228,8 @@ export default function ManageHackathon() {
                       <p className="text-xs text-muted-foreground">{sub.registration?.team?.name}</p>
                     </div>
                     <div className="w-40">
-                      <Select 
+                      <select 
+                        className="flex h-10 w-full items-center justify-between rounded-md border border-input bg-background px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-ring focus:ring-offset-2"
                         value={sub.status || 'pending'} 
                         onChange={async (e) => {
                           const newStatus = e.target.value;
@@ -245,7 +246,7 @@ export default function ManageHackathon() {
                         <option value="under_review">Under Review</option>
                         <option value="approved">Approved</option>
                         <option value="rejected">Rejected</option>
-                      </Select>
+                      </select>
                     </div>
                   </li>
                 ))}

@@ -1,3 +1,5 @@
+import { Link } from 'react-router-dom';
+
 export default function Footer() {
   return (
     <footer className="border-t border-border py-12 mt-auto bg-muted/50">
@@ -9,16 +11,16 @@ export default function Footer() {
         <div>
           <h4 className="font-semibold text-foreground mb-4">Platform</h4>
           <ul className="space-y-2 text-sm text-muted-foreground">
-            <li>Browse Hackathons</li>
-            <li>Leaderboards</li>
-            <li>Organize an Event</li>
+            <li><Link to="/hackathons" className="hover:text-primary transition-colors">Browse Hackathons</Link></li>
+            <li><Link to="/hackathons" className="hover:text-primary transition-colors">Leaderboards</Link></li>
+            <li><Link to="/signup" className="hover:text-primary transition-colors">Organize an Event</Link></li>
           </ul>
         </div>
         <div>
           <h4 className="font-semibold text-foreground mb-4">Legal</h4>
           <ul className="space-y-2 text-sm text-muted-foreground">
-            <li>Terms of Service</li>
-            <li>Privacy Policy</li>
+            <li><span className="cursor-pointer hover:text-primary transition-colors">Terms of Service</span></li>
+            <li><span className="cursor-pointer hover:text-primary transition-colors">Privacy Policy</span></li>
           </ul>
         </div>
       </div>

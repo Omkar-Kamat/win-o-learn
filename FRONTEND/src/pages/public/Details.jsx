@@ -86,10 +86,11 @@ export default function Details() {
                         <label className="text-sm font-medium">Select your team</label>
                         {teams.length === 0 ? (
                           <div className="text-sm text-muted-foreground mb-2">
-                            You don't have any teams yet. <Link to="/dashboard/participant/teams" className="text-primary hover:underline">Create a team first.</Link>
+                            You don't have any teams yet. <Link to="/teams" className="text-primary hover:underline">Create a team first.</Link>
                           </div>
                         ) : (
-                          <Select
+                          <select
+                            className="flex h-10 w-full items-center justify-between rounded-md border border-input bg-background px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-ring focus:ring-offset-2"
                             value={selectedTeam}
                             onChange={(e) => setSelectedTeam(e.target.value)}
                           >
@@ -97,7 +98,7 @@ export default function Details() {
                             {teams.map(t => (
                               <option key={t._id} value={t._id}>{t.name}</option>
                             ))}
-                          </Select>
+                          </select>
                         )}
                       </div>
                       <DialogFooter>

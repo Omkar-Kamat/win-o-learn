@@ -3,6 +3,7 @@ import { useQuery } from '@tanstack/react-query';
 import { axiosClient } from '../../api/axiosClient';
 import { Card, CardHeader, CardTitle, CardContent, CardFooter } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
+import { Badge } from '@/components/ui/badge';
 
 export default function SubmissionQueue() {
   const { hackathonId } = useParams();
@@ -27,6 +28,8 @@ export default function SubmissionQueue() {
       reviewed: reviewedIds.has(sub._id)
     }));
 
+  const hackathonTitle = dashboard?.assignedHackathons?.find(h => String(h._id) === String(hackathonId))?.title || hackathonId;
+
   return (
     <div className="space-y-8 max-w-6xl mx-auto">
       <div className="flex items-center gap-4">
@@ -35,7 +38,7 @@ export default function SubmissionQueue() {
 
       <div>
         <h1 className="text-4xl font-extrabold tracking-tight lg:text-5xl font-bold text-foreground">Submission Queue</h1>
-        <p className="text-muted-foreground mt-2">Evaluate projects for Hackathon {hackathonId}</p>
+        <p className="text-muted-foreground mt-2">Evaluate projects for {hackathonTitle}</p>
       </div>
 
       <Card className="overflow-hidden">
@@ -59,9 +62,9 @@ export default function SubmissionQueue() {
                 <td className="px-6 py-4 font-medium text-foreground">{sub.projectName}</td>
                 <td className="px-6 py-4 text-muted-foreground">{sub.teamName}</td>
                 <td className="px-6 py-4">
-                  <span className={`px-2 py-1 rounded-full font-medium text-xs ${sub.reviewed ? 'badge-success' : 'badge-warning'}`}>
+                  <Badge variant={sub.reviewed ? 'success' : 'warning'}>
                     {sub.reviewed ? 'Reviewed' : 'Pending'}
-                  </span>
+                  </Badge>
                 </td>
                 <td className="px-6 py-4 text-right">
                   <Link to={`/dashboard/judge/submissions/${sub._id}/review`}>

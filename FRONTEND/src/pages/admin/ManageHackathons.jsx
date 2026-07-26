@@ -3,6 +3,7 @@ import { useQuery, useQueryClient } from '@tanstack/react-query';
 import { axiosClient } from '../../api/axiosClient';
 import { Card, CardHeader, CardTitle, CardContent, CardFooter } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
+import { Badge } from '@/components/ui/badge';
 
 export default function ManageHackathons() {
   const queryClient = useQueryClient();
@@ -55,7 +56,7 @@ export default function ManageHackathons() {
               <tr key={h._id} className="border-b border-border last:border-0 hover:bg-muted/50/50 transition-colors">
                 <td className="px-6 py-4 font-medium text-foreground">{h.title}</td>
                 <td className="px-6 py-4 text-muted-foreground">{h.organizer?.name || h.organizer || 'Unknown'}</td>
-                <td className="px-6 py-4"><span className="badge-info px-2 py-1 rounded-full font-medium text-xs capitalize">{h.status || 'active'}</span></td>
+                <td className="px-6 py-4"><Badge variant="info" className="capitalize">{h.status || 'active'}</Badge></td>
                 <td className="px-6 py-4 text-right">
                   <Button variant="destructive" size="sm" onClick={() => handleDelete(h._id)}>Delete</Button>
                 </td>
