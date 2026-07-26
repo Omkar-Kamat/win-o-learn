@@ -21,7 +21,7 @@ describe('7. Judge Assignment Module (/api/hackathons/:hackathonId/judges*)', ()
         suite: 'Judge Assignment > Assign',
         caseName: 'Organizer-owner successfully assigns an existing judge-role user',
         token: tokens.organizer,
-        body: { judgeId: users.judge._id }
+        body: { email: users.judge.email }
       });
       expect(res.status).toBe(201);
     });
@@ -31,7 +31,7 @@ describe('7. Judge Assignment Module (/api/hackathons/:hackathonId/judges*)', ()
         suite: 'Judge Assignment > Assign',
         caseName: 'Rejects when the target user role is not judge',
         token: tokens.organizer,
-        body: { judgeId: users.participant._id }
+        body: { email: users.participant.email }
       });
       expect(res.status).toBe(400);
     });
@@ -43,7 +43,7 @@ describe('7. Judge Assignment Module (/api/hackathons/:hackathonId/judges*)', ()
         suite: 'Judge Assignment > Assign',
         caseName: 'Rejects when the judge is already assigned to the hackathon',
         token: tokens.organizer,
-        body: { judgeId: users.judge._id }
+        body: { email: users.judge.email }
       });
       expect(res.status).toBe(409);
     });
