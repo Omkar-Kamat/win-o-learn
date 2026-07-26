@@ -47,75 +47,75 @@ import ManageTeams from '../pages/admin/ManageTeams';
 import PlatformAnalytics from '../pages/admin/PlatformAnalytics';
 
 const DashboardRouter = () => {
-  const { role } = useAuth();
-  if (!role) return null;
-  return <Navigate to={`/dashboard/${role}`} replace />;
+ const { role } = useAuth();
+ if (!role) return null;
+ return <Navigate to={`/dashboard/${role}`} replace />;
 };
 
 export default function AppRoutes() {
-  return (
-    <Routes>
-      <Route element={<MainLayout />}>
-        <Route path="/" element={<Home />} />
-        <Route path="/hackathons" element={<Listing />} />
-        <Route path="/hackathons/:id" element={<Details />} />
-        <Route path="/hackathons/:id/leaderboard" element={<Leaderboard />} />
-        <Route path="*" element={<NotFound />} />
-      </Route>
-      
-      <Route element={<AuthLayout />}>
-        <Route path="/login" element={<Login />} />
-        <Route path="/signup" element={<Signup />} />
-        <Route path="/forgot-password" element={<ForgotPassword />} />
-        <Route path="/reset-password/:token" element={<ResetPassword />} />
-      </Route>
-      
-      <Route element={<ProtectedRoute />}>
-        <Route element={<MainLayout />}>
-          <Route element={<RoleRoute allow={[ROLES.PARTICIPANT]} />}>
-            <Route path="/hackathons/:hackathonId/submit" element={<SubmitProject />} />
-            <Route path="/submissions/:submissionId/edit" element={<SubmitProject />} />
-          </Route>
-        </Route>
+ return (
+ <Routes>
+ <Route element={<MainLayout />}>
+ <Route path="/" element={<Home />} />
+ <Route path="/hackathons" element={<Listing />} />
+ <Route path="/hackathons/:id" element={<Details />} />
+ <Route path="/hackathons/:id/leaderboard" element={<Leaderboard />} />
+ <Route path="*" element={<NotFound />} />
+ </Route>
+ 
+ <Route element={<AuthLayout />}>
+ <Route path="/login" element={<Login />} />
+ <Route path="/signup" element={<Signup />} />
+ <Route path="/forgot-password" element={<ForgotPassword />} />
+ <Route path="/reset-password/:token" element={<ResetPassword />} />
+ </Route>
+ 
+ <Route element={<ProtectedRoute />}>
+ <Route element={<MainLayout />}>
+ <Route element={<RoleRoute allow={[ROLES.PARTICIPANT]} />}>
+ <Route path="/hackathons/:hackathonId/submit" element={<SubmitProject />} />
+ <Route path="/submissions/:submissionId/edit" element={<SubmitProject />} />
+ </Route>
+ </Route>
 
-        <Route element={<DashboardLayout />}>
-          <Route path="/dashboard" element={<DashboardRouter />} />
-          <Route path="/profile" element={<Profile />} />
-          <Route path="/teams" element={<TeamsList />} />
-          <Route path="/teams/:id" element={<TeamDetails />} />
-          
-          <Route element={<RoleRoute allow={[ROLES.ADMIN]} />}>
-            <Route path="/dashboard/admin" element={<AdminDashboard />} />
-            <Route path="/dashboard/admin/users" element={<ManageUsers />} />
-            <Route path="/dashboard/admin/hackathons" element={<ManageHackathons />} />
-            <Route path="/dashboard/admin/teams" element={<ManageTeams />} />
-            <Route path="/dashboard/admin/analytics" element={<PlatformAnalytics />} />
-          </Route>
-          
-          <Route element={<RoleRoute allow={[ROLES.ORGANIZER]} />}>
-            <Route path="/dashboard/organizer" element={<OrganizerDashboard />} />
-            <Route path="/dashboard/organizer/hackathons" element={<MyHackathons />} />
-            <Route path="/dashboard/organizer/hackathons/new" element={<CreateEditHackathon />} />
-            <Route path="/dashboard/organizer/hackathons/:id/edit" element={<CreateEditHackathon />} />
-            <Route path="/dashboard/organizer/hackathons/:id/manage" element={<ManageHackathon />} />
-          </Route>
-          
-          <Route element={<RoleRoute allow={[ROLES.PARTICIPANT]} />}>
-            <Route path="/dashboard/participant" element={<ParticipantDashboard />} />
-            <Route path="/dashboard/participant/registrations" element={<Registrations />} />
-            <Route path="/dashboard/participant/submissions" element={<MySubmissions />} />
-            <Route path="/dashboard/participant/invites" element={<MyInvites />} />
-          </Route>
+ <Route element={<DashboardLayout />}>
+ <Route path="/dashboard" element={<DashboardRouter />} />
+ <Route path="/profile" element={<Profile />} />
+ <Route path="/teams" element={<TeamsList />} />
+ <Route path="/teams/:id" element={<TeamDetails />} />
+ 
+ <Route element={<RoleRoute allow={[ROLES.ADMIN]} />}>
+ <Route path="/dashboard/admin" element={<AdminDashboard />} />
+ <Route path="/dashboard/admin/users" element={<ManageUsers />} />
+ <Route path="/dashboard/admin/hackathons" element={<ManageHackathons />} />
+ <Route path="/dashboard/admin/teams" element={<ManageTeams />} />
+ <Route path="/dashboard/admin/analytics" element={<PlatformAnalytics />} />
+ </Route>
+ 
+ <Route element={<RoleRoute allow={[ROLES.ORGANIZER]} />}>
+ <Route path="/dashboard/organizer" element={<OrganizerDashboard />} />
+ <Route path="/dashboard/organizer/hackathons" element={<MyHackathons />} />
+ <Route path="/dashboard/organizer/hackathons/new" element={<CreateEditHackathon />} />
+ <Route path="/dashboard/organizer/hackathons/:id/edit" element={<CreateEditHackathon />} />
+ <Route path="/dashboard/organizer/hackathons/:id/manage" element={<ManageHackathon />} />
+ </Route>
+ 
+ <Route element={<RoleRoute allow={[ROLES.PARTICIPANT]} />}>
+ <Route path="/dashboard/participant" element={<ParticipantDashboard />} />
+ <Route path="/dashboard/participant/registrations" element={<Registrations />} />
+ <Route path="/dashboard/participant/submissions" element={<MySubmissions />} />
+ <Route path="/dashboard/participant/invites" element={<MyInvites />} />
+ </Route>
 
-          <Route element={<RoleRoute allow={[ROLES.JUDGE]} />}>
-            <Route path="/dashboard/judge" element={<JudgeDashboard />} />
-            <Route path="/dashboard/judge/hackathons" element={<AssignedHackathons />} />
-            <Route path="/dashboard/judge/hackathons/:hackathonId/submissions" element={<SubmissionQueue />} />
-            <Route path="/dashboard/judge/submissions/:submissionId/review" element={<ReviewSubmission />} />
-            <Route path="/dashboard/judge/reviews" element={<MyReviews />} />
-          </Route>
-        </Route>
-      </Route>
-    </Routes>
-  );
+ <Route element={<RoleRoute allow={[ROLES.JUDGE]} />}>
+ <Route path="/dashboard/judge" element={<JudgeDashboard />} />
+ <Route path="/dashboard/judge/hackathons" element={<AssignedHackathons />} />
+ <Route path="/dashboard/judge/hackathons/:hackathonId/submissions" element={<SubmissionQueue />} />
+ <Route path="/dashboard/judge/submissions/:submissionId/review" element={<ReviewSubmission />} />
+ <Route path="/dashboard/judge/reviews" element={<MyReviews />} />
+ </Route>
+ </Route>
+ </Route>
+ </Routes>
+ );
 }
