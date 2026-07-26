@@ -14,10 +14,10 @@ export default function ReviewSubmission() {
   const queryClient = useQueryClient();
 
   // Fetch dashboard to get existing reviews
-  const { data: dashboard } = useQuery({
-    queryKey: ['dashboard', 'judge'],
+  const { data: reviews = [] } = useQuery({
+    queryKey: ['judge', 'my-reviews'],
     queryFn: async () => {
-      const res = await axiosClient.get('/dashboard/judge');
+      const res = await axiosClient.get('/judges/me/reviews');
       return res.data.data;
     }
   });
@@ -31,7 +31,7 @@ export default function ReviewSubmission() {
     }
   });
 
-  const existingReview = dashboard?.reviews?.find(r =>
+  const existingReview = reviews.find(r =>
     String(r.submission?._id || r.submission) === String(submissionId)
   );
 

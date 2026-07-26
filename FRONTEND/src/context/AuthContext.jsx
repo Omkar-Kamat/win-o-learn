@@ -1,5 +1,6 @@
 import { createContext, useContext, useEffect, useState } from 'react';
 import { axiosClient } from '../api/axiosClient';
+import toast from 'react-hot-toast';
 
 const AuthContext = createContext();
 
@@ -31,6 +32,8 @@ export function AuthProvider({ children }) {
     const handleRefreshFailed = () => {
       setUser(null);
       setRole(null);
+      toast.error('Your session has expired. Please log in again.');
+      window.location.href = '/login';
     };
 
     window.addEventListener('auth:refresh-failed', handleRefreshFailed);

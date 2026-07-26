@@ -27,6 +27,7 @@ import ParticipantDashboard from '../pages/participant/ParticipantDashboard';
 import Registrations from '../pages/participant/Registrations';
 import MySubmissions from '../pages/participant/MySubmissions';
 import SubmitProject from '../pages/participant/SubmitProject';
+import MyInvites from '../pages/participant/MyInvites';
 
 import OrganizerDashboard from '../pages/organizer/OrganizerDashboard';
 import MyHackathons from '../pages/organizer/MyHackathons';
@@ -103,6 +104,7 @@ export default function AppRoutes() {
             <Route path="/dashboard/participant" element={<ParticipantDashboard />} />
             <Route path="/dashboard/participant/registrations" element={<Registrations />} />
             <Route path="/dashboard/participant/submissions" element={<MySubmissions />} />
+            <Route path="/dashboard/participant/invites" element={<MyInvites />} />
           </Route>
 
           <Route element={<RoleRoute allow={[ROLES.JUDGE]} />}>

@@ -12,7 +12,8 @@ export default function Leaderboard() {
     queryFn: async () => {
       const res = await axiosClient.get(`/hackathons/${id}/leaderboard`);
       return res.data.data;
-    }
+    },
+    retry: false
   });
 
   return (

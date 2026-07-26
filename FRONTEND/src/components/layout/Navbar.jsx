@@ -8,14 +8,21 @@ import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { Button } from '@/components/ui/button';
 
-export default function Navbar() {
+import { MenuIcon } from 'lucide-react';
+
+export default function Navbar({ onMenuClick }) {
   const { user, logout } = useAuth();
   const { theme, toggleTheme } = useTheme();
   const navigate = useNavigate();
 
   return (
     <nav className="h-[72px] bg-card border-b border-border px-6 flex items-center justify-between sticky top-0 z-50">
-      <div className="flex items-center gap-8">
+      <div className="flex items-center gap-4 md:gap-8">
+        {onMenuClick && (
+          <button className="md:hidden p-2 -ml-2 text-muted-foreground hover:text-foreground" onClick={onMenuClick}>
+            <MenuIcon className="w-6 h-6" />
+          </button>
+        )}
         <Link to="/" className="text-xl font-bold text-foreground">Win-O-Learn</Link>
         <div className="hidden md:flex items-center gap-4">
           <Link to="/hackathons" className="text-sm font-medium text-muted-foreground hover:text-foreground transition-colors">Browse Hackathons</Link>

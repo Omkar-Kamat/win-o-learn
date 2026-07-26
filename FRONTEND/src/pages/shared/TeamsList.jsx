@@ -16,6 +16,9 @@ import {
   DialogFooter,
 } from "../../components/ui/dialog";
 
+import { useCreateTeam } from '../../hooks/useTeams';
+import { useAuth } from '../../context/AuthContext';
+
 export default function TeamsList() {
   const queryClient = useQueryClient();
   const [isDialogOpen, setIsDialogOpen] = useState(false);
@@ -29,11 +32,7 @@ export default function TeamsList() {
     }
   });
 
-  const createTeamMutation = useMutation({
-    mutationFn: async (name) => {
-      const res = await axiosClient.post('/teams', { name });
-      return res.data;
-    },
+  const createTeamMutation = useCreateTeam({
     onSuccess: () => {
       toast.success('Team created successfully!');
       setTeamName('');
@@ -73,7 +72,7 @@ export default function TeamsList() {
   const handleCreateTeam = (e) => {
     e.preventDefault();
     if (!teamName.trim()) return;
-    createTeamMutation.mutate(teamName.trim());
+    createTeamMutation.mutate({ name: teamName.trim() });
   };
 
   const teams = dashboard?.teams || [];

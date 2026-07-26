@@ -1,4 +1,5 @@
 import { Badge } from '@/components/ui/badge';
+import { STATUS_LABELS } from '../../utils/hackathonStatus';
 
 export default function StatusBadge({ status }) {
   const map = {
@@ -6,12 +7,7 @@ export default function StatusBadge({ status }) {
     approved: { label: 'Approved', variant: 'success' },
     rejected: { label: 'Rejected', variant: 'error' },
     under_review: { label: 'Under Review', variant: 'info' },
-    ongoing: { label: 'Ongoing', variant: 'info' },
-    draft: { label: 'Draft', variant: 'default' },
-    upcoming: { label: 'Upcoming', variant: 'default' },
-    'registration-open': { label: 'Registration Open', variant: 'success' },
-    closed: { label: 'Closed', variant: 'error' },
-    'results-published': { label: 'Results Published', variant: 'success' }
+    ...STATUS_LABELS,
   };
 
   const config = map[status?.toLowerCase()] || { label: status, variant: 'default' };

@@ -186,11 +186,13 @@ export default function ManageHackathon() {
               <form onSubmit={handleAssignJudge} className="flex gap-2">
                 <input 
                   type="text" 
-                  placeholder="Judge ID" 
+                  placeholder="Judge's user ID (Mongo ObjectId)" 
                   className="px-3 py-1 rounded-[10px] border border-border bg-muted/50 text-sm"
                   value={judgeId}
                   onChange={e => setJudgeId(e.target.value)}
                   required
+                  pattern="^[a-fA-F0-9]{24}$"
+                  title="Must be a 24-character Mongo ObjectId, not an email"
                 />
                 <Button size="sm" type="submit" disabled={assigningJudge}>Assign Judge</Button>
               </form>

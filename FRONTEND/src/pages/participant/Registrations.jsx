@@ -65,19 +65,21 @@ export default function Registrations() {
                   </span>
                 </td>
                 <td className="px-6 py-4 text-right">
-                  <Button 
-                    variant="ghost" 
-                    size="sm" 
-                    className="text-destructive hover:text-destructive hover:bg-transparent p-0 h-auto"
-                    onClick={() => {
-                      if(window.confirm('Are you sure you want to cancel this registration?')) {
-                        cancelMutation.mutate({ hackathonId: reg.hackathon?._id || reg.hackathon, teamId: reg.team?._id || reg.team });
-                      }
-                    }}
-                    disabled={cancelMutation.isPending && cancelMutation.variables?.hackathonId === (reg.hackathon?._id || reg.hackathon)}
-                  >
-                    Cancel
-                  </Button>
+                  {reg.status === 'pending' && (
+                    <Button 
+                      variant="ghost" 
+                      size="sm" 
+                      className="text-destructive hover:text-destructive hover:bg-transparent p-0 h-auto"
+                      onClick={() => {
+                        if(window.confirm('Are you sure you want to cancel this registration?')) {
+                          cancelMutation.mutate({ hackathonId: reg.hackathon?._id || reg.hackathon, teamId: reg.team?._id || reg.team });
+                        }
+                      }}
+                      disabled={cancelMutation.isPending && cancelMutation.variables?.hackathonId === (reg.hackathon?._id || reg.hackathon)}
+                    >
+                      Cancel
+                    </Button>
+                  )}
                 </td>
               </tr>
             ))}

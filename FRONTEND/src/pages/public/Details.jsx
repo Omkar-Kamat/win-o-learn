@@ -15,6 +15,8 @@ import {
   DialogFooter,
 } from "../../components/ui/dialog";
 
+import { useHackathon, useRegisterHackathon } from '../../hooks/useHackathons';
+
 export default function Details() {
   const { id } = useParams();
   const navigate = useNavigate();
@@ -22,13 +24,7 @@ export default function Details() {
   const [isDialogOpen, setIsDialogOpen] = useState(false);
   const [selectedTeam, setSelectedTeam] = useState('');
 
-  const { data: hackathon, isLoading, error } = useQuery({
-    queryKey: ['hackathon', id],
-    queryFn: async () => {
-      const res = await axiosClient.get(`/hackathons/${id}`);
-      return res.data.data;
-    }
-  });
+  const { data: hackathon, isLoading, error } = useHackathon(id);
 
   const { data: participantData } = useQuery({
     queryKey: ['dashboard', 'participant'],
@@ -39,11 +35,7 @@ export default function Details() {
     enabled: role === 'participant' && isDialogOpen
   });
 
-  const registerMutation = useMutation({
-    mutationFn: async (teamId) => {
-      const res = await axiosClient.post(`/hackathons/${id}/register`, { teamId });
-      return res.data;
-    },
+  const registerMutation = useRegisterHackathon(id, {
     onSuccess: () => {
       toast.success('Successfully registered for the hackathon!');
       setIsDialogOpen(false);
@@ -119,6 +111,22 @@ export default function Details() {
             </>
           )}
         </div>
+        
+        <div className="grid grid-cols-2 md:grid-cols-4 gap-4 text-sm border-y border-border py-4">
+          <div><span className="text-muted-foreground block">Prize Pool</span><span className="font-semibold text-foreground">${hackathon.prizePool?.toLocaleString()}</span></div>
+          <div><span className="text-muted-foreground block">Max Team Size</span><span className="font-semibold text-foreground">{hackathon.maxTeamSize}</span></div>
+          <div><span className="text-muted-foreground block">Registration Deadline</span><span className="font-semibold text-foreground">{new Date(hackathon.registrationDeadline).toLocaleDateString()}</span></div>
+          <div><span className="text-muted-foreground block">Submission Deadline</span><span className="font-semibold text-foreground">{new Date(hackathon.submissionDeadline).toLocaleDateString()}</span></div>
+        </div>
+        {hackathon.venue && <p className="text-sm text-muted-foreground">Venue: {hackathon.venue}</p>}
+        {hackathon.rules?.length > 0 && (
+          <div>
+            <h3 className="font-semibold text-foreground mb-2">Rules</h3>
+            <ul className="list-disc list-inside text-sm text-muted-foreground space-y-1">
+              {hackathon.rules.map((r, i) => <li key={i}>{r}</li>)}
+            </ul>
+          </div>
+        )}
         
         <div className="prose text-foreground max-w-none">
           <p className="whitespace-pre-wrap">{hackathon.description}</p>

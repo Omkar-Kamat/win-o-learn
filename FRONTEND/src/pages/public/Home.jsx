@@ -1,17 +1,11 @@
 import { Link } from 'react-router-dom';
-import { useQuery } from '@tanstack/react-query';
-import { axiosClient } from '../../api/axiosClient';
 import { Button } from '@/components/ui/button';
 import HackathonCard from '../../components/hackathon/HackathonCard';
+import { useHackathons } from '../../hooks/useHackathons';
 
 export default function Home() {
-  const { data: hackathons, isLoading } = useQuery({
-    queryKey: ['hackathons', 'featured'],
-    queryFn: async () => {
-      const res = await axiosClient.get('/hackathons?limit=3');
-      return res.data.data.hackathons;
-    }
-  });
+  const { data, isLoading } = useHackathons({ limit: 3 });
+  const hackathons = data?.hackathons || [];
 
   return (
     <div className="flex flex-col gap-24 py-12">

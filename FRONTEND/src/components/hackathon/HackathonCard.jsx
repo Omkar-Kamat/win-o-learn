@@ -2,6 +2,7 @@ import { Link, useLocation } from 'react-router-dom';
 import { Card, CardHeader, CardTitle, CardContent, CardFooter } from '@/components/ui/card';
 import StatusBadge from '../submission/StatusBadge';
 import { Badge } from '@/components/ui/badge';
+import { getHackathonStatus } from '../../utils/hackathonStatus';
 
 export default function HackathonCard({ hackathon }) {
   const location = useLocation();
@@ -12,24 +13,7 @@ export default function HackathonCard({ hackathon }) {
   const prizePool = hackathon?.prizePool || 5000;
   const theme = hackathon?.theme || 'Web3';
   const mode = hackathon?.mode || 'Online';
-
-  const now = new Date();
-  const startDate = hackathon?.startDate ? new Date(hackathon.startDate) : null;
-  const endDate = hackathon?.endDate ? new Date(hackathon.endDate) : null;
-  
-  let derivedStatus = 'upcoming';
-  if (hackathon?.resultsPublished) {
-    derivedStatus = 'results-published';
-  } else if (endDate && now > endDate) {
-    derivedStatus = 'closed';
-  } else if (startDate && endDate && now >= startDate && now <= endDate) {
-    derivedStatus = 'ongoing';
-  } else if (hackathon?.registrationOpen) {
-    derivedStatus = 'registration-open';
-  }
-  
-  const status = derivedStatus;
-
+  const status = getHackathonStatus(hackathon);
   return (
     <Card className="hover:shadow-md transition-shadow overflow-hidden flex flex-col h-full shadow-card p-0">
       <div className="aspect-[16/9] bg-muted/50 w-full rounded-t-[16px] border-b border-border relative">
