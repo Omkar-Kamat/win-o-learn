@@ -7,6 +7,12 @@ class UserController {
     const user = await UserService.getProfile(req.user._id);
     SendResponse(res, 200, true, 'Profile fetched successfully', user);
   });
+  
+  getMyInvites = AsyncHandler(async (req, res) => {
+    const invites = await UserService.getMyInvites(req.user._id);
+    SendResponse(res, 200, true, 'Invites fetched successfully', invites);
+  });
+  
   // Updates an existing profile by executing underlying operations (updateProfile). Constructs and sends the final API response to the client. 
   updateProfile = AsyncHandler(async (req, res) => {
     const user = await UserService.updateProfile(req.user._id, req.body);

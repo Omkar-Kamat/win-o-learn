@@ -118,6 +118,7 @@ export default {
   findById: findById,
   findByLeader: findByLeader,
   findByMember: findByMember,
+  findByPendingInvite: (userId) => Team.find({ 'pendingInvites.user': userId }).populate('leader', 'name avatar').populate('members', 'name avatar'),
   isMember: isMember,
   updateById: updateById,
   deleteById: deleteById,

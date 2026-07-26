@@ -1,4 +1,5 @@
 import UserRepository from '../repository/User.repository.js';
+import TeamRepository from '../repository/Team.repository.js';
 import ApiError from '../utils/ApiError.js';
 import cloudinary from '../config/Cloudinary.js';
 class UserService {
@@ -9,6 +10,19 @@ class UserService {
       throw new ApiError(404, 'User not found');
     }
     return user.toJSON();
+  }
+  
+  async getMyInvites(userId) {
+    const teams = await TeamRepository.findByPendingInvite(userId);
+    return teams.map(t => {
+      const invite = t.pendingInvites.find(i => i.user.toString() === userId.toString() || (i.user._id && i.user._id.toString() === userId.toString()));
+      return {
+        _id: t._id,
+        name: t.name,
+        leader: t.leader,
+        invitedAt: invite ? invite.invitedAt : null
+      };
+    });
   }
   // Updates an existing profile by executing underlying operations (updateById). Validates inputs and throws an error if user not found. 
   async updateProfile(userId, data) {

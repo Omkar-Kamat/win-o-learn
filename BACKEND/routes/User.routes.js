@@ -7,6 +7,7 @@ import { validateAdminUpdate, validateRoleUpdate, validateUpdateProfile, validat
 import UploadAvatar from '../middlewares/UploadAvatar.js';
 const router = Router();
 router.get('/me', VerifyToken, UserController.getProfile);
+router.get('/me/invites', VerifyToken, UserController.getMyInvites);
 router.put('/me', VerifyToken, validateUpdateProfile, UserController.updateProfile);
 router.put('/me/avatar', VerifyToken, UploadAvatar.single('avatar'), UserController.uploadAvatar);
 router.get('/', VerifyToken, AuthorizeRoles(ROLES.ADMIN), validateListUsers, UserController.getAllUsers);
