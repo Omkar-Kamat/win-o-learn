@@ -3,15 +3,15 @@ import { useParams, Link } from 'react-router-dom';
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
 import { axiosClient } from '../../api/axiosClient';
 import toast from 'react-hot-toast';
-import Card from '../../components/ui/Card';
-import Button from '../../components/ui/Button';
+import { Card, CardHeader, CardTitle, CardContent, CardFooter } from '@/components/ui/card';
+import { Button } from '@/components/ui/button';
 
 export default function ManageHackathon() {
   const { id } = useParams();
   const queryClient = useQueryClient();
   const [activeTab, setActiveTab] = useState('registrations');
   const [assigningJudge, setAssigningJudge] = useState(false);
-  const [judgeEmail, setJudgeEmail] = useState('');
+  const [judgeId, setJudgeId] = useState('');
 
   const { data: hackathon, isLoading: isLoadingHackathon } = useQuery({
     queryKey: ['hackathon', id],
@@ -71,12 +71,12 @@ export default function ManageHackathon() {
 
   const handleAssignJudge = async (e) => {
     e.preventDefault();
-    if (!judgeEmail) return;
+    if (!judgeId) return;
     try {
       setAssigningJudge(true);
-      await axiosClient.post(`/hackathons/${id}/judges`, { judgeId: judgeEmail });
+      await axiosClient.post(`/hackathons/${id}/judges`, { judgeId });
       toast.success('Judge assigned successfully');
-      setJudgeEmail('');
+      setJudgeId('');
       queryClient.invalidateQueries({ queryKey: ['hackathon', id, 'judges'] });
     } catch (error) {
       toast.error(error.response?.data?.message || 'Failed to assign judge');
@@ -87,9 +87,7 @@ export default function ManageHackathon() {
 
   const toggleRegistration = async () => {
     try {
-      const action = hackathon?.status === 'published' ? 'close-registration' : 'open-registration';
-      // Wait, is it published or open? The API has /open-registration and /close-registration
-      const endpoint = hackathon?.status === 'draft' || hackathon?.status === 'closed' ? 'open-registration' : 'close-registration';
+      const endpoint = hackathon?.registrationOpen ? 'close-registration' : 'open-registration';
       await axiosClient.patch(`/hackathons/${id}/${endpoint}`);
       toast.success(`Registration ${endpoint.split('-')[0]}ed successfully`);
       queryClient.invalidateQueries({ queryKey: ['hackathon', id] });
@@ -118,16 +116,16 @@ export default function ManageHackathon() {
   return (
     <div className="max-w-6xl mx-auto space-y-8">
       <div>
-        <h1 className="text-h1 font-bold text-body">Manage Hackathon</h1>
-        <p className="text-muted mt-2">ID: {id}</p>
+        <h1 className="text-4xl font-extrabold tracking-tight lg:text-5xl font-bold text-foreground">Manage Hackathon</h1>
+        <p className="text-muted-foreground mt-2">ID: {id}</p>
       </div>
 
-      <div className="flex space-x-2 border-b border-base">
+      <div className="flex space-x-2 border-b border-border">
         {tabs.map(tab => (
           <button
             key={tab.id}
             onClick={() => setActiveTab(tab.id)}
-            className={`px-4 py-3 text-sm font-medium border-b-2 transition-colors ${activeTab === tab.id ? 'border-primary text-primary' : 'border-transparent text-muted hover:text-body hover:border-base'}`}
+            className={`px-4 py-3 text-sm font-medium border-b-2 transition-colors ${activeTab === tab.id ? 'border-primary text-primary' : 'border-transparent text-muted-foreground hover:text-foreground hover:border-border'}`}
           >
             {tab.label}
           </button>
@@ -136,31 +134,31 @@ export default function ManageHackathon() {
 
       <div className="pt-4">
         {activeTab === 'registrations' && (
-          <Card padding="none" className="overflow-hidden">
+          <Card className="overflow-hidden">
             <table className="w-full text-left text-sm">
-              <thead className="bg-surface border-b border-base">
+              <thead className="bg-muted/50 border-b border-border">
                 <tr>
-                  <th className="px-6 py-4 font-semibold text-body">Team</th>
-                  <th className="px-6 py-4 font-semibold text-body">Date</th>
-                  <th className="px-6 py-4 font-semibold text-body">Status</th>
-                  <th className="px-6 py-4 font-semibold text-body text-right">Actions</th>
+                  <th className="px-6 py-4 font-semibold text-foreground">Team</th>
+                  <th className="px-6 py-4 font-semibold text-foreground">Date</th>
+                  <th className="px-6 py-4 font-semibold text-foreground">Status</th>
+                  <th className="px-6 py-4 font-semibold text-foreground text-right">Actions</th>
                 </tr>
               </thead>
               <tbody>
                 {isLoadingRegistrations && (
                   <tr>
-                    <td colSpan="4" className="px-6 py-8 text-center text-muted">Loading registrations...</td>
+                    <td colSpan="4" className="px-6 py-8 text-center text-muted-foreground">Loading registrations...</td>
                   </tr>
                 )}
                 {!isLoadingRegistrations && registrations.length === 0 && (
                   <tr>
-                    <td colSpan="4" className="px-6 py-8 text-center text-muted">No registrations found.</td>
+                    <td colSpan="4" className="px-6 py-8 text-center text-muted-foreground">No registrations found.</td>
                   </tr>
                 )}
                 {!isLoadingRegistrations && registrations.map(reg => (
-                  <tr key={reg._id} className="border-b border-base hover:bg-surface/50 transition-colors">
-                    <td className="px-6 py-4 font-medium text-body">{reg.team?.name}</td>
-                    <td className="px-6 py-4 text-muted">{new Date(reg.createdAt).toLocaleDateString()}</td>
+                  <tr key={reg._id} className="border-b border-border hover:bg-muted/50/50 transition-colors">
+                    <td className="px-6 py-4 font-medium text-foreground">{reg.team?.name}</td>
+                    <td className="px-6 py-4 text-muted-foreground">{new Date(reg.createdAt).toLocaleDateString()}</td>
                     <td className="px-6 py-4">
                       <span className={`px-2 py-1 rounded-full font-medium text-[10px] uppercase tracking-wider badge-${reg.status === 'approved' ? 'success' : reg.status === 'pending' ? 'warning' : 'error'}`}>
                         {reg.status}
@@ -170,7 +168,7 @@ export default function ManageHackathon() {
                       {reg.status === 'pending' && (
                         <>
                           <Button variant="secondary" size="sm" className="text-success hover:text-success hover:border-success" onClick={() => handleApprove(reg._id)}>Approve</Button>
-                          <Button variant="secondary" size="sm" className="text-error hover:text-error hover:border-error" onClick={() => handleReject(reg._id)}>Reject</Button>
+                          <Button variant="secondary" size="sm" className="text-destructive hover:text-destructive hover:border-error" onClick={() => handleReject(reg._id)}>Reject</Button>
                         </>
                       )}
                     </td>
@@ -182,30 +180,30 @@ export default function ManageHackathon() {
         )}
         
         {activeTab === 'judges' && (
-          <Card>
+          <Card className="p-6">
             <div className="flex justify-between items-center mb-6">
-              <h3 className="font-semibold text-body">Assigned Judges</h3>
+              <h3 className="font-semibold text-foreground">Assigned Judges</h3>
               <form onSubmit={handleAssignJudge} className="flex gap-2">
                 <input 
                   type="text" 
                   placeholder="Judge ID" 
-                  className="px-3 py-1 rounded-[10px] border border-base bg-surface text-sm"
-                  value={judgeEmail}
-                  onChange={e => setJudgeEmail(e.target.value)}
+                  className="px-3 py-1 rounded-[10px] border border-border bg-muted/50 text-sm"
+                  value={judgeId}
+                  onChange={e => setJudgeId(e.target.value)}
                   required
                 />
-                <Button size="sm" type="submit" loading={assigningJudge}>Assign Judge</Button>
+                <Button size="sm" type="submit" disabled={assigningJudge}>Assign Judge</Button>
               </form>
             </div>
-            {isLoadingJudges && <p className="text-sm text-muted">Loading judges...</p>}
-            {!isLoadingJudges && judges.length === 0 && <p className="text-sm text-muted">No judges assigned yet.</p>}
+            {isLoadingJudges && <p className="text-sm text-muted-foreground">Loading judges...</p>}
+            {!isLoadingJudges && judges.length === 0 && <p className="text-sm text-muted-foreground">No judges assigned yet.</p>}
             {!isLoadingJudges && judges.length > 0 && (
               <ul className="space-y-3">
                 {judges.map(judgeAssignment => (
-                  <li key={judgeAssignment._id} className="flex justify-between items-center p-3 bg-surface rounded-[10px] border border-base">
+                  <li key={judgeAssignment._id} className="flex justify-between items-center p-3 bg-muted/50 rounded-[10px] border border-border">
                     <div>
-                      <p className="font-medium text-body">{judgeAssignment.judge?.name}</p>
-                      <p className="text-xs text-muted">{judgeAssignment.judge?.email}</p>
+                      <p className="font-medium text-foreground">{judgeAssignment.judge?.name}</p>
+                      <p className="text-xs text-muted-foreground">{judgeAssignment.judge?.email}</p>
                     </div>
                   </li>
                 ))}
@@ -215,17 +213,37 @@ export default function ManageHackathon() {
         )}
         
         {activeTab === 'submissions' && (
-          <Card>
-            <h3 className="font-semibold text-body mb-6">Submissions</h3>
-            {isLoadingSubmissions && <p className="text-sm text-muted">Loading submissions...</p>}
-            {!isLoadingSubmissions && submissions.length === 0 && <p className="text-sm text-muted">No submissions found.</p>}
+          <Card className="p-6">
+            <h3 className="font-semibold text-foreground mb-6">Submissions</h3>
+            {isLoadingSubmissions && <p className="text-sm text-muted-foreground">Loading submissions...</p>}
+            {!isLoadingSubmissions && submissions.length === 0 && <p className="text-sm text-muted-foreground">No submissions found.</p>}
             {!isLoadingSubmissions && submissions.length > 0 && (
               <ul className="space-y-3">
                 {submissions.map(sub => (
-                  <li key={sub._id} className="flex justify-between items-center p-3 bg-surface rounded-[10px] border border-base">
+                  <li key={sub._id} className="flex justify-between items-center p-3 bg-muted/50 rounded-[10px] border border-border">
                     <div>
-                      <p className="font-medium text-body">{sub.projectName}</p>
-                      <p className="text-xs text-muted">{sub.registration?.team?.name}</p>
+                      <p className="font-medium text-foreground">{sub.projectName}</p>
+                      <p className="text-xs text-muted-foreground">{sub.registration?.team?.name}</p>
+                    </div>
+                    <div className="w-40">
+                      <Select 
+                        value={sub.status || 'pending'} 
+                        onChange={async (e) => {
+                          const newStatus = e.target.value;
+                          try {
+                            await axiosClient.patch(`/submissions/${sub._id}/status`, { status: newStatus });
+                            toast.success('Status updated');
+                            queryClient.invalidateQueries({ queryKey: ['hackathon-submissions', id] });
+                          } catch (error) {
+                            toast.error(error.response?.data?.message || 'Failed to update status');
+                          }
+                        }}
+                      >
+                        <option value="pending">Pending</option>
+                        <option value="under_review">Under Review</option>
+                        <option value="approved">Approved</option>
+                        <option value="rejected">Rejected</option>
+                      </Select>
                     </div>
                   </li>
                 ))}
@@ -236,19 +254,19 @@ export default function ManageHackathon() {
         
         {activeTab === 'controls' && (
           <div className="space-y-4">
-            <Card className="flex justify-between items-center">
+            <Card className="flex justify-between items-center p-6">
               <div>
-                <h3 className="font-semibold text-body">Registration Status</h3>
-                <p className="text-sm text-muted">Currently {hackathon?.registrationStatus || (hackathon?.registrationOpen ? 'Open' : 'Closed')}.</p>
+                <h3 className="font-semibold text-foreground">Registration Status</h3>
+                <p className="text-sm text-muted-foreground">Currently {hackathon?.registrationOpen ? 'Open' : 'Closed'}.</p>
               </div>
-              <Button variant="danger" onClick={toggleRegistration}>
-                {hackathon?.registrationStatus === 'closed' || !hackathon?.registrationOpen ? 'Open Registration' : 'Close Registration'}
+              <Button variant="destructive" onClick={toggleRegistration}>
+                {hackathon?.registrationOpen ? 'Close Registration' : 'Open Registration'}
               </Button>
             </Card>
-            <Card className="flex justify-between items-center">
+            <Card className="flex justify-between items-center p-6">
               <div>
-                <h3 className="font-semibold text-body">Publish Results</h3>
-                <p className="text-sm text-muted">Make the leaderboard public. Cannot be undone.</p>
+                <h3 className="font-semibold text-foreground">Publish Results</h3>
+                <p className="text-sm text-muted-foreground">Make the leaderboard public. Cannot be undone.</p>
               </div>
               <Button onClick={publishResults} disabled={hackathon?.resultsPublished}>
                 {hackathon?.resultsPublished ? 'Published' : 'Publish Results'}

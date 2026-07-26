@@ -1,7 +1,7 @@
 import { useParams, Link } from 'react-router-dom';
 import { useQuery } from '@tanstack/react-query';
 import { axiosClient } from '../../api/axiosClient';
-import Card from '../../components/ui/Card';
+import { Card, CardHeader, CardTitle, CardContent, CardFooter } from '@/components/ui/card';
 import LeaderboardTable from '../../components/hackathon/LeaderboardTable';
 
 export default function Leaderboard() {
@@ -18,18 +18,19 @@ export default function Leaderboard() {
   return (
     <div className="space-y-8 max-w-4xl mx-auto">
       <div className="flex items-center gap-4">
-        <Link to={`/hackathons/${id}`} className="text-muted hover:text-body">&larr; Back to Hackathon</Link>
+        <Link to={`/hackathons/${id}`} className="text-muted-foreground hover:text-foreground">&larr; Back to Hackathon</Link>
       </div>
       <div>
-        <h1 className="text-h1 font-bold text-body">Leaderboard</h1>
-        <p className="text-muted mt-2">Final results for Hackathon {id}</p>
+        <h1 className="text-4xl font-extrabold tracking-tight lg:text-5xl font-bold text-foreground">Leaderboard</h1>
+        <p className="text-muted-foreground mt-2">Final results for Hackathon {id}</p>
       </div>
       
-      <Card padding="none" className="overflow-hidden">
-        {isLoading && <div className="p-8 text-center text-muted">Loading leaderboard...</div>}
-        {error && <div className="p-8 text-center text-error">Failed to load leaderboard.</div>}
+      <Card className="overflow-hidden">
+        {isLoading && <div className="p-8 text-center text-muted-foreground">Loading leaderboard...</div>}
+        {error && error.response?.status === 403 && <div className="p-8 text-center text-muted-foreground">Results are not published yet.</div>}
+        {error && error.response?.status !== 403 && <div className="p-8 text-center text-destructive">Failed to load leaderboard.</div>}
         {!isLoading && !error && (!results || results.length === 0) && (
-          <div className="p-8 text-center text-muted">Results are not published yet, or there are no submissions.</div>
+          <div className="p-8 text-center text-muted-foreground">Results are not published yet, or there are no submissions.</div>
         )}
         {!isLoading && !error && results && results.length > 0 && (
           <LeaderboardTable results={results} />

@@ -1,6 +1,6 @@
 import { useQuery } from '@tanstack/react-query';
 import { axiosClient } from '../../api/axiosClient';
-import Card from '../../components/ui/Card';
+import { Card, CardHeader, CardTitle, CardContent, CardFooter } from '@/components/ui/card';
 
 export default function ManageTeams() {
   const { data: teamsData, isLoading } = useQuery({
@@ -16,33 +16,33 @@ export default function ManageTeams() {
   return (
     <div className="space-y-8 max-w-6xl mx-auto">
       <div>
-        <h1 className="text-h1 font-bold text-body">Global Teams</h1>
-        <p className="text-muted mt-2">Read-only oversight of all teams.</p>
+        <h1 className="text-4xl font-extrabold tracking-tight lg:text-5xl font-bold text-foreground">Global Teams</h1>
+        <p className="text-muted-foreground mt-2">Read-only oversight of all teams.</p>
       </div>
 
-      <Card padding="none" className="overflow-hidden">
+      <Card className="overflow-hidden">
         <table className="w-full text-left text-sm">
-          <thead className="bg-surface border-b border-base">
+          <thead className="bg-muted/50 border-b border-border">
             <tr>
-              <th className="px-6 py-4 font-semibold text-body">Team Name</th>
-              <th className="px-6 py-4 font-semibold text-body">Members</th>
+              <th className="px-6 py-4 font-semibold text-foreground">Team Name</th>
+              <th className="px-6 py-4 font-semibold text-foreground">Members</th>
             </tr>
           </thead>
           <tbody>
             {isLoading && (
               <tr>
-                <td colSpan="2" className="px-6 py-8 text-center text-muted">Loading teams...</td>
+                <td colSpan="2" className="px-6 py-8 text-center text-muted-foreground">Loading teams...</td>
               </tr>
             )}
             {!isLoading && teams.map(t => (
-              <tr key={t._id} className="border-b border-base hover:bg-surface/50 transition-colors">
-                <td className="px-6 py-4 font-medium text-body">{t.name}</td>
-                <td className="px-6 py-4 text-muted">{t.members?.length || 0} members</td>
+              <tr key={t._id} className="border-b border-border hover:bg-muted/50/50 transition-colors">
+                <td className="px-6 py-4 font-medium text-foreground">{t.name}</td>
+                <td className="px-6 py-4 text-muted-foreground">{t.members?.length || 0} members</td>
               </tr>
             ))}
             {!isLoading && teams.length === 0 && (
               <tr>
-                <td colSpan="2" className="px-6 py-8 text-center text-muted">No teams found.</td>
+                <td colSpan="2" className="px-6 py-8 text-center text-muted-foreground">No teams found.</td>
               </tr>
             )}
           </tbody>

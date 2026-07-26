@@ -1,7 +1,7 @@
 import { Link } from 'react-router-dom';
 import { useQuery } from '@tanstack/react-query';
 import { axiosClient } from '../../api/axiosClient';
-import Card from '../../components/ui/Card';
+import { Card, CardHeader, CardTitle, CardContent, CardFooter } from '@/components/ui/card';
 
 export default function MyReviews() {
   const { data: dashboard, isLoading } = useQuery({
@@ -17,33 +17,33 @@ export default function MyReviews() {
   return (
     <div className="space-y-8 max-w-6xl mx-auto">
       <div>
-        <h1 className="text-h1 font-bold text-body">My Reviews</h1>
-        <p className="text-muted mt-2">History of submissions you have evaluated.</p>
+        <h1 className="text-4xl font-extrabold tracking-tight lg:text-5xl font-bold text-foreground">My Reviews</h1>
+        <p className="text-muted-foreground mt-2">History of submissions you have evaluated.</p>
       </div>
 
-      <Card padding="none" className="overflow-hidden">
+      <Card className="overflow-hidden">
         <table className="w-full text-left text-sm">
-          <thead className="bg-surface border-b border-base">
+          <thead className="bg-muted/50 border-b border-border">
             <tr>
-              <th className="px-6 py-4 font-semibold text-body">Project</th>
-              <th className="px-6 py-4 font-semibold text-body">Hackathon</th>
-              <th className="px-6 py-4 font-semibold text-body">Date Evaluated</th>
-              <th className="px-6 py-4 font-semibold text-body text-right">Total Score</th>
+              <th className="px-6 py-4 font-semibold text-foreground">Project</th>
+              <th className="px-6 py-4 font-semibold text-foreground">Hackathon</th>
+              <th className="px-6 py-4 font-semibold text-foreground">Date Evaluated</th>
+              <th className="px-6 py-4 font-semibold text-foreground text-right">Total Score</th>
             </tr>
           </thead>
           <tbody>
             {isLoading && (
               <tr>
-                <td colSpan="4" className="px-6 py-8 text-center text-muted">Loading reviews...</td>
+                <td colSpan="4" className="px-6 py-8 text-center text-muted-foreground">Loading reviews...</td>
               </tr>
             )}
             {!isLoading && reviews.map(r => {
               const hackathon = dashboard?.hackathons?.find(h => h._id === r.hackathon);
               return (
-                <tr key={r._id} className="border-b border-base last:border-0 hover:bg-surface/50 transition-colors">
-                  <td className="px-6 py-4 font-medium text-body">{r.submission?.projectName || 'Unknown Project'}</td>
-                  <td className="px-6 py-4 text-muted">{hackathon?.title || 'Unknown Hackathon'}</td>
-                  <td className="px-6 py-4 text-muted">{new Date(r.updatedAt || r.createdAt).toLocaleDateString()}</td>
+                <tr key={r._id} className="border-b border-border last:border-0 hover:bg-muted/50/50 transition-colors">
+                  <td className="px-6 py-4 font-medium text-foreground">{r.submission?.projectName || 'Unknown Project'}</td>
+                  <td className="px-6 py-4 text-muted-foreground">{hackathon?.title || 'Unknown Hackathon'}</td>
+                  <td className="px-6 py-4 text-muted-foreground">{new Date(r.updatedAt || r.createdAt).toLocaleDateString()}</td>
                   <td className="px-6 py-4 text-right font-bold text-primary">{r.totalScore}</td>
                 </tr>
               );
@@ -51,7 +51,7 @@ export default function MyReviews() {
           </tbody>
         </table>
         {!isLoading && reviews.length === 0 && (
-          <div className="p-8 text-center text-muted">You haven't completed any reviews yet.</div>
+          <div className="p-8 text-center text-muted-foreground">You haven't completed any reviews yet.</div>
         )}
       </Card>
     </div>

@@ -24,23 +24,23 @@ export default function MySubmissions() {
   return (
     <div className="space-y-8 max-w-6xl mx-auto">
       <div>
-        <h1 className="text-h1 font-bold text-body">My Submissions</h1>
-        <p className="text-muted mt-2">Projects you have submitted for judging.</p>
+        <h1 className="text-4xl font-extrabold tracking-tight lg:text-5xl font-bold text-foreground">My Submissions</h1>
+        <p className="text-muted-foreground mt-2">Projects you have submitted for judging.</p>
       </div>
 
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-        {isLoading && <p className="text-muted col-span-full">Loading submissions...</p>}
-        {error && <p className="text-error col-span-full">Failed to load submissions.</p>}
+        {isLoading && <p className="text-muted-foreground col-span-full">Loading submissions...</p>}
+        {error && <p className="text-destructive col-span-full">Failed to load submissions.</p>}
         {!isLoading && submissions.map(sub => (
           <SubmissionCard 
             key={sub._id} 
             submission={sub} 
-            onView={(id) => navigate(`/dashboard/participant/submissions/${id}`)}
+            onView={(id) => navigate(`/submissions/${id}/edit`)}
           />
         ))}
         {!isLoading && submissions.length === 0 && (
-          <div className="col-span-full p-8 text-center bg-surface border border-base rounded-[16px]">
-            <p className="text-muted">You haven't submitted any projects yet.</p>
+          <div className="col-span-full p-8 text-center bg-muted/50 border border-border rounded-[16px]">
+            <p className="text-muted-foreground">You haven't submitted any projects yet.</p>
           </div>
         )}
       </div>

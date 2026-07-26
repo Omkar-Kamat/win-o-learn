@@ -33,9 +33,9 @@ export default function Sidebar() {
   const links = navItems[role] || [];
 
   return (
-    <aside className="w-64 bg-card border-r border-base flex-col hidden md:flex h-screen sticky top-0">
-      <div className="h-[72px] flex items-center px-6 border-b border-base shrink-0">
-        <Link to="/" className="text-xl font-bold text-body">Win-O-Learn</Link>
+    <aside className="w-64 bg-card border-r border-border flex-col hidden md:flex h-screen sticky top-0">
+      <div className="h-[72px] flex items-center px-6 border-b border-border shrink-0">
+        <Link to="/" className="text-xl font-bold text-foreground">Win-O-Learn</Link>
       </div>
       <nav className="flex-1 overflow-y-auto py-4">
         <ul className="space-y-1">
@@ -47,8 +47,8 @@ export default function Sidebar() {
                   to={link.path}
                   className={`block px-6 py-3 text-sm font-medium transition-colors border-l-4 ${
                     isActive 
-                      ? 'bg-primary-light text-primary-text-on border-primary' 
-                      : 'text-muted hover:bg-surface border-transparent hover:text-body'
+                      ? 'bg-primary/10 text-primary-foreground border-primary' 
+                      : 'text-muted-foreground hover:bg-muted/50 border-transparent hover:text-foreground'
                   }`}
                 >
                   {link.label}
@@ -58,13 +58,13 @@ export default function Sidebar() {
           })}
         </ul>
       </nav>
-      <div className="p-4 border-t border-base shrink-0 space-y-1">
+      <div className="p-4 border-t border-border shrink-0 space-y-1">
         <Link 
           to="/profile" 
           className={`block px-6 py-3 text-sm font-medium transition-colors border-l-4 ${
             location.pathname === '/profile' 
-              ? 'bg-primary-light text-primary-text-on border-primary' 
-              : 'text-muted hover:bg-surface border-transparent hover:text-body'
+              ? 'bg-primary/10 text-primary-foreground border-primary' 
+              : 'text-muted-foreground hover:bg-muted/50 border-transparent hover:text-foreground'
           }`}
         >
           Profile

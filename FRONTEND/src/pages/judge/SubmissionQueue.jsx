@@ -1,8 +1,8 @@
 import { useParams, Link } from 'react-router-dom';
 import { useQuery } from '@tanstack/react-query';
 import { axiosClient } from '../../api/axiosClient';
-import Card from '../../components/ui/Card';
-import Button from '../../components/ui/Button';
+import { Card, CardHeader, CardTitle, CardContent, CardFooter } from '@/components/ui/card';
+import { Button } from '@/components/ui/button';
 
 export default function SubmissionQueue() {
   const { hackathonId } = useParams();
@@ -30,36 +30,36 @@ export default function SubmissionQueue() {
   return (
     <div className="space-y-8 max-w-6xl mx-auto">
       <div className="flex items-center gap-4">
-        <Link to="/dashboard/judge/hackathons" className="text-muted hover:text-body">&larr; Back to Hackathons</Link>
+        <Link to="/dashboard/judge/hackathons" className="text-muted-foreground hover:text-foreground">&larr; Back to Hackathons</Link>
       </div>
 
       <div>
-        <h1 className="text-h1 font-bold text-body">Submission Queue</h1>
-        <p className="text-muted mt-2">Evaluate projects for Hackathon {hackathonId}</p>
+        <h1 className="text-4xl font-extrabold tracking-tight lg:text-5xl font-bold text-foreground">Submission Queue</h1>
+        <p className="text-muted-foreground mt-2">Evaluate projects for Hackathon {hackathonId}</p>
       </div>
 
-      <Card padding="none" className="overflow-hidden">
+      <Card className="overflow-hidden">
         <table className="w-full text-left text-sm">
-          <thead className="bg-surface border-b border-base">
+          <thead className="bg-muted/50 border-b border-border">
             <tr>
-              <th className="px-6 py-4 font-semibold text-body">Project Name</th>
-              <th className="px-6 py-4 font-semibold text-body">Team</th>
-              <th className="px-6 py-4 font-semibold text-body">Status</th>
-              <th className="px-6 py-4 font-semibold text-body text-right">Action</th>
+              <th className="px-6 py-4 font-semibold text-foreground">Project Name</th>
+              <th className="px-6 py-4 font-semibold text-foreground">Team</th>
+              <th className="px-6 py-4 font-semibold text-foreground">Status</th>
+              <th className="px-6 py-4 font-semibold text-foreground text-right">Action</th>
             </tr>
           </thead>
           <tbody>
             {isLoading && (
               <tr>
-                <td colSpan="4" className="px-6 py-8 text-center text-muted">Loading submissions...</td>
+                <td colSpan="4" className="px-6 py-8 text-center text-muted-foreground">Loading submissions...</td>
               </tr>
             )}
             {!isLoading && submissions.map(sub => (
-              <tr key={sub._id} className="border-b border-base last:border-0 hover:bg-surface/50 transition-colors">
-                <td className="px-6 py-4 font-medium text-body">{sub.projectName}</td>
-                <td className="px-6 py-4 text-muted">{sub.teamName}</td>
+              <tr key={sub._id} className="border-b border-border last:border-0 hover:bg-muted/50/50 transition-colors">
+                <td className="px-6 py-4 font-medium text-foreground">{sub.projectName}</td>
+                <td className="px-6 py-4 text-muted-foreground">{sub.teamName}</td>
                 <td className="px-6 py-4">
-                  <span className={`px-2 py-1 rounded-full font-medium text-tiny ${sub.reviewed ? 'badge-success' : 'badge-warning'}`}>
+                  <span className={`px-2 py-1 rounded-full font-medium text-xs ${sub.reviewed ? 'badge-success' : 'badge-warning'}`}>
                     {sub.reviewed ? 'Reviewed' : 'Pending'}
                   </span>
                 </td>
@@ -72,7 +72,7 @@ export default function SubmissionQueue() {
             ))}
             {!isLoading && submissions.length === 0 && (
               <tr>
-                <td colSpan="4" className="px-6 py-8 text-center text-muted">No submissions found for this hackathon.</td>
+                <td colSpan="4" className="px-6 py-8 text-center text-muted-foreground">No submissions found for this hackathon.</td>
               </tr>
             )}
           </tbody>

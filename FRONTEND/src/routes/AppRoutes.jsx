@@ -73,6 +73,7 @@ export default function AppRoutes() {
         <Route element={<MainLayout />}>
           <Route element={<RoleRoute allow={[ROLES.PARTICIPANT]} />}>
             <Route path="/hackathons/:hackathonId/submit" element={<SubmitProject />} />
+            <Route path="/submissions/:submissionId/edit" element={<SubmitProject />} />
           </Route>
         </Route>
 

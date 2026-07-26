@@ -17,12 +17,12 @@ export default function AssignedHackathons() {
   return (
     <div className="space-y-8 max-w-6xl mx-auto">
       <div>
-        <h1 className="text-h1 font-bold text-body">Assigned Hackathons</h1>
-        <p className="text-muted mt-2">Hackathons you are judging.</p>
+        <h1 className="text-4xl font-extrabold tracking-tight lg:text-5xl font-bold text-foreground">Assigned Hackathons</h1>
+        <p className="text-muted-foreground mt-2">Hackathons you are judging.</p>
       </div>
 
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-        {isLoading && <p className="text-muted col-span-full">Loading hackathons...</p>}
+        {isLoading && <p className="text-muted-foreground col-span-full">Loading hackathons...</p>}
         {!isLoading && hackathons.map(h => (
           <div key={h._id} className="relative group">
             <HackathonCard hackathon={h} />
@@ -34,7 +34,7 @@ export default function AssignedHackathons() {
           </div>
         ))}
         {!isLoading && hackathons.length === 0 && (
-          <p className="text-muted col-span-full">You haven't been assigned to judge any hackathons yet.</p>
+          <p className="text-muted-foreground col-span-full">You haven't been assigned to judge any hackathons yet.</p>
         )}
       </div>
     </div>

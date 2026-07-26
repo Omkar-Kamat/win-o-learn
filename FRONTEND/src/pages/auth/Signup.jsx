@@ -6,10 +6,11 @@ import { useNavigate, Link } from 'react-router-dom';
 import toast from 'react-hot-toast';
 import { useAuth } from '../../context/AuthContext';
 import { ROLES } from '../../utils/constants';
-import Input from '../../components/ui/Input';
-import Select from '../../components/ui/Select';
-import Button from '../../components/ui/Button';
-import Card from '../../components/ui/Card';
+import { Input } from '@/components/ui/input';
+import { Label } from '@/components/ui/label';
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
+import { Button } from '@/components/ui/button';
+import { Card, CardHeader, CardTitle, CardContent, CardFooter } from '@/components/ui/card';
 
 const signupSchema = z.object({
   name: z.string().min(2, 'Name must be at least 2 characters').max(50, 'Name must be at most 50 characters'),
@@ -48,40 +49,37 @@ export default function Signup() {
   };
 
   return (
-    <Card>
-      <h2 className="text-h3 font-semibold text-body mb-6 text-center">Create an account</h2>
+    <Card className="p-6">
+      <h2 className="text-2xl font-semibold tracking-tight font-semibold text-foreground mb-6 text-center">Create an account</h2>
       <form onSubmit={handleSubmit(onSubmit)} className="space-y-4">
-        <Input
-          label="Full Name"
+        <div className="space-y-1"><Label>Full Name</Label><Input  
           placeholder="John Doe"
           {...register('name')}
           error={errors.name?.message}
-        />
-        <Input
-          label="Email Address"
+         /></div>
+        <div className="space-y-1"><Label>Email Address</Label><Input  
           type="email"
           placeholder="you@example.com"
           {...register('email')}
           error={errors.email?.message}
-        />
-        <Input
-          label="Password"
+         /></div>
+        <div className="space-y-1"><Label>Password</Label><Input  
           type="password"
           placeholder="••••••••"
           {...register('password')}
           error={errors.password?.message}
-        />
-        <Select label="I want to join as" {...register('role')} error={errors.role?.message}>
+         /></div>
+        <div className="space-y-1"><Label>I want to join as</Label><Select   {...register('role')} error={errors.role?.message}>
           <option value={ROLES.PARTICIPANT}>Participant</option>
           <option value={ROLES.ORGANIZER}>Organizer</option>
           <option value={ROLES.JUDGE}>Judge</option>
-        </Select>
+        </Select></div>
         
-        <Button type="submit" className="w-full mt-2" loading={isLoading}>
+        <Button type="submit" className="w-full mt-2" disabled={isLoading}>
           Sign up
         </Button>
       </form>
-      <p className="mt-6 text-center text-sm text-muted">
+      <p className="mt-6 text-center text-sm text-muted-foreground">
         Already have an account?{' '}
         <Link to="/login" className="font-medium text-primary hover:underline">
           Log in

@@ -11,7 +11,7 @@ export default function AuthLayout() {
       <div className="absolute top-6 right-6">
         <button
           onClick={toggleTheme}
-          className="p-2 rounded-full hover:bg-primary-light hover:text-primary-text-on transition-colors text-body"
+          className="p-2 rounded-full hover:bg-primary/10 hover:text-primary-foreground transition-colors text-foreground"
         >
           {theme === 'dark' ? (
             <motion.div initial={{ rotate: -15, opacity: 0 }} animate={{ rotate: 0, opacity: 1 }}>
@@ -27,8 +27,8 @@ export default function AuthLayout() {
       
       <div className="w-full max-w-md">
         <div className="text-center mb-8">
-          <h1 className="text-h2 font-bold text-body">Win-O-Learn</h1>
-          <p className="text-muted mt-2">Hackathon Management Platform</p>
+          <h1 className="text-3xl font-semibold tracking-tight font-bold text-foreground">Win-O-Learn</h1>
+          <p className="text-muted-foreground mt-2">Hackathon Management Platform</p>
         </div>
         <Outlet />
       </div>
