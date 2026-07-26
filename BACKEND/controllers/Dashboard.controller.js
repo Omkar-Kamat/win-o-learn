@@ -17,9 +17,15 @@ const getJudgeDashboard = AsyncHandler(async (req, res) => {
   const dashboard = await DashboardService.getJudgeDashboard(req.user);
   return SendResponse(res, 200, true, 'Judge dashboard retrieved successfully.', dashboard);
 });
+const getPublicStats = AsyncHandler(async (req, res) => {
+  const stats = await DashboardService.getPublicStats();
+  return SendResponse(res, 200, true, 'Public stats retrieved successfully.', stats);
+});
+
 export default {
   getAdminDashboard: getAdminDashboard,
   getOrganizerDashboard: getOrganizerDashboard,
   getParticipantDashboard: getParticipantDashboard,
-  getJudgeDashboard: getJudgeDashboard
+  getJudgeDashboard: getJudgeDashboard,
+  getPublicStats: getPublicStats
 };

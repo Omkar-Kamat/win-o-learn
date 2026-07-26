@@ -6,6 +6,24 @@ import Registration from '../models/Registration.model.js';
 import JudgeAssignment from '../models/JudgeAssignment.model.js';
 import Review from '../models/Review.model.js';
 class DashboardService {
+  // Retrieves public platform stats.
+  async getPublicStats() {
+    const [totalHackathons, totalDevelopers, hackathons] = await Promise.all([
+      Hackathon.countDocuments(),
+      User.countDocuments({ role: 'participant' }),
+      Hackathon.find({}, 'prizePool')
+    ]);
+    
+    const totalPrizePool = hackathons.reduce((sum, h) => sum + (h.prizePool || 0), 0);
+
+    return {
+      totalHackathons,
+      totalDevelopers,
+      totalPrizePool,
+      countriesReached: 120 // Static placeholder
+    };
+  }
+
   // Retrieves admin dashboard. 
   async getAdminDashboard() {
     const [totalUsers, totalHackathons, totalTeams, totalSubmissions] = await Promise.all([User.countDocuments(), Hackathon.countDocuments(), Team.countDocuments(), Submission.countDocuments()]);

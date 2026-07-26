@@ -2,6 +2,7 @@ import mongoose from 'mongoose';
 import { clearDatabase, seedUsers } from '../utils/seed.js';
 import { logged } from '../utils/logRequest.js';
 import User from '../../models/User.model.js';
+import Team from '../../models/Team.model.js';
 
 let users, tokens;
 
@@ -28,6 +29,41 @@ describe('2. User Module (/api/users)', () => {
     it('Rejects unauthenticated requests', async () => {
       const res = await logged('get', '/api/users/me', {
         suite: 'User > Me',
+        caseName: 'Rejects unauthenticated requests'
+      });
+      expect(res.status).toBe(401);
+    });
+  });
+
+  describe('GET /api/users/me/invites', () => {
+    it('Returns a list of pending team invitations for the user', async () => {
+      // Create a team and add an invite
+      const team = await Team.create({
+        name: 'Invite Test Team',
+        leader: users.participant2._id,
+        members: [users.participant2._id],
+        pendingInvites: [{
+          user: users.participant._id,
+          invitedBy: users.participant2._id
+        }]
+      });
+
+      const res = await logged('get', '/api/users/me/invites', {
+        suite: 'User > Me Invites',
+        caseName: 'Returns a list of pending team invitations',
+        token: tokens.participant
+      });
+      
+      expect(res.status).toBe(200);
+      expect(Array.isArray(res.body.data)).toBe(true);
+      expect(res.body.data.length).toBe(1);
+      expect(res.body.data[0].name).toBe('Invite Test Team');
+      expect(res.body.data[0].leader._id.toString()).toBe(users.participant2._id.toString());
+    });
+
+    it('Rejects unauthenticated requests', async () => {
+      const res = await logged('get', '/api/users/me/invites', {
+        suite: 'User > Me Invites',
         caseName: 'Rejects unauthenticated requests'
       });
       expect(res.status).toBe(401);

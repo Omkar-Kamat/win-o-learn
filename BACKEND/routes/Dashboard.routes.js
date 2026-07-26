@@ -4,6 +4,7 @@ import VerifyToken from '../middlewares/VerifyToken.js';
 import AuthorizeRoles from '../middlewares/AuthorizeRoles.js';
 import { ROLES } from '../utils/Constants.js';
 const router = express.Router();
+router.get('/public/stats', DashboardController.getPublicStats);
 router.get('/admin', VerifyToken, AuthorizeRoles(ROLES.ADMIN), DashboardController.getAdminDashboard);
 router.get('/organizer', VerifyToken, AuthorizeRoles(ROLES.ORGANIZER), DashboardController.getOrganizerDashboard);
 router.get('/participant', VerifyToken, AuthorizeRoles(ROLES.PARTICIPANT), DashboardController.getParticipantDashboard);

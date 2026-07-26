@@ -30,7 +30,9 @@ const acceptInvite = asyncHandler(async (req, res) => {
   SendResponse(res, 200, true, 'Invite accepted successfully.', team);
 });
 const rejectInvite = asyncHandler(async (req, res) => {
-  const team = await TeamService.rejectInvite(req.team, req.user._id);
+  const isLeader = String(req.team.leader._id ?? req.team.leader) === String(req.user._id);
+  const targetUserId = (isLeader && req.body.userId) ? req.body.userId : req.user._id;
+  const team = await TeamService.rejectInvite(req.team, targetUserId);
   SendResponse(res, 200, true, 'Invite rejected successfully.', team);
 });
 const transferLeadership = asyncHandler(async (req, res) => {
