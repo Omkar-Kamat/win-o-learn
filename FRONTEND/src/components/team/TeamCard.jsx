@@ -4,7 +4,7 @@ import { Badge } from '@/components/ui/badge';
 
 export default function TeamCard({ team }) {
   return (
-    <Card className={`hover:shadow-md transition-shadow flex flex-col`}>
+    <Card className={`hover:shadow-md transition-shadow flex flex-col p-6`}>
       <div className="flex justify-between items-start mb-4">
         <h3 className="text-xl font-semibold tracking-tight font-semibold text-foreground line-clamp-1">{team.name}</h3>
         {team.role === 'leader' && (

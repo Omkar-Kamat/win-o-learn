@@ -30,7 +30,20 @@ export default function LeaderboardTable({ results = [] }) {
                 )}
               </td>
               <td className="px-6 py-4 text-foreground">{result.teamName}</td>
-              <td className="px-6 py-4 text-primary hover:underline cursor-pointer font-medium">{result.projectName}</td>
+              <td className="px-6 py-4">
+                {result.githubRepo ? (
+                  <a 
+                    href={/^https?:\/\//i.test(result.githubRepo) ? result.githubRepo : `https://${result.githubRepo}`} 
+                    target="_blank" 
+                    rel="noreferrer" 
+                    className="text-primary hover:underline font-medium"
+                  >
+                    {result.projectName}
+                  </a>
+                ) : (
+                  <span className="font-medium text-foreground">{result.projectName}</span>
+                )}
+              </td>
               <td className="px-6 py-4 text-right font-bold text-2xl font-semibold tracking-tight text-foreground">{result.totalScore}</td>
             </tr>
           );

@@ -2,22 +2,22 @@ import ApiError from '../utils/ApiError.js';
 import UserRepository from '../repository/User.repository.js';
 import JudgeAssignmentRepository from '../repository/JudgeAssignment.repository.js';
 import { ROLES } from '../utils/Constants.js';
-// Assigns judge by executing underlying operations (findById, findByHackathonAndJudge, create). Includes validation checks preventing actions if judge not found. or the selected user is not a judge.. 
-const assignJudge = async (hackathon, judgeId, assignedBy) => {
-  const judge = await UserRepository.findById(judgeId);
+// Assigns judge by executing underlying operations (findByEmail, findByHackathonAndJudge, create). Includes validation checks preventing actions if judge not found. or the selected user is not a judge.. 
+const assignJudge = async (hackathon, email, assignedBy) => {
+  const judge = await UserRepository.findByEmail(email);
   if (!judge) {
     throw new ApiError(404, 'Judge not found.');
   }
   if (judge.role !== ROLES.JUDGE) {
     throw new ApiError(400, 'The selected user is not a judge.');
   }
-  const existingAssignment = await JudgeAssignmentRepository.findByHackathonAndJudge(hackathon._id, judgeId);
+  const existingAssignment = await JudgeAssignmentRepository.findByHackathonAndJudge(hackathon._id, judge._id);
   if (existingAssignment) {
     throw new ApiError(409, 'Judge is already assigned to this hackathon.');
   }
   const assignment = await JudgeAssignmentRepository.create({
     hackathon: hackathon._id,
-    judge: judgeId,
+    judge: judge._id,
     assignedBy: assignedBy
   });
   return JudgeAssignmentRepository.findById(assignment._id);

@@ -14,6 +14,7 @@ class LeaderboardService {
       rank: index + 1,
       teamName: submission.registration.team.name,
       projectName: submission.projectName,
+      githubRepo: submission.githubRepo,
       totalScore: submission.averageScore
     }));
   }

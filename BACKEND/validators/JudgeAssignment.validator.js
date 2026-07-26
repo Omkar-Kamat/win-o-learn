@@ -9,13 +9,13 @@ const validate = (req, res, next) => {
     next();
 };
 export const validateAssignJudge = [
-    body('judgeId')
+    body('email')
         .trim()
         .notEmpty()
-        .withMessage('Judge ID is required.')
+        .withMessage('Email is required.')
         .bail()
-        .isMongoId()
-        .withMessage('Invalid judge ID.'),
+        .isEmail()
+        .withMessage('Invalid email address.'),
     validate,
 ];
 export const validateHackathonId = [

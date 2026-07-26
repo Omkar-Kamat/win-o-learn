@@ -28,7 +28,7 @@ export default function SubmissionQueue() {
       reviewed: reviewedIds.has(sub._id)
     }));
 
-  const hackathonTitle = dashboard?.assignedHackathons?.find(h => String(h._id) === String(hackathonId))?.title || hackathonId;
+  const hackathonTitle = dashboard?.hackathons?.find(h => String(h._id) === String(hackathonId))?.title || hackathonId;
 
   return (
     <div className="space-y-8 max-w-6xl mx-auto">

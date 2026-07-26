@@ -20,6 +20,7 @@ export default function Sidebar({ mobileOpen = false, onClose }) {
     ],
     [ROLES.PARTICIPANT]: [
       { label: 'Dashboard', path: '/dashboard' },
+      { label: 'My Teams', path: '/teams' },
       { label: 'My Registrations', path: '/dashboard/participant/registrations' },
       { label: 'My Submissions', path: '/dashboard/participant/submissions' },
       { label: 'My Invites', path: '/dashboard/participant/invites' },

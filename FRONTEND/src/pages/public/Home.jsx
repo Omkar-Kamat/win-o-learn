@@ -39,7 +39,7 @@ export default function Home() {
           The Premier Hackathon Platform
         </div>
         <h1 className="text-5xl font-extrabold tracking-tight lg:text-7xl font-bold text-foreground leading-tight">
-          Build the <span className="text-transparent bg-clip-text bg-gradient-to-r from-primary to-blue-600">Future.</span>
+          Build the <span className="text-primary">Future.</span>
         </h1>
         <p className="text-xl md:text-2xl font-medium text-muted-foreground max-w-2xl mx-auto">
           Discover, compete, and organize world-class hackathons on a platform designed for clarity and performance.
@@ -103,7 +103,7 @@ export default function Home() {
               ))}
             </>
           ) : hackathons.length > 0 ? (
-            hackathons.map(hackathon => (
+            hackathons.slice(0, 6).map(hackathon => (
               <HackathonCard key={hackathon._id} hackathon={hackathon} />
             ))
           ) : (

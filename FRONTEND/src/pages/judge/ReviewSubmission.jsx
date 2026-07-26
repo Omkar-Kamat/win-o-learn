@@ -101,8 +101,8 @@ export default function ReviewSubmission() {
                 <p className="text-muted-foreground">{submission?.solutionDescription}</p>
               </div>
               <div className="flex gap-4 pt-4 border-t border-border">
-                {submission?.githubRepo && <a href={submission.githubRepo} target="_blank" rel="noreferrer" className="text-primary hover:underline font-medium">GitHub Repo</a>}
-                {submission?.liveDemoUrl && <a href={submission.liveDemoUrl} target="_blank" rel="noreferrer" className="text-primary hover:underline font-medium">Live Demo</a>}
+                {submission?.githubRepo && <a href={/^https?:\/\//i.test(submission.githubRepo) ? submission.githubRepo : `https://${submission.githubRepo}`} target="_blank" rel="noreferrer" className="text-primary hover:underline font-medium">GitHub Repo</a>}
+                {submission?.liveDemoUrl && <a href={/^https?:\/\//i.test(submission.liveDemoUrl) ? submission.liveDemoUrl : `https://${submission.liveDemoUrl}`} target="_blank" rel="noreferrer" className="text-primary hover:underline font-medium">Live Demo</a>}
               </div>
             </div>
           </Card>

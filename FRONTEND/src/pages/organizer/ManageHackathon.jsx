@@ -5,13 +5,14 @@ import { axiosClient } from '../../api/axiosClient';
 import toast from 'react-hot-toast';
 import { Card, CardHeader, CardTitle, CardContent, CardFooter } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
+import { Badge } from '@/components/ui/badge';
 
 export default function ManageHackathon() {
   const { id } = useParams();
   const queryClient = useQueryClient();
   const [activeTab, setActiveTab] = useState('registrations');
   const [assigningJudge, setAssigningJudge] = useState(false);
-  const [judgeId, setJudgeId] = useState('');
+  const [judgeEmail, setJudgeEmail] = useState('');
 
   const { data: hackathon, isLoading: isLoadingHackathon } = useQuery({
     queryKey: ['hackathon', id],
@@ -21,7 +22,7 @@ export default function ManageHackathon() {
     }
   });
 
-  const { data: registrations = [], isLoading: isLoadingRegistrations } = useQuery({
+  const { data: registrationsData, isLoading: isLoadingRegistrations } = useQuery({
     queryKey: ['hackathon', id, 'registrations'],
     queryFn: async () => {
       const res = await axiosClient.get(`/hackathons/${id}/registrations`);
@@ -29,6 +30,8 @@ export default function ManageHackathon() {
     },
     enabled: activeTab === 'registrations'
   });
+
+  const registrations = registrationsData?.registrations || [];
 
   const { data: judges = [], isLoading: isLoadingJudges } = useQuery({
     queryKey: ['hackathon', id, 'judges'],
@@ -71,12 +74,12 @@ export default function ManageHackathon() {
 
   const handleAssignJudge = async (e) => {
     e.preventDefault();
-    if (!judgeId) return;
+    if (!judgeEmail) return;
     try {
       setAssigningJudge(true);
-      await axiosClient.post(`/hackathons/${id}/judges`, { judgeId });
+      await axiosClient.post(`/hackathons/${id}/judges`, { email: judgeEmail });
       toast.success('Judge assigned successfully');
-      setJudgeId('');
+      setJudgeEmail('');
       queryClient.invalidateQueries({ queryKey: ['hackathon', id, 'judges'] });
     } catch (error) {
       toast.error(error.response?.data?.message || 'Failed to assign judge');
@@ -160,9 +163,9 @@ export default function ManageHackathon() {
                     <td className="px-6 py-4 font-medium text-foreground">{reg.team?.name}</td>
                     <td className="px-6 py-4 text-muted-foreground">{new Date(reg.createdAt).toLocaleDateString()}</td>
                     <td className="px-6 py-4">
-                      <span className={`px-2 py-1 rounded-full font-medium text-[10px] uppercase tracking-wider badge-${reg.status === 'approved' ? 'success' : reg.status === 'pending' ? 'warning' : 'error'}`}>
+                      <Badge variant={reg.status === 'approved' ? 'success' : reg.status === 'pending' ? 'warning' : 'error'}>
                         {reg.status}
-                      </span>
+                      </Badge>
                     </td>
                     <td className="px-6 py-4 text-right flex justify-end gap-2">
                       {reg.status === 'pending' && (
@@ -178,21 +181,19 @@ export default function ManageHackathon() {
             </table>
           </Card>
         )}
-        
+
         {activeTab === 'judges' && (
           <Card className="p-6">
             <div className="flex justify-between items-center mb-6">
               <h3 className="font-semibold text-foreground">Assigned Judges</h3>
               <form onSubmit={handleAssignJudge} className="flex gap-2">
-                <input 
-                  type="text" 
-                  placeholder="Judge's user ID (Mongo ObjectId)" 
+                <input
+                  type="email"
+                  placeholder="Judge's email address"
                   className="px-3 py-1 rounded-[10px] border border-border bg-muted/50 text-sm"
-                  value={judgeId}
-                  onChange={e => setJudgeId(e.target.value)}
+                  value={judgeEmail}
+                  onChange={e => setJudgeEmail(e.target.value)}
                   required
-                  pattern="^[a-fA-F0-9]{24}$"
-                  title="Must be a 24-character Mongo ObjectId, not an email"
                 />
                 <Button size="sm" type="submit" disabled={assigningJudge}>Assign Judge</Button>
               </form>
@@ -213,7 +214,7 @@ export default function ManageHackathon() {
             )}
           </Card>
         )}
-        
+
         {activeTab === 'submissions' && (
           <Card className="p-6">
             <h3 className="font-semibold text-foreground mb-6">Submissions</h3>
@@ -228,15 +229,15 @@ export default function ManageHackathon() {
                       <p className="text-xs text-muted-foreground">{sub.registration?.team?.name}</p>
                     </div>
                     <div className="w-40">
-                      <select 
+                      <select
                         className="flex h-10 w-full items-center justify-between rounded-md border border-input bg-background px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-ring focus:ring-offset-2"
-                        value={sub.status || 'pending'} 
+                        value={sub.status || 'pending'}
                         onChange={async (e) => {
                           const newStatus = e.target.value;
                           try {
                             await axiosClient.patch(`/submissions/${sub._id}/status`, { status: newStatus });
                             toast.success('Status updated');
-                            queryClient.invalidateQueries({ queryKey: ['hackathon-submissions', id] });
+                            queryClient.invalidateQueries({ queryKey: ['hackathon', id, 'submissions'] });
                           } catch (error) {
                             toast.error(error.response?.data?.message || 'Failed to update status');
                           }
@@ -254,7 +255,7 @@ export default function ManageHackathon() {
             )}
           </Card>
         )}
-        
+
         {activeTab === 'controls' && (
           <div className="space-y-4">
             <Card className="flex justify-between items-center p-6">

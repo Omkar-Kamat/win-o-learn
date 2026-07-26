@@ -4,7 +4,7 @@ import StatusBadge from './StatusBadge';
 
 export default function SubmissionCard({ submission, onView }) {
   return (
-    <Card className={`hover:shadow-md transition-shadow flex flex-col h-full`}>
+    <Card className={`hover:shadow-md transition-shadow flex flex-col h-full p-6`}>
       <div className="flex justify-between items-start mb-4">
         <div>
           <h3 className="text-xl font-semibold tracking-tight font-semibold text-foreground mb-1">{submission.projectName}</h3>

@@ -1,7 +1,7 @@
 import asyncHandler from '../middlewares/AsyncHandler.js';
 import JudgeAssignmentService from '../services/JudgeAssignment.service.js';
 const assignJudge = asyncHandler(async (req, res) => {
-  const assignment = await JudgeAssignmentService.assignJudge(req.hackathon, req.body.judgeId, req.user._id);
+  const assignment = await JudgeAssignmentService.assignJudge(req.hackathon, req.body.email, req.user._id);
   res.status(201).json({
     success: true,
     message: 'Judge assigned successfully.',

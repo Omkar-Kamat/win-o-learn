@@ -31,10 +31,8 @@ export default function Navbar({ onMenuClick }) {
 
       <div className="flex items-center gap-2 sm:gap-4">
         <Dialog>
-          <DialogTrigger asChild>
-            <button aria-label="Search" className="p-2 text-muted-foreground hover:text-foreground transition-colors cursor-pointer">
-              <MagnifyingGlassIcon className="w-5 h-5" />
-            </button>
+          <DialogTrigger aria-label="Search" className="p-2 text-muted-foreground hover:text-foreground transition-colors cursor-pointer">
+            <MagnifyingGlassIcon className="w-5 h-5" />
           </DialogTrigger>
           <DialogContent className="sm:max-w-md">
             <DialogHeader>

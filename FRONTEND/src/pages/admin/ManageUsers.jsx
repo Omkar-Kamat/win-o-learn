@@ -1,6 +1,8 @@
 import { useState } from 'react';
 import toast from 'react-hot-toast';
-import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
+import { useInfiniteQuery, useMutation, useQueryClient } from '@tanstack/react-query';
+import { useInView } from 'react-intersection-observer';
+import { useEffect, useMemo } from 'react';
 import { axiosClient } from '../../api/axiosClient';
 import { Card, CardHeader, CardTitle, CardContent, CardFooter } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
@@ -18,14 +20,45 @@ export default function ManageUsers() {
   const queryClient = useQueryClient();
   const [selectedUser, setSelectedUser] = useState(null);
   const [newRole, setNewRole] = useState('');
+  
+  const [searchTerm, setSearchTerm] = useState('');
+  const [roleFilter, setRoleFilter] = useState('all');
+  const [sortOrder, setSortOrder] = useState('asc');
 
-  const { data, isLoading, error } = useQuery({
-    queryKey: ['users'],
-    queryFn: async () => {
-      const res = await axiosClient.get('/users');
-      return res.data.data;
+  const { ref, inView } = useInView();
+  
+  const { 
+    data, 
+    isLoading, 
+    error,
+    fetchNextPage,
+    hasNextPage,
+    isFetchingNextPage
+  } = useInfiniteQuery({
+    queryKey: ['users', roleFilter, searchTerm],
+    queryFn: async ({ pageParam = 1 }) => {
+      const res = await axiosClient.get('/users', {
+        params: {
+          page: pageParam,
+          limit: 20,
+          role: roleFilter === 'all' ? undefined : roleFilter,
+          search: searchTerm || undefined
+        }
+      });
+      return res.data.data; // { users, total }
+    },
+    getNextPageParam: (lastPage, allPages) => {
+      // If we got less than 20 items, there are no more pages
+      if (lastPage.users.length < 20) return undefined;
+      return allPages.length + 1;
     }
   });
+
+  useEffect(() => {
+    if (inView && hasNextPage && !isFetchingNextPage) {
+      fetchNextPage();
+    }
+  }, [inView, hasNextPage, isFetchingNextPage, fetchNextPage]);
 
   const handleToggleBlock = async (user) => {
     try {
@@ -63,13 +96,54 @@ export default function ManageUsers() {
     updateRoleMutation.mutate({ userId: selectedUser._id, role: newRole });
   };
 
-  const users = data?.users || [];
+  const users = useMemo(() => {
+    const allUsers = data?.pages.flatMap(page => page.users) || [];
+    // Deduplicate by _id to prevent React key warnings when items shift during pagination
+    return Array.from(new Map(allUsers.map(u => [u._id, u])).values());
+  }, [data]);
+
+  // Frontend sorting only (since backend doesn't support sort parameter yet)
+  const sortedUsers = [...users].sort((a, b) => {
+    return sortOrder === 'asc' 
+      ? a.name.localeCompare(b.name) 
+      : b.name.localeCompare(a.name);
+  });
 
   return (
     <div className="space-y-8 max-w-6xl mx-auto">
-      <div>
-        <h1 className="text-4xl font-extrabold tracking-tight lg:text-5xl font-bold text-foreground">Manage Users</h1>
-        <p className="text-muted-foreground mt-2">View and manage platform users.</p>
+      <div className="flex flex-col md:flex-row justify-between items-start md:items-center gap-4">
+        <div>
+          <h1 className="text-4xl font-extrabold tracking-tight lg:text-5xl font-bold text-foreground">Manage Users</h1>
+          <p className="text-muted-foreground mt-2">View and manage platform users.</p>
+        </div>
+        <div className="flex flex-col sm:flex-row gap-3 w-full md:w-auto">
+          <input
+            type="text"
+            placeholder="Search name or email..."
+            className="px-3 py-2 rounded-md border border-input bg-background text-sm"
+            value={searchTerm}
+            onChange={e => setSearchTerm(e.target.value)}
+          />
+          <select 
+            className="px-3 py-2 rounded-md border border-input bg-background text-sm"
+            value={roleFilter}
+            onChange={e => setRoleFilter(e.target.value)}
+          >
+            <option value="all">All Roles</option>
+            <option value="participant">Participant</option>
+            <option value="organizer">Organizer</option>
+            <option value="judge">Judge</option>
+            <option value="admin">Admin</option>
+          </select>
+          <select 
+            className="px-3 py-2 rounded-md border border-input bg-background text-sm"
+            value={sortOrder}
+            onChange={e => setSortOrder(e.target.value)}
+          >
+            <option value="asc">Sort A-Z</option>
+            <option value="desc">Sort Z-A</option>
+          </select>
+        </div>
       </div>
 
       <Dialog open={!!selectedUser} onOpenChange={(open) => !open && setSelectedUser(null)}>
@@ -115,7 +189,7 @@ export default function ManageUsers() {
                 <td colSpan="4" className="px-6 py-8 text-center text-muted-foreground">Loading users...</td>
               </tr>
             )}
-            {!isLoading && users.map(u => (
+            {!isLoading && sortedUsers.map(u => (
               <tr key={u._id} className="border-b border-border last:border-0 hover:bg-muted/50/50 transition-colors">
                 <td className="px-6 py-4">
                   <div className="font-medium text-foreground">{u.name}</div>
@@ -146,6 +220,19 @@ export default function ManageUsers() {
                 </td>
               </tr>
             ))}
+            {!isLoading && sortedUsers.length === 0 && (
+              <tr>
+                <td colSpan="4" className="px-6 py-8 text-center text-muted-foreground">No users found.</td>
+              </tr>
+            )}
+            {isFetchingNextPage && (
+              <tr>
+                <td colSpan="4" className="px-6 py-8 text-center text-muted-foreground">Loading more users...</td>
+              </tr>
+            )}
+            <tr ref={ref}>
+              <td colSpan="4" className="h-1 p-0 m-0"></td>
+            </tr>
           </tbody>
         </table>
       </Card>
