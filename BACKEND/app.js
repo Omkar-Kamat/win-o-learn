@@ -29,7 +29,7 @@ app.use(cors({
         if (!origin) return callback(null, true);
         
         const clientUrl = process.env.CLIENT_URL ? process.env.CLIENT_URL.replace(/\/$/, '') : '';
-        const allowedOrigins = [clientUrl, 'https://win-o-learn.vercel.app', 'http://localhost:5173', 'http://localhost:3000'];
+        const allowedOrigins = [clientUrl, 'https://win-o-learn-hackathons.onrender.com', 'http://localhost:5173', 'http://localhost:3000'];
         
         if (allowedOrigins.includes(origin) || origin.endsWith('.vercel.app')) {
             callback(null, true);
