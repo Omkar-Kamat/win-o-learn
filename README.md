@@ -4,8 +4,8 @@ Win-o-Learn is a comprehensive platform designed to streamline the process of ho
 
 ## Live Links
 
-- **Frontend Application**: [https://win-o-learn-hackathons.onrender.com/](https://win-o-learn-hackathons.onrender.com/)
-- **Backend API**: [https://win-o-learn.onrender.com](https://win-o-learn.onrender.com) (REST API)
+- **Frontend Application** (DOWN): [https://win-o-learn-hackathons.onrender.com/](https://win-o-learn-hackathons.onrender.com/)
+- **Backend API** (DOWN): [https://win-o-learn.onrender.com](https://win-o-learn.onrender.com) (REST API)
 
 ---
 
